@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class ConsoleSpriteManager extends SpriteManager {
@@ -38,7 +37,12 @@ public class ConsoleSpriteManager extends SpriteManager {
     @Override
     public List<RenderableSprite> getAllRenderableObjectWithinRange(int range) {
         List<RenderableSprite> renderableSpriteList = new ArrayList<>(renderableObjectMap.values());
-        renderableSpriteList.sort(Comparator.comparingInt(u -> u.model.posY));
+
+        /* Render order:
+         * - PlayerModel renders last.
+         * - Models with smaller posY render first.
+         */
+        renderableSpriteList.sort((u, v) -> (u.model instanceof PlayerModel) ? 1 : Integer.compare(u.model.posY, v.model.posY));
         return renderableSpriteList;
     }
 }

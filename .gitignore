@@ -6,6 +6,7 @@
 hs_err_pid*
 
 target/
+*.log
 
 ## Robovm
 /ios/robovm-build/

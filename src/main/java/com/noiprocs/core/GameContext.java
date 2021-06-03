@@ -3,14 +3,15 @@ package com.noiprocs.core;
 import com.noiprocs.core.graphics.GameScreenInterface;
 import com.noiprocs.core.graphics.SpriteManager;
 import com.noiprocs.core.model.ModelManager;
-import com.noiprocs.core.model.WorldGenerator;
-import com.noiprocs.core.model.environment.TreeModel;
-import com.noiprocs.core.model.mob.character.PlayerModel;
+import com.noiprocs.core.model.WorldModelGenerator;
 
 import java.io.IOException;
 
 public class GameContext {
     private final ModelManager modelManager = new ModelManager();
+
+    public final ControlManager controlManager = new ControlManager(modelManager);
+
     private SpriteManager spriteManager;
     private GameScreenInterface gameScreen;
 
@@ -29,7 +30,7 @@ public class GameContext {
     }
 
     private void initializeNewGame() {
-        new WorldGenerator().generateWorld(modelManager.getServerModelManager());
+        new WorldModelGenerator().generateWorld(modelManager.getServerModelManager());
 
         this.saveGameToFile();
     }
