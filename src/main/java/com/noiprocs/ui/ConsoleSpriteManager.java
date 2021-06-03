@@ -35,7 +35,7 @@ public class ConsoleSpriteManager extends SpriteManager {
 
     @Override
     public List<RenderableSprite> getRenderableObjectListWithinRange(int x, int y, int range) {
-        return renderableObjectMap.values().stream().filter(
+        return renderableSpriteMap.values().stream().filter(
                 renderableSprite -> renderableSprite.model.distanceTo(x, y) <= range
         ).collect(Collectors.toList());
     }

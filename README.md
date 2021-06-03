@@ -14,4 +14,4 @@
 ```
 
 ## Future improvement
-- Divide ModelManager into chunk
+- Divide ModelManager into chunks.

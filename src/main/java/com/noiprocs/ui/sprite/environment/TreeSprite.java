@@ -6,7 +6,7 @@ import com.noiprocs.ui.sprite.mob.character.ConsoleSprite;
 public class TreeSprite extends ConsoleSprite {
     private static final char[][] TEXTURE = {
             {'(','(',')',')'},
-            {0,'|','|',0},
+            {0,'\\','/',0},
             {'=','|','|','='},
     };
 

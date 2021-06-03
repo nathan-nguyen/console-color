@@ -35,8 +35,8 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
 
         boolean[][] map = constructCurrentHitboxMap(offsetX, offsetY, renderableSpriteList);
 
-        boolean isExisting = gameContext.spriteManager.renderableObjectMap.containsKey(model.id);
-        RenderableSprite renderableSprite = isExisting ? gameContext.spriteManager.renderableObjectMap.get(model.id)
+        boolean isExisting = gameContext.spriteManager.renderableSpriteMap.containsKey(model.id);
+        RenderableSprite renderableSprite = isExisting ? gameContext.spriteManager.renderableSpriteMap.get(model.id)
                 : gameContext.spriteManager.createRenderableObject(model);
 
         logger.info("Model " + model + " is already existing: " + isExisting);

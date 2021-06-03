@@ -3,7 +3,6 @@ package com.noiprocs.core.graphics;
 import com.noiprocs.core.GameContext;
 import com.noiprocs.core.config.Config;
 import com.noiprocs.core.model.Model;
-import com.noiprocs.core.model.mob.character.PlayerModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +15,7 @@ public abstract class SpriteManager {
     private static final Logger logger = LoggerFactory.getLogger(SpriteManager.class);
     private GameContext gameContext;
 
-    public final Map<String, RenderableSprite> renderableObjectMap = new HashMap<>();
+    public final Map<String, RenderableSprite> renderableSpriteMap = new HashMap<>();
     private int modelSynchronizationDelay = 0;
 
     public void setGameContext(GameContext gameContext) {
@@ -29,26 +28,26 @@ public abstract class SpriteManager {
         Map<String, Model> modelMap = gameContext.modelManager.getModelMap();
         List<String> removedKeyList = new ArrayList<>();
 
-        for (String key: renderableObjectMap.keySet()) {
+        // Remove no-longer-exist models
+        for (String key: renderableSpriteMap.keySet()) {
             if (!modelMap.containsKey(key)) {
-                logger.info("Removing object: " + key);
+                logger.info("Remove Renderable Sprite: " + key);
                 removedKeyList.add(key);
             }
         }
+        for (String key: removedKeyList) renderableSpriteMap.remove(key);
 
-        for (String key: removedKeyList) renderableObjectMap.remove(key);
-
+        // Add newly-created models
         for (String key: modelMap.keySet()) {
-            if (!renderableObjectMap.containsKey(key)) {
+            if (!renderableSpriteMap.containsKey(key)) {
                 Model model = modelMap.get(key);
                 RenderableSprite renderableObject = createRenderableObject(model);
-                if (renderableObject != null) renderableObjectMap.put(key, renderableObject);
+                if (renderableObject != null) renderableSpriteMap.put(key, renderableObject);
             }
         }
     }
 
     public abstract RenderableSprite createRenderableObject(Model model);
     public abstract void update(int dt);
-
     public abstract List<RenderableSprite> getRenderableObjectListWithinRange(int x, int y, int range);
 }
