@@ -2,8 +2,10 @@ package com.noiprocs.core;
 
 import com.noiprocs.core.graphics.GameScreenInterface;
 import com.noiprocs.core.graphics.SpriteManager;
-import com.noiprocs.core.model.mob.character.PlayerModel;
 import com.noiprocs.core.model.ModelManager;
+import com.noiprocs.core.model.WorldGenerator;
+import com.noiprocs.core.model.environment.TreeModel;
+import com.noiprocs.core.model.mob.character.PlayerModel;
 
 import java.io.IOException;
 
@@ -27,9 +29,7 @@ public class GameContext {
     }
 
     private void initializeNewGame() {
-        PlayerModel playerModel = new PlayerModel(20, 20, true);
-
-        modelManager.getServerModelManager().addModel(playerModel);
+        new WorldGenerator().generateWorld(modelManager.getServerModelManager());
 
         this.saveGameToFile();
     }

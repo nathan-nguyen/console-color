@@ -3,6 +3,7 @@ package com.noiprocs.core.graphics;
 import com.noiprocs.core.config.Config;
 import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.ModelManager;
+import com.noiprocs.core.model.mob.character.PlayerModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,6 +15,7 @@ import java.util.Map;
 public abstract class SpriteManager {
     private static final Logger logger = LoggerFactory.getLogger(SpriteManager.class);
     protected ModelManager modelManager;
+    public PlayerModel player;
 
     protected final Map<String, RenderableSprite> renderableObjectMap = new HashMap<>();
     private int modelSynchronizationDelay = 0;
