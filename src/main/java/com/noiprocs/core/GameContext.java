@@ -1,6 +1,7 @@
 package com.noiprocs.core;
 
 import com.noiprocs.core.graphics.GameScreenInterface;
+import com.noiprocs.core.graphics.HitboxManagerInterface;
 import com.noiprocs.core.graphics.SpriteManager;
 import com.noiprocs.core.model.ModelManager;
 import com.noiprocs.core.model.WorldModelGenerator;
@@ -8,11 +9,12 @@ import com.noiprocs.core.model.WorldModelGenerator;
 import java.io.IOException;
 
 public class GameContext {
-    private final ModelManager modelManager = new ModelManager();
+    public final ModelManager modelManager = new ModelManager();
+    public final ControlManager controlManager = new ControlManager(this);
 
-    public final ControlManager controlManager = new ControlManager(modelManager);
+    public SpriteManager spriteManager;
+    public HitboxManagerInterface hitboxManager;
 
-    private SpriteManager spriteManager;
     private GameScreenInterface gameScreen;
 
     public void run() {
@@ -53,11 +55,16 @@ public class GameContext {
 
     public void setSpriteManager(SpriteManager spriteManager) {
         this.spriteManager = spriteManager;
-        this.spriteManager.setModelManager(modelManager);
+        this.spriteManager.setGameContext(this);
     }
 
     public void setGameScreen(GameScreenInterface gameScreen) {
         this.gameScreen = gameScreen;
-        this.gameScreen.setSpriteManager(spriteManager);
+        this.gameScreen.setGameContext(this);
+    }
+
+    public void setHitboxManager(HitboxManagerInterface hitboxManager) {
+        this.hitboxManager = hitboxManager;
+        hitboxManager.setGameContext(this);
     }
 }

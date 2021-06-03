@@ -8,4 +8,6 @@ public class Config {
     public static final String USER_NAME = "gnik";
 
     public static final int RENDER_RANGE = 100;
+
+    public static final boolean IS_FREEZE = false;
 }

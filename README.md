@@ -12,3 +12,6 @@
 |_ util: Will be decided later
     |- SaveLoadManager: Save/Load ServerModelManager
 ```
+
+## Future improvement
+- Divide ModelManager into chunk

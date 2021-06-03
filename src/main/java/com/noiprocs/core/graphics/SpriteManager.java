@@ -1,8 +1,8 @@
 package com.noiprocs.core.graphics;
 
+import com.noiprocs.core.GameContext;
 import com.noiprocs.core.config.Config;
 import com.noiprocs.core.model.Model;
-import com.noiprocs.core.model.ModelManager;
 import com.noiprocs.core.model.mob.character.PlayerModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,20 +14,19 @@ import java.util.Map;
 
 public abstract class SpriteManager {
     private static final Logger logger = LoggerFactory.getLogger(SpriteManager.class);
-    protected ModelManager modelManager;
-    public PlayerModel player;
+    private GameContext gameContext;
 
-    protected final Map<String, RenderableSprite> renderableObjectMap = new HashMap<>();
+    public final Map<String, RenderableSprite> renderableObjectMap = new HashMap<>();
     private int modelSynchronizationDelay = 0;
 
-    public void setModelManager(ModelManager modelManager) {
-        this.modelManager = modelManager;
+    public void setGameContext(GameContext gameContext) {
+        this.gameContext = gameContext;
     }
 
-    protected void synchronizeModelData() {
-        if (modelSynchronizationDelay++ % Config.MODEL_SYNCHRONISATION_DELAY != 0) return;
+    public void synchronizeModelData(boolean forceSynchronize) {
+        if (!forceSynchronize && modelSynchronizationDelay++ % Config.MODEL_SYNCHRONISATION_DELAY != 0) return;
 
-        Map<String, Model> modelMap = modelManager.getModelMap();
+        Map<String, Model> modelMap = gameContext.modelManager.getModelMap();
         List<String> removedKeyList = new ArrayList<>();
 
         for (String key: renderableObjectMap.keySet()) {
@@ -51,5 +50,5 @@ public abstract class SpriteManager {
     public abstract RenderableSprite createRenderableObject(Model model);
     public abstract void update(int dt);
 
-    public abstract List<RenderableSprite> getAllRenderableObjectWithinRange(int range);
+    public abstract List<RenderableSprite> getRenderableObjectListWithinRange(int x, int y, int range);
 }

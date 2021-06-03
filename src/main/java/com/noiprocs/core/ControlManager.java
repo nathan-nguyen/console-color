@@ -1,19 +1,13 @@
 package com.noiprocs.core;
 
-import com.noiprocs.core.config.Config;
-import com.noiprocs.core.model.ModelManager;
-import com.noiprocs.core.model.mob.character.PlayerModel;
-
 public class ControlManager {
-    private ModelManager modelManager;
-    private PlayerModel playerModel;
+    private GameContext gameContext;
 
-    public ControlManager(ModelManager modelManager) {
-        this.modelManager = modelManager;
+    public ControlManager(GameContext gameContext) {
+        this.gameContext = gameContext;
     }
 
     public void processCommand(String command) {
-        if (playerModel == null) this.playerModel = (PlayerModel) modelManager.getModelMap().get(Config.USER_NAME);
         if (command.length() == 0) return;
 
         for (int i = 0; i < command.length(); ++i) processCommand(command.charAt(i));
@@ -21,10 +15,10 @@ public class ControlManager {
 
     public void processCommand(char c) {
         switch (c) {
-            case 'a': playerModel.moveLeft(); break;
-            case 'd': playerModel.moveRight(); break;
-            case 'w': playerModel.moveUp(); break;
-            case 's': playerModel.moveDown(); break;
+            case 'a': gameContext.modelManager.getPlayerModel().moveLeft(); break;
+            case 'd': gameContext.modelManager.getPlayerModel().moveRight(); break;
+            case 'w': gameContext.modelManager.getPlayerModel().moveUp(); break;
+            case 's': gameContext.modelManager.getPlayerModel().moveDown(); break;
         }
     }
 }

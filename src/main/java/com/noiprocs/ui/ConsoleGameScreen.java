@@ -1,31 +1,48 @@
 package com.noiprocs.ui;
 
+import com.noiprocs.core.GameContext;
 import com.noiprocs.core.config.Config;
 import com.noiprocs.core.graphics.GameScreenInterface;
 import com.noiprocs.core.graphics.RenderableSprite;
 import com.noiprocs.core.graphics.SpriteManager;
+import com.noiprocs.core.model.mob.character.PlayerModel;
 import com.noiprocs.ui.sprite.mob.character.ConsoleSprite;
 
 import java.util.List;
 
+import static com.noiprocs.ui.UIConfig.HEIGHT;
+import static com.noiprocs.ui.UIConfig.WIDTH;
+
 public class ConsoleGameScreen implements GameScreenInterface {
-    private static final int WIDTH = 60;
-    private static final int HEIGHT = 40;
     private final char[][] map = new char[HEIGHT][WIDTH];
-    private SpriteManager spriteManager;
+    private GameContext gameContext;
 
     @Override
-    public void setSpriteManager(SpriteManager spriteManager) {
-        this.spriteManager = spriteManager;
+    public void setGameContext(GameContext gameContext) {
+        this.gameContext = gameContext;
     }
 
     @Override
     public void render(int delta) {
-        List<RenderableSprite> renderableSpriteList =
-                spriteManager.getAllRenderableObjectWithinRange(Config.RENDER_RANGE);
+        PlayerModel playerModel = gameContext.modelManager.getPlayerModel();
 
-        int offsetX = spriteManager.player.posX - HEIGHT / 2;
-        int offsetY = spriteManager.player.posY - WIDTH / 2;
+        // Get list of objects not far from player
+        List<RenderableSprite> renderableSpriteList = gameContext.spriteManager.getRenderableObjectListWithinRange(
+                playerModel.posX,
+                playerModel.posY,
+                Config.RENDER_RANGE
+        );
+
+        /* Render order:
+         * - PlayerModel renders last.
+         * - Models with smaller posY render first.
+         */
+        renderableSpriteList.sort(
+                (u, v) -> (u.model instanceof PlayerModel) ? 1 : Integer.compare(u.model.posY, v.model.posY)
+        );
+
+        int offsetX = playerModel.posX - HEIGHT / 2;
+        int offsetY = playerModel.posY - WIDTH / 2;
 
         this.clearMap();
 
@@ -39,7 +56,7 @@ public class ConsoleGameScreen implements GameScreenInterface {
         }
 
         // Render map
-        this.printMap();
+        if (!Config.IS_FREEZE) this.printMap();
     }
 
     private void clearMap() {

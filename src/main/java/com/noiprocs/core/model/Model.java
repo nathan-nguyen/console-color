@@ -14,4 +14,8 @@ public abstract class Model implements Serializable {
         this.posY = y;
         this.isPhysical = isPhysical;
     }
+
+    public int distanceTo(int x, int y) {
+        return (int) Math.sqrt((x - posX) * (x - posX) + (y - posY) * (y - posY));
+    }
 }

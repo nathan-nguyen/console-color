@@ -11,8 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ConsoleSpriteManager extends SpriteManager {
     private static final Logger logger = LoggerFactory.getLogger(ConsoleSpriteManager.class);
@@ -21,7 +21,6 @@ public class ConsoleSpriteManager extends SpriteManager {
     public RenderableSprite createRenderableObject(Model model) {
         if (model instanceof PlayerModel) {
             logger.info("Creating player " + model.id);
-            this.player = (PlayerModel) model;
             return new PlayerSprite(model);
         }
         if (model instanceof TreeModel) return new TreeSprite(model);
@@ -31,18 +30,13 @@ public class ConsoleSpriteManager extends SpriteManager {
 
     @Override
     public void update(int dt) {
-        this.synchronizeModelData();
+        this.synchronizeModelData(false);
     }
 
     @Override
-    public List<RenderableSprite> getAllRenderableObjectWithinRange(int range) {
-        List<RenderableSprite> renderableSpriteList = new ArrayList<>(renderableObjectMap.values());
-
-        /* Render order:
-         * - PlayerModel renders last.
-         * - Models with smaller posY render first.
-         */
-        renderableSpriteList.sort((u, v) -> (u.model instanceof PlayerModel) ? 1 : Integer.compare(u.model.posY, v.model.posY));
-        return renderableSpriteList;
+    public List<RenderableSprite> getRenderableObjectListWithinRange(int x, int y, int range) {
+        return renderableObjectMap.values().stream().filter(
+                renderableSprite -> renderableSprite.model.distanceTo(x, y) <= range
+        ).collect(Collectors.toList());
     }
 }
