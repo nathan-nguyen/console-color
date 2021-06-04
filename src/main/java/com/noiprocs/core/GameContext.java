@@ -4,21 +4,45 @@ import com.noiprocs.core.graphics.GameScreenInterface;
 import com.noiprocs.core.graphics.HitboxManagerInterface;
 import com.noiprocs.core.graphics.SpriteManager;
 import com.noiprocs.core.model.ModelManager;
-import com.noiprocs.core.model.WorldModelGenerator;
-
-import java.io.IOException;
+import com.noiprocs.core.network.NetworkManager;
 
 public class GameContext {
-    public final ModelManager modelManager = new ModelManager();
+    private final NetworkManager networkManager = new NetworkManager();
+    public final ModelManager modelManager = new ModelManager(this, networkManager);
     public final ControlManager controlManager = new ControlManager(this);
+
+    public final String platform;
+    public final String username;
+    public final boolean isServer;
+    public final String hostname;
+    public final int port;
 
     public SpriteManager spriteManager;
     public HitboxManagerInterface hitboxManager;
 
     private GameScreenInterface gameScreen;
 
+    public GameContext(String platform, String username, String type, String hostname, int port) {
+        this.platform = platform;
+        this.username = username;
+        this.isServer = type.equals("server");
+        this.hostname = hostname;
+        this.port = port;
+    }
+
+    private void startNetworkService() {
+        if (isServer) networkManager.startServer(hostname, port);
+        else networkManager.startClient(hostname, port);
+        networkManager.startService();
+        networkManager.setNetworkReceiver(modelManager);
+    }
+
     public void run() {
-        this.loadGameFromSaveFile();
+        // Load data from save file for Server
+        modelManager.start();
+
+        // Start network services
+        this.startNetworkService();
 
         // Initialize timeManager
         TimeManager timeManager = new TimeManager() {
@@ -29,28 +53,6 @@ public class GameContext {
             }
         };
         timeManager.run();
-    }
-
-    private void initializeNewGame() {
-        new WorldModelGenerator().generateWorld(modelManager.getServerModelManager());
-
-        this.saveGameToFile();
-    }
-
-    // Save game to file
-    private void saveGameToFile() {
-        // Save game
-        SaveLoadManager.saveGameData(modelManager.getServerModelManager());
-    }
-
-    // Load game from save file
-    private void loadGameFromSaveFile() {
-        try {
-            modelManager.setServerModelManager(SaveLoadManager.loadGameData());
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-            initializeNewGame();
-        }
     }
 
     public void setSpriteManager(SpriteManager spriteManager) {

@@ -4,7 +4,6 @@ import com.noiprocs.core.GameContext;
 import com.noiprocs.core.config.Config;
 import com.noiprocs.core.graphics.GameScreenInterface;
 import com.noiprocs.core.graphics.RenderableSprite;
-import com.noiprocs.core.graphics.SpriteManager;
 import com.noiprocs.core.model.mob.character.PlayerModel;
 import com.noiprocs.ui.sprite.mob.character.ConsoleSprite;
 
@@ -25,6 +24,9 @@ public class ConsoleGameScreen implements GameScreenInterface {
     @Override
     public void render(int delta) {
         PlayerModel playerModel = gameContext.modelManager.getPlayerModel();
+
+        // Only render when playerModel is existing
+        if (playerModel == null) return;
 
         // Get list of objects not far from player
         List<RenderableSprite> renderableSpriteList = gameContext.spriteManager.getRenderableObjectListWithinRange(

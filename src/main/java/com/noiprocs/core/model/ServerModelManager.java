@@ -2,7 +2,6 @@ package com.noiprocs.core.model;
 
 import com.noiprocs.core.model.mob.character.PlayerModel;
 import com.noiprocs.core.util.Helper;
-import com.noiprocs.ui.ConsoleSpriteManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,6 +23,10 @@ public class ServerModelManager implements Serializable {
 
         modelMap.put(model.id, model);
         Helper.GAME_CONTEXT.spriteManager.synchronizeModelData(true);
+    }
+
+    public void removeModel(String id) {
+        modelMap.remove(id);
     }
 
     public Map<String, Model> getModelMap() {
