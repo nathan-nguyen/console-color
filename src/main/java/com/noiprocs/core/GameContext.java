@@ -70,8 +70,12 @@ public class GameContext {
     public void progress(int dt) {
         worldCounter += 1;
 
-        // Broadcast data to all clients
-        modelManager.broadcastToClient();
+        /*
+         * Server:
+         *     - Broadcast data to all clients.
+         *     - Periodically save data to disk.
+         */
+        modelManager.update(dt);
 
         // Synchronize data with modelManager
         spriteManager.update(dt);

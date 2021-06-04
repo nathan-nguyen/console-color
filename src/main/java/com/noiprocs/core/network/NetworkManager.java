@@ -77,6 +77,7 @@ public class NetworkManager implements ClientInterface {
         String disconnectedClientUserName = clientIdMap.get(clientId);
         logger.info("Client " + clientId + " - User " + disconnectedClientUserName + " disconnected!");
         gameContext.modelManager.removeModel(disconnectedClientUserName);
+        gameContext.modelManager.saveGameData();
     }
 
     private void processClientCommand(int clientId, byte[] bytes) {

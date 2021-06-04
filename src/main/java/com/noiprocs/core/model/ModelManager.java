@@ -47,7 +47,7 @@ public class ModelManager {
                 serverModelManager = new ServerModelManager();
                 new WorldModelGenerator(gameContext).generateWorld();
 
-                SaveLoadManager.saveGameData(serverModelManager);
+                this.saveGameData();
             }
         } else {
             serverModelManager = new ServerModelManager();
@@ -60,7 +60,6 @@ public class ModelManager {
      */
     public void broadcastToClient() {
         if (!gameContext.isServer) return;
-        if (gameContext.worldCounter % Config.BROADCAST_DELAY != 0) return;
 
         try {
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
@@ -112,5 +111,18 @@ public class ModelManager {
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    public void update(int dt) {
+        this.broadcastToClient();
+
+        if (gameContext.worldCounter % Config.AUTO_SAVE_DURATION == 0) this.saveGameData();
+    }
+
+    /**
+     * Save game data to disk
+     */
+    public void saveGameData() {
+        SaveLoadManager.saveGameData(serverModelManager);
     }
 }
