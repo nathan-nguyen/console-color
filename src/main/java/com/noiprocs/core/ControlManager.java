@@ -54,6 +54,7 @@ public class ControlManager {
                 case 's':
                     playerModel.moveDown();
                     break;
+                case 'h': playerModel.stop(); break;
             }
         }
     }

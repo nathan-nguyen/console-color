@@ -5,6 +5,7 @@ import com.noiprocs.core.graphics.HitboxManagerInterface;
 import com.noiprocs.core.graphics.SpriteManager;
 import com.noiprocs.core.model.ModelManager;
 import com.noiprocs.core.network.NetworkManager;
+import com.noiprocs.core.util.Helper;
 
 public class GameContext {
     public final NetworkManager networkManager = new NetworkManager(this);
@@ -30,6 +31,8 @@ public class GameContext {
         this.isServer = type.equals("server");
         this.hostname = hostname;
         this.port = port;
+
+        Helper.GAME_CONTEXT = this;
     }
 
     public void run() {

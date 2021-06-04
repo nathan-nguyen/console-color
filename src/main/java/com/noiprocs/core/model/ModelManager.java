@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class ModelManager {
@@ -40,6 +42,9 @@ public class ModelManager {
         if (gameContext.isServer) {
             try {
                 serverModelManager = SaveLoadManager.loadGameData();
+
+                // Remove disconnected player when server starts
+                this.removeDisconnectedPlayer();
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
 
@@ -75,12 +80,6 @@ public class ModelManager {
 
     public void addModel(Model model) {
         logger.info(this.getClass() + " - Adding Model: " + model.id);
-
-        // Special treatment when adding PlayerModel
-        if (model instanceof PlayerModel) {
-            logger.info("Adding PlayerModel");
-        }
-
         serverModelManager.modelMap.put(model.id, model);
         gameContext.spriteManager.synchronizeModelData(true);
     }
@@ -90,11 +89,17 @@ public class ModelManager {
      * @param playerName: Client Player Username
      */
     public void addPlayerModel(String playerName) {
+        PlayerModel playerModel;
         if (!serverModelManager.playerModelMap.containsKey(playerName)) {
-            PlayerModel pm = new PlayerModel(playerName, 0, 0, true);
-            serverModelManager.playerModelMap.put(playerName, pm);
+            playerModel = new PlayerModel(playerName, 0, 0, true);
+            serverModelManager.playerModelMap.put(playerName, playerModel);
         }
-        this.addModel(serverModelManager.playerModelMap.get(playerName));
+        else playerModel = serverModelManager.playerModelMap.get(playerName);
+
+        // Player initial state must be STOP mode
+        playerModel.stop();
+
+        this.addModel(playerModel);
     }
 
     /**
@@ -114,6 +119,7 @@ public class ModelManager {
     }
 
     public void update(int dt) {
+        serverModelManager.modelMap.values().forEach(model -> model.update(dt));
         this.broadcastToClient();
 
         if (gameContext.worldCounter % Config.AUTO_SAVE_DURATION == 0) this.saveGameData();
@@ -124,5 +130,15 @@ public class ModelManager {
      */
     public void saveGameData() {
         SaveLoadManager.saveGameData(serverModelManager);
+    }
+
+    private void removeDisconnectedPlayer() {
+        List<String> disconnectedPlayer = new ArrayList<>();
+        for (Model model: serverModelManager.modelMap.values()) {
+            if (model instanceof PlayerModel && !model.id.equals(gameContext.username)) {
+                disconnectedPlayer.add(model.id);
+            }
+        }
+        for (String disconnectedUsername: disconnectedPlayer) this.removeModel(disconnectedUsername);
     }
 }

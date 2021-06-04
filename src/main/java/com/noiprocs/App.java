@@ -28,8 +28,6 @@ public class App {
         HitboxManagerInterface hitboxManager = new ConsoleHitboxManager();
         gameContext.setHitboxManager(hitboxManager);
 
-        Helper.GAME_CONTEXT = gameContext;
-
         // Start a separate thread for game, main thread is for control
         Runnable task = () -> gameContext.run();
         Thread thread = new Thread(task);

@@ -4,24 +4,57 @@ import com.noiprocs.core.model.Model;
 import com.noiprocs.core.util.Helper;
 
 public class PlayerModel extends Model {
+    public enum MovingDirection {
+        STOP, UP, DOWN, LEFT, RIGHT
+    }
+
+    private MovingDirection movingDirection = MovingDirection.STOP;
+
     public PlayerModel(String id, int x, int y, boolean isPhysical) {
         super(x, y, isPhysical);
         this.id = id;
     }
 
+    public void moveUp() {
+        this.movingDirection = MovingDirection.UP;
+    }
+
+    public void moveDown() {
+        this.movingDirection = MovingDirection.DOWN;
+    }
+
     public void moveLeft() {
-        if (Helper.GAME_CONTEXT.hitboxManager.isValid(this, posX, posY - 1)) posY -= 1;
+        this.movingDirection = MovingDirection.LEFT;
     }
 
     public void moveRight() {
-        if (Helper.GAME_CONTEXT.hitboxManager.isValid(this, posX, posY + 1)) posY += 1;
-   }
+        this.movingDirection = MovingDirection.RIGHT;
+    }
 
-   public void moveUp() {
-       if (Helper.GAME_CONTEXT.hitboxManager.isValid(this, posX - 1, posY)) posX -= 1;
-   }
+    public void stop() {
+        this.movingDirection = MovingDirection.STOP;
+    }
 
-   public void moveDown() {
-       if (Helper.GAME_CONTEXT.hitboxManager.isValid(this, posX + 1, posY)) posX += 1;
-   }
+    @Override
+    public void update(int dt) {
+        this.move();
+    }
+
+    private void move() {
+        switch (movingDirection) {
+            case STOP: return;
+            case UP: move(-1, 0); break;
+            case DOWN: move(1, 0); break;
+            case LEFT: move(0, -1); break;
+            case RIGHT: move(0, 1); break;
+        }
+    }
+
+    private void move(int x, int y) {
+        if (Helper.GAME_CONTEXT.hitboxManager.isValid(this, posX + x, posY + y)) {
+            posX += x;
+            posY += y;
+        }
+        else movingDirection = MovingDirection.STOP;
+    }
 }
