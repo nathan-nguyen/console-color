@@ -4,6 +4,9 @@ import com.noiprocs.core.model.Model;
 import com.noiprocs.core.util.Helper;
 
 public class PlayerModel extends Model {
+    private static final int HORIZONTAL_SPEED = 2;
+    private static final int VERTICAL_SPEED = 3;
+
     public enum MovingDirection {
         STOP, UP, DOWN, LEFT, RIGHT
     }
@@ -43,10 +46,10 @@ public class PlayerModel extends Model {
     private void move() {
         switch (movingDirection) {
             case STOP: return;
-            case UP: move(-1, 0); break;
-            case DOWN: move(1, 0); break;
-            case LEFT: move(0, -1); break;
-            case RIGHT: move(0, 1); break;
+            case UP: if (Helper.GAME_CONTEXT.worldCounter % VERTICAL_SPEED == 0) move(-1, 0); break;
+            case DOWN: if (Helper.GAME_CONTEXT.worldCounter % VERTICAL_SPEED == 0) move(1, 0); break;
+            case LEFT: if (Helper.GAME_CONTEXT.worldCounter % HORIZONTAL_SPEED == 0) move(0, -1); break;
+            case RIGHT: if (Helper.GAME_CONTEXT.worldCounter % HORIZONTAL_SPEED == 0) move(0, 1); break;
         }
     }
 

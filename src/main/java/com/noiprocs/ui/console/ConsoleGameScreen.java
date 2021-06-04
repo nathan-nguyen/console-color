@@ -79,6 +79,7 @@ public class ConsoleGameScreen implements GameScreenInterface {
     private void updateMap(int posX, int posY, char[][] texture, int offsetX, int offsetY) {
         for (int i = 0; i < texture.length; ++i) {
             for (int j = 0; j < texture[0].length; ++j) {
+                if (texture[i][j] == 0) continue;
                 int x = posX + i - offsetX;
                 int y = posY + j - offsetY;
                 if (x >= 0 && x < HEIGHT && y >= 0 && y < WIDTH) map[x][y] = texture[i][j];
