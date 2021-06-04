@@ -1,7 +1,6 @@
-package com.noiprocs.ui.sprite.environment;
+package com.noiprocs.ui.console.sprite.environment;
 
-import com.noiprocs.core.model.Model;
-import com.noiprocs.ui.sprite.ConsoleSprite;
+import com.noiprocs.ui.console.sprite.ConsoleSprite;
 
 public class TreeSprite extends ConsoleSprite {
     private static final char[][] TEXTURE = {

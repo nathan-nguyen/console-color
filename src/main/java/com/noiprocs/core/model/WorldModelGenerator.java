@@ -1,6 +1,7 @@
 package com.noiprocs.core.model;
 
 import com.noiprocs.core.GameContext;
+import com.noiprocs.core.config.Config;
 import com.noiprocs.core.model.environment.TreeModel;
 import com.noiprocs.core.model.mob.character.PlayerModel;
 
@@ -15,7 +16,9 @@ public class WorldModelGenerator {
     }
 
     public void generateWorld() {
-        gameContext.modelManager.addModel(new PlayerModel(gameContext.username, 0, 0, true));
+        if (!Config.DISABLE_PLAYER) {
+            gameContext.modelManager.addModel(new PlayerModel(gameContext.username, 0, 0, true));
+        }
 
         for (int i = 0; i < 20; ++i) {
             Model treeModel = new TreeModel(

@@ -10,4 +10,6 @@ public class Config {
 
     public static final int BROADCAST_DELAY = 1;
     public static final int AUTO_SAVE_DURATION = 1000;
+
+    public static boolean DISABLE_PLAYER = false;
 }

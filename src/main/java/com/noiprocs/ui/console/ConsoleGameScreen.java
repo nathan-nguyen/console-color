@@ -1,4 +1,4 @@
-package com.noiprocs.ui;
+package com.noiprocs.ui.console;
 
 import com.noiprocs.core.GameContext;
 import com.noiprocs.core.config.Config;
@@ -6,12 +6,12 @@ import com.noiprocs.core.graphics.GameScreenInterface;
 import com.noiprocs.core.graphics.RenderableSprite;
 import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.mob.character.PlayerModel;
-import com.noiprocs.ui.sprite.ConsoleSprite;
+import com.noiprocs.ui.console.sprite.ConsoleSprite;
 
 import java.util.List;
 
-import static com.noiprocs.ui.UIConfig.HEIGHT;
-import static com.noiprocs.ui.UIConfig.WIDTH;
+import static com.noiprocs.ui.console.ConsoleUIConfig.HEIGHT;
+import static com.noiprocs.ui.console.ConsoleUIConfig.WIDTH;
 
 public class ConsoleGameScreen implements GameScreenInterface {
     private final char[][] map = new char[HEIGHT][WIDTH];
@@ -24,6 +24,8 @@ public class ConsoleGameScreen implements GameScreenInterface {
 
     @Override
     public void render(int delta) {
+        if (Config.DISABLE_PLAYER) return;
+
         PlayerModel playerModel = (PlayerModel) gameContext.modelManager.getModel(gameContext.username);
 
         // Only render when playerModel is existing

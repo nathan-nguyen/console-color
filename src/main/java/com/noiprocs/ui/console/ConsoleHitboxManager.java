@@ -1,18 +1,18 @@
-package com.noiprocs.ui;
+package com.noiprocs.ui.console;
 
 import com.noiprocs.core.GameContext;
 import com.noiprocs.core.config.Config;
 import com.noiprocs.core.graphics.HitboxManagerInterface;
 import com.noiprocs.core.graphics.RenderableSprite;
 import com.noiprocs.core.model.Model;
-import com.noiprocs.ui.sprite.ConsoleSprite;
+import com.noiprocs.ui.console.sprite.ConsoleSprite;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-import static com.noiprocs.ui.UIConfig.HEIGHT;
-import static com.noiprocs.ui.UIConfig.WIDTH;
+import static com.noiprocs.ui.console.ConsoleUIConfig.HEIGHT;
+import static com.noiprocs.ui.console.ConsoleUIConfig.WIDTH;
 
 public class ConsoleHitboxManager implements HitboxManagerInterface {
     private static final Logger logger = LoggerFactory.getLogger(ConsoleHitboxManager.class);
@@ -39,7 +39,7 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
         RenderableSprite renderableSprite = isExisting ? gameContext.spriteManager.renderableSpriteMap.get(model.id)
                 : gameContext.spriteManager.createRenderableObject(model);
 
-        logger.info("Model " + model + " is already existing: " + isExisting);
+//        logger.info("Model " + model + " is already existing: " + isExisting);
 
         // Model is already existing
         if (isExisting) {
@@ -91,7 +91,7 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
     ) {
         boolean[][] map = new boolean[HEIGHT][WIDTH];
 
-        logger.info("Constructing hit box map with existing model: " + renderableSpriteList.size());
+//        logger.info("Constructing hit box map with existing model: " + renderableSpriteList.size());
 
         for (RenderableSprite renderableSprite : renderableSpriteList) {
             char[][] texture = ((ConsoleSprite) renderableSprite).getTexture();

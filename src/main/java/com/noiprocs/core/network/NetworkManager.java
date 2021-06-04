@@ -1,8 +1,6 @@
 package com.noiprocs.core.network;
 
 import com.noiprocs.core.GameContext;
-import com.noiprocs.core.model.ModelManager;
-import com.noiprocs.core.model.ServerModelManager;
 import com.noiprocs.network.ClientInterface;
 import com.noiprocs.network.CommunicationManager;
 import com.noiprocs.network.client.Client;
@@ -10,15 +8,11 @@ import com.noiprocs.network.server.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectInputStream;
 import java.util.HashMap;
 import java.util.Map;
 
 public class NetworkManager implements ClientInterface {
-    private static final Logger logger = LoggerFactory.getLogger(ModelManager.class);
+    private static final Logger logger = LoggerFactory.getLogger(NetworkManager.class);
 
     private final GameContext gameContext;
 
@@ -82,7 +76,7 @@ public class NetworkManager implements ClientInterface {
 
     private void processClientCommand(int clientId, byte[] bytes) {
         String command = new String(bytes);
-        logger.info("[Server] Receiving message from client: " + clientId + " - Content: " + command);
+//        logger.info("[Server] Receiving message from client: " + clientId + " - Content: " + command);
 
         if (command.startsWith("join ")) {
             String clientUserName = command.substring(5);

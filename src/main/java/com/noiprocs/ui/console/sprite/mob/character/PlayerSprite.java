@@ -1,7 +1,6 @@
-package com.noiprocs.ui.sprite.mob.character;
+package com.noiprocs.ui.console.sprite.mob.character;
 
-import com.noiprocs.core.model.Model;
-import com.noiprocs.ui.sprite.ConsoleSprite;
+import com.noiprocs.ui.console.sprite.ConsoleSprite;
 
 public class PlayerSprite extends ConsoleSprite {
     private static final char[][] TEXTURE = {

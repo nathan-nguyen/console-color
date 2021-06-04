@@ -1,17 +1,16 @@
-package com.noiprocs.ui;
+package com.noiprocs.ui.console;
 
 import com.noiprocs.core.graphics.RenderableSprite;
 import com.noiprocs.core.graphics.SpriteManager;
 import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.environment.TreeModel;
 import com.noiprocs.core.model.mob.character.PlayerModel;
-import com.noiprocs.ui.sprite.environment.TreeSprite;
-import com.noiprocs.ui.sprite.mob.character.PlayerSprite;
+import com.noiprocs.ui.console.sprite.environment.TreeSprite;
+import com.noiprocs.ui.console.sprite.mob.character.PlayerSprite;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

@@ -1,4 +1,4 @@
-package com.noiprocs.ui.util;
+package com.noiprocs.ui.console.util;
 
 public class ColorPrinter {
     public static final String ANSI_RESET = "\u001B[0m";

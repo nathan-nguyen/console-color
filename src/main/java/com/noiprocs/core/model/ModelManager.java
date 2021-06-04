@@ -139,6 +139,7 @@ public class ModelManager {
                 disconnectedPlayer.add(model.id);
             }
         }
+        if (Config.DISABLE_PLAYER) disconnectedPlayer.add(gameContext.username);
         for (String disconnectedUsername: disconnectedPlayer) this.removeModel(disconnectedUsername);
     }
 }
