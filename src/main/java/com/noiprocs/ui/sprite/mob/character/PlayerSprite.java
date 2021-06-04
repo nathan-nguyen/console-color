@@ -1,6 +1,7 @@
 package com.noiprocs.ui.sprite.mob.character;
 
 import com.noiprocs.core.model.Model;
+import com.noiprocs.ui.sprite.ConsoleSprite;
 
 public class PlayerSprite extends ConsoleSprite {
     private static final char[][] TEXTURE = {
@@ -9,8 +10,8 @@ public class PlayerSprite extends ConsoleSprite {
             {'/',0,'\\'},
     };
 
-    public PlayerSprite(Model model) {
-        super(TEXTURE, model);
+    public PlayerSprite(String id) {
+        super(TEXTURE, id);
     }
 
     @Override

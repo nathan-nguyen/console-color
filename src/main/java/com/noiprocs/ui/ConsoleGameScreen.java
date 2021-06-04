@@ -4,8 +4,9 @@ import com.noiprocs.core.GameContext;
 import com.noiprocs.core.config.Config;
 import com.noiprocs.core.graphics.GameScreenInterface;
 import com.noiprocs.core.graphics.RenderableSprite;
+import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.mob.character.PlayerModel;
-import com.noiprocs.ui.sprite.mob.character.ConsoleSprite;
+import com.noiprocs.ui.sprite.ConsoleSprite;
 
 import java.util.List;
 
@@ -23,11 +24,12 @@ public class ConsoleGameScreen implements GameScreenInterface {
 
     @Override
     public void render(int delta) {
-        PlayerModel playerModel = gameContext.modelManager.getPlayerModel();
+        PlayerModel playerModel = (PlayerModel) gameContext.modelManager.getModel(gameContext.username);
 
         // Only render when playerModel is existing
         if (playerModel == null) return;
 
+        System.out.println(playerModel.id);
         // Get list of objects not far from player
         List<RenderableSprite> renderableSpriteList = gameContext.spriteManager.getRenderableObjectListWithinRange(
                 playerModel.posX,
@@ -40,7 +42,12 @@ public class ConsoleGameScreen implements GameScreenInterface {
          * - Models with smaller posY render first.
          */
         renderableSpriteList.sort(
-                (u, v) -> (u.model instanceof PlayerModel) ? 1 : Integer.compare(u.model.posY, v.model.posY)
+                (u, v) -> {
+                    Model uModel = u.getModel();
+                    if (uModel instanceof PlayerModel) return 1;
+                    Model vModel = v.getModel();
+                    return Integer.compare(uModel.posY, vModel.posY);
+                }
         );
 
         int offsetX = playerModel.posX - HEIGHT / 2;
@@ -51,8 +58,9 @@ public class ConsoleGameScreen implements GameScreenInterface {
         for (RenderableSprite renderableSprite : renderableSpriteList) {
             char[][] texture = ((ConsoleSprite) renderableSprite).getTexture();
 
-            int posX = renderableSprite.model.posX;
-            int posY = renderableSprite.model.posY;
+            Model model = renderableSprite.getModel();
+            int posX = model.posX;
+            int posY = model.posY;
 
             this.updateMap(posX, posY, texture, offsetX, offsetY);
         }
@@ -81,9 +89,30 @@ public class ConsoleGameScreen implements GameScreenInterface {
         System.out.print("\033[H\033[2J");
         System.out.flush();
         StringBuilder sb = new StringBuilder();
-        for (char[] chars : map) {
-            for (int j = 0; j < map[0].length; ++j) sb.append(chars[j] == 0 ? ' ' : chars[j]);
+        for (int i = 0; i < map.length; ++i) {
+            // Add top border
+            if (i == 0) {
+                for (int j = 0; j < map[0].length + 2; ++j) sb.append('-');
+                sb.append('\n');
+            }
+            
+            // Add map content
+            for (int j = 0; j < map[0].length; ++j) {
+                // Add left border
+                if (j == 0) sb.append('|');
+
+                sb.append(map[i][j] == 0 ? ' ' : map[i][j]);
+
+                // Add right border
+                if (j == map[0].length - 1) sb.append('|');
+            }
             sb.append('\n');
+
+            // Add bottom border
+            if (i == map.length - 1) {
+                for (int j = 0; j < map[0].length + 2; ++j) sb.append('-');
+                sb.append('\n');
+            }
         }
         System.out.println(sb);
     }

@@ -7,4 +7,6 @@ public class Config {
 
     public static final int RENDER_RANGE = 100;
     public static final boolean IS_FREEZE = false;
+
+    public static final int BROADCAST_DELAY = 1;
 }

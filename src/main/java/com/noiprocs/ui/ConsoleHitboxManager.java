@@ -5,7 +5,7 @@ import com.noiprocs.core.config.Config;
 import com.noiprocs.core.graphics.HitboxManagerInterface;
 import com.noiprocs.core.graphics.RenderableSprite;
 import com.noiprocs.core.model.Model;
-import com.noiprocs.ui.sprite.mob.character.ConsoleSprite;
+import com.noiprocs.ui.sprite.ConsoleSprite;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,8 +71,10 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
     // Remove current object from hitbox map
     private void removeFromHitboxMap(boolean[][] map, int offsetX, int offsetY, RenderableSprite renderableSprite) {
         char[][] texture = ((ConsoleSprite) renderableSprite).getTexture();
-        int posX = renderableSprite.model.posX;
-        int posY = renderableSprite.model.posY;
+
+        Model model = renderableSprite.getModel();
+        int posX = model.posX;
+        int posY = model.posY;
 
         for (int i = 0; i < texture.length; ++i) {
             for (int j = 0; j < texture[0].length; ++j) {
@@ -94,8 +96,9 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
         for (RenderableSprite renderableSprite : renderableSpriteList) {
             char[][] texture = ((ConsoleSprite) renderableSprite).getTexture();
 
-            int posX = renderableSprite.model.posX;
-            int posY = renderableSprite.model.posY;
+            Model model = renderableSprite.getModel();
+            int posX = model.posX;
+            int posY = model.posY;
 
             for (int i = 0; i < texture.length; ++i) {
                 for (int j = 0; j < texture[0].length; ++j) {

@@ -38,7 +38,7 @@ public class App {
         Scanner scanner = new Scanner(System.in);
         while (true) {
             String line = scanner.nextLine();
-            gameContext.controlManager.processCommand(line);
+            gameContext.controlManager.processInput(line);
         }
     }
 }

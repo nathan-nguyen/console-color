@@ -1,7 +1,5 @@
 package com.noiprocs.core.network;
 
-import com.noiprocs.core.config.Config;
-import com.noiprocs.core.util.Helper;
 import com.noiprocs.network.ClientInterface;
 import com.noiprocs.network.CommunicationManager;
 import com.noiprocs.network.client.Client;
@@ -12,8 +10,8 @@ public class NetworkManager {
     private Server server;
     private Client client;
 
-    public void broadcast(String message) {
-        communicationManager.sendMessage(message);
+    public void broadcast(byte[] bytes) {
+        communicationManager.sendMessage(bytes);
     }
 
     public void setNetworkReceiver(ClientInterface networkReceiver) {

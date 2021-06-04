@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,9 +22,9 @@ public class ConsoleSpriteManager extends SpriteManager {
     public RenderableSprite createRenderableObject(Model model) {
         if (model instanceof PlayerModel) {
             logger.info("Creating player " + model.id);
-            return new PlayerSprite(model);
+            return new PlayerSprite(model.id);
         }
-        if (model instanceof TreeModel) return new TreeSprite(model);
+        if (model instanceof TreeModel) return new TreeSprite(model.id);
 
         throw new NotImplementedException();
     }
@@ -36,7 +37,10 @@ public class ConsoleSpriteManager extends SpriteManager {
     @Override
     public List<RenderableSprite> getRenderableObjectListWithinRange(int x, int y, int range) {
         return renderableSpriteMap.values().stream().filter(
-                renderableSprite -> renderableSprite.model.distanceTo(x, y) <= range
+                renderableSprite -> {
+                    Model model = renderableSprite.getModel();
+                    return model != null && renderableSprite.getModel().distanceTo(x, y) <= range;
+                }
         ).collect(Collectors.toList());
     }
 }

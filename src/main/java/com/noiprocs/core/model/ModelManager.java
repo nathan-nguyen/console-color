@@ -2,36 +2,35 @@ package com.noiprocs.core.model;
 
 import com.noiprocs.core.GameContext;
 import com.noiprocs.core.SaveLoadManager;
+import com.noiprocs.core.config.Config;
 import com.noiprocs.core.model.mob.character.PlayerModel;
-import com.noiprocs.core.network.NetworkManager;
 import com.noiprocs.network.ClientInterface;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
+import java.io.*;
+import java.util.HashMap;
 import java.util.Map;
 
 public class ModelManager implements ClientInterface {
     private static final Logger logger = LoggerFactory.getLogger(ModelManager.class);
 
     private final GameContext gameContext;
-    private final NetworkManager networkManager;
 
     private ServerModelManager serverModelManager;
-    private PlayerModel playerModel;
 
-    public ModelManager(GameContext gameContext, NetworkManager networkManager) {
+    private final Map<Integer, String> clientIdMap = new HashMap<>();
+
+    public ModelManager(GameContext gameContext) {
         this.gameContext = gameContext;
-        this.networkManager = networkManager;
     }
 
     public Map<String, Model> getModelMap() {
         return serverModelManager.getModelMap();
     }
 
-    public PlayerModel getPlayerModel() {
-        if (playerModel == null) playerModel = (PlayerModel) getModelMap().get(gameContext.username);
-        return playerModel;
+    public Model getModel(String id) {
+        return getModelMap().get(id);
     }
 
     public void start() {
@@ -47,13 +46,54 @@ public class ModelManager implements ClientInterface {
 
                 SaveLoadManager.saveGameData(serverModelManager);
             }
+        } else {
+            serverModelManager = new ServerModelManager();
+            gameContext.networkManager.broadcast(("join " + gameContext.username).getBytes());
         }
-        else serverModelManager = new ServerModelManager();
+    }
+
+    public void broadcastToClient() {
+        if (!gameContext.isServer) return;
+        if (gameContext.worldCounter % Config.BROADCAST_DELAY != 0) return;
+
+        try {
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(buffer);
+            oos.writeObject(serverModelManager);
+            oos.flush();
+            gameContext.networkManager.broadcast(buffer.toByteArray());
+            buffer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void receiveMessage(int clientId, String message) {
-        logger.info("Receiving message from " + clientId + " - Content: " + message);
+    public void receiveMessage(int clientId, byte[] bytes) {
+        if (!gameContext.isServer) {
+            try {
+                ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
+                ObjectInput in = new ObjectInputStream(bis);
+                this.serverModelManager = (ServerModelManager) in.readObject();
+                in.close();
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        } else {
+            String command = new String(bytes);
+
+            logger.info("[Server] Receiving message from client: " + clientId + " - Content: " + command);
+
+            if (command.startsWith("join ")) {
+                String clientUserName = command.substring(5);
+                serverModelManager.addPlayer(clientUserName);
+                clientIdMap.put(clientId, clientUserName);
+            }
+            else {
+                String[] splitArr = command.split(" ");
+                gameContext.controlManager.processCommand(splitArr[0], splitArr[1]);
+            }
+        }
     }
 
     @Override
@@ -69,6 +109,8 @@ public class ModelManager implements ClientInterface {
 
     @Override
     public void clientDisconnect(int clientId) {
-        logger.info("Client " + clientId + " disconnected!");
+        String disconnectedClientUserName = clientIdMap.get(clientId);
+        logger.info("Client " + clientId + " - User " + disconnectedClientUserName + " disconnected!");
+        serverModelManager.removeModel(disconnectedClientUserName);
     }
 }

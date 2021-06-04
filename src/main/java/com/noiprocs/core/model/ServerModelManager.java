@@ -13,6 +13,8 @@ public class ServerModelManager implements Serializable {
     private static final Logger logger = LoggerFactory.getLogger(ServerModelManager.class);
     private Map<String, Model> modelMap = new HashMap<>();
 
+    public Map<String, PlayerModel> playerModelMap = new HashMap<>();
+
     public void addModel(Model model) {
         logger.info(this.getClass() + " - Adding Model: " + model.id);
 
@@ -23,6 +25,14 @@ public class ServerModelManager implements Serializable {
 
         modelMap.put(model.id, model);
         Helper.GAME_CONTEXT.spriteManager.synchronizeModelData(true);
+    }
+
+    public void addPlayer(String playerName) {
+        if (!playerModelMap.containsKey(playerName)) {
+            PlayerModel pm = new PlayerModel(playerName, 0, 0, true);
+            playerModelMap.put(playerName, pm);
+        }
+        this.addModel(playerModelMap.get(playerName));
     }
 
     public void removeModel(String id) {

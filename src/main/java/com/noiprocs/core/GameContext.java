@@ -7,8 +7,8 @@ import com.noiprocs.core.model.ModelManager;
 import com.noiprocs.core.network.NetworkManager;
 
 public class GameContext {
-    private final NetworkManager networkManager = new NetworkManager();
-    public final ModelManager modelManager = new ModelManager(this, networkManager);
+    public final NetworkManager networkManager = new NetworkManager();
+    public final ModelManager modelManager = new ModelManager(this);
     public final ControlManager controlManager = new ControlManager(this);
 
     public final String platform;
@@ -16,6 +16,8 @@ public class GameContext {
     public final boolean isServer;
     public final String hostname;
     public final int port;
+
+    public int worldCounter = 0;
 
     public SpriteManager spriteManager;
     public HitboxManagerInterface hitboxManager;
@@ -38,18 +40,17 @@ public class GameContext {
     }
 
     public void run() {
-        // Load data from save file for Server
-        modelManager.start();
-
         // Start network services
         this.startNetworkService();
+
+        // Load data from save file for Server
+        modelManager.start();
 
         // Initialize timeManager
         TimeManager timeManager = new TimeManager() {
             @Override
             protected void update(int dt) {
-                spriteManager.update(dt);
-                gameScreen.render(dt);
+                progress(dt);
             }
         };
         timeManager.run();
@@ -68,5 +69,12 @@ public class GameContext {
     public void setHitboxManager(HitboxManagerInterface hitboxManager) {
         this.hitboxManager = hitboxManager;
         hitboxManager.setGameContext(this);
+    }
+
+    public void progress(int dt) {
+        worldCounter += 1;
+        modelManager.broadcastToClient();
+        spriteManager.update(dt);
+        gameScreen.render(dt);
     }
 }

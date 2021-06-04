@@ -1,24 +1,43 @@
 package com.noiprocs.core;
 
+import com.noiprocs.core.model.mob.character.PlayerModel;
+
 public class ControlManager {
-    private GameContext gameContext;
+    private final GameContext gameContext;
 
     public ControlManager(GameContext gameContext) {
         this.gameContext = gameContext;
     }
 
-    public void processCommand(String command) {
+    public void processInput(String command) {
         if (command.length() == 0) return;
 
-        for (int i = 0; i < command.length(); ++i) processCommand(command.charAt(i));
+        if (!gameContext.isServer) {
+            gameContext.networkManager.broadcast((gameContext.username + " " + command).getBytes());
+            return;
+        }
+
+        processCommand(gameContext.username, command);
     }
 
-    public void processCommand(char c) {
-        switch (c) {
-            case 'a': gameContext.modelManager.getPlayerModel().moveLeft(); break;
-            case 'd': gameContext.modelManager.getPlayerModel().moveRight(); break;
-            case 'w': gameContext.modelManager.getPlayerModel().moveUp(); break;
-            case 's': gameContext.modelManager.getPlayerModel().moveDown(); break;
+    public void processCommand(String username, String command) {
+        PlayerModel playerModel = (PlayerModel) gameContext.modelManager.getModel(username);
+
+        for (int i = 0; i < command.length(); ++i) {
+            switch (command.charAt(i)) {
+                case 'a':
+                    playerModel.moveLeft();
+                    break;
+                case 'd':
+                    playerModel.moveRight();
+                    break;
+                case 'w':
+                    playerModel.moveUp();
+                    break;
+                case 's':
+                    playerModel.moveDown();
+                    break;
+            }
         }
     }
 }
