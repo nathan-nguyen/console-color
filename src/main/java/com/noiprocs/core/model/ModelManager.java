@@ -4,35 +4,38 @@ import com.noiprocs.core.GameContext;
 import com.noiprocs.core.SaveLoadManager;
 import com.noiprocs.core.config.Config;
 import com.noiprocs.core.model.mob.character.PlayerModel;
-import com.noiprocs.network.ClientInterface;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.util.HashMap;
 import java.util.Map;
 
-public class ModelManager implements ClientInterface {
+public class ModelManager {
     private static final Logger logger = LoggerFactory.getLogger(ModelManager.class);
-
     private final GameContext gameContext;
 
-    private ServerModelManager serverModelManager;
-
-    private final Map<Integer, String> clientIdMap = new HashMap<>();
+    public ServerModelManager serverModelManager;
 
     public ModelManager(GameContext gameContext) {
         this.gameContext = gameContext;
     }
 
     public Map<String, Model> getModelMap() {
-        return serverModelManager.getModelMap();
+        return serverModelManager.modelMap;
     }
 
     public Model getModel(String id) {
-        return getModelMap().get(id);
+        return serverModelManager.modelMap.get(id);
     }
 
+    public void removeModel(String id) {
+        serverModelManager.modelMap.remove(id);
+    }
+
+    /**
+     * If server: Load data from save file or generate new world.
+     * If client: Send join command to server.
+     */
     public void start() {
         if (gameContext.isServer) {
             try {
@@ -42,16 +45,19 @@ public class ModelManager implements ClientInterface {
 
                 // Initialize a new Game
                 serverModelManager = new ServerModelManager();
-                new WorldModelGenerator(gameContext).generateWorld(serverModelManager);
+                new WorldModelGenerator(gameContext).generateWorld();
 
                 SaveLoadManager.saveGameData(serverModelManager);
             }
         } else {
             serverModelManager = new ServerModelManager();
-            gameContext.networkManager.broadcast(("join " + gameContext.username).getBytes());
+            gameContext.networkManager.broadcastDataOverNetwork(("join " + gameContext.username).getBytes());
         }
     }
 
+    /**
+     * This method is used only for Server, broadcast serverModelManager object to all clients
+     */
     public void broadcastToClient() {
         if (!gameContext.isServer) return;
         if (gameContext.worldCounter % Config.BROADCAST_DELAY != 0) return;
@@ -61,56 +67,50 @@ public class ModelManager implements ClientInterface {
             ObjectOutputStream oos = new ObjectOutputStream(buffer);
             oos.writeObject(serverModelManager);
             oos.flush();
-            gameContext.networkManager.broadcast(buffer.toByteArray());
+            gameContext.networkManager.broadcastDataOverNetwork(buffer.toByteArray());
             buffer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    @Override
-    public void receiveMessage(int clientId, byte[] bytes) {
-        if (!gameContext.isServer) {
-            try {
-                ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
-                ObjectInput in = new ObjectInputStream(bis);
-                this.serverModelManager = (ServerModelManager) in.readObject();
-                in.close();
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-        } else {
-            String command = new String(bytes);
+    public void addModel(Model model) {
+        logger.info(this.getClass() + " - Adding Model: " + model.id);
 
-            logger.info("[Server] Receiving message from client: " + clientId + " - Content: " + command);
-
-            if (command.startsWith("join ")) {
-                String clientUserName = command.substring(5);
-                serverModelManager.addPlayer(clientUserName);
-                clientIdMap.put(clientId, clientUserName);
-            }
-            else {
-                String[] splitArr = command.split(" ");
-                gameContext.controlManager.processCommand(splitArr[0], splitArr[1]);
-            }
+        // Special treatment when adding PlayerModel
+        if (model instanceof PlayerModel) {
+            logger.info("Adding PlayerModel");
         }
+
+        serverModelManager.modelMap.put(model.id, model);
+        gameContext.spriteManager.synchronizeModelData(true);
     }
 
-    @Override
-    public void serverDisconnect() {
-        logger.info("Disconnected from server! Exit with status 1!");
-        System.exit(1);
+    /**
+     * Add Client Player Model to serverModelManager.modelMap
+     * @param playerName: Client Player Username
+     */
+    public void addPlayerModel(String playerName) {
+        if (!serverModelManager.playerModelMap.containsKey(playerName)) {
+            PlayerModel pm = new PlayerModel(playerName, 0, 0, true);
+            serverModelManager.playerModelMap.put(playerName, pm);
+        }
+        this.addModel(serverModelManager.playerModelMap.get(playerName));
     }
 
-    @Override
-    public void clientConnectionNotify(int clientId) {
-        logger.info("Client " + clientId + " connected!");
-    }
-
-    @Override
-    public void clientDisconnect(int clientId) {
-        String disconnectedClientUserName = clientIdMap.get(clientId);
-        logger.info("Client " + clientId + " - User " + disconnectedClientUserName + " disconnected!");
-        serverModelManager.removeModel(disconnectedClientUserName);
+    /**
+     * Update ServerModelManager from byte array.
+     * This method is for Client only
+     * @param bytes ServerModelManager object in byte array.
+     */
+    public void updateServerModelManager(byte[] bytes) {
+        try {
+            ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
+            ObjectInput in = new ObjectInputStream(bis);
+            serverModelManager = (ServerModelManager) in.readObject();
+            in.close();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }

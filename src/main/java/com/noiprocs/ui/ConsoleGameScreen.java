@@ -29,7 +29,6 @@ public class ConsoleGameScreen implements GameScreenInterface {
         // Only render when playerModel is existing
         if (playerModel == null) return;
 
-        System.out.println(playerModel.id);
         // Get list of objects not far from player
         List<RenderableSprite> renderableSpriteList = gameContext.spriteManager.getRenderableObjectListWithinRange(
                 playerModel.posX,

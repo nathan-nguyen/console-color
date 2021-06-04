@@ -14,8 +14,8 @@ public class WorldModelGenerator {
         this.gameContext = gameContext;
     }
 
-    public void generateWorld(ServerModelManager serverModelManager) {
-        serverModelManager.addModel(new PlayerModel(gameContext.username, 0, 0, true));
+    public void generateWorld() {
+        gameContext.modelManager.addModel(new PlayerModel(gameContext.username, 0, 0, true));
 
         for (int i = 0; i < 20; ++i) {
             Model treeModel = new TreeModel(
@@ -24,7 +24,7 @@ public class WorldModelGenerator {
                     true
             );
             if (gameContext.hitboxManager.isValid(treeModel, treeModel.posX, treeModel.posY)) {
-                serverModelManager.addModel(treeModel);
+                gameContext.modelManager.addModel(treeModel);
             }
             else --i;
         }

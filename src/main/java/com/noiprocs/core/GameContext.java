@@ -7,7 +7,7 @@ import com.noiprocs.core.model.ModelManager;
 import com.noiprocs.core.network.NetworkManager;
 
 public class GameContext {
-    public final NetworkManager networkManager = new NetworkManager();
+    public final NetworkManager networkManager = new NetworkManager(this);
     public final ModelManager modelManager = new ModelManager(this);
     public final ControlManager controlManager = new ControlManager(this);
 
@@ -32,18 +32,14 @@ public class GameContext {
         this.port = port;
     }
 
-    private void startNetworkService() {
-        if (isServer) networkManager.startServer(hostname, port);
-        else networkManager.startClient(hostname, port);
-        networkManager.startService();
-        networkManager.setNetworkReceiver(modelManager);
-    }
-
     public void run() {
         // Start network services
-        this.startNetworkService();
+        networkManager.startNetworkService(isServer, hostname, port);
 
-        // Load data from save file for Server
+        /*
+         * If Server: Load data from save file or generate new world.
+         * If client: Send join command to server. This required network connection to be setup beforehand.
+         */
         modelManager.start();
 
         // Initialize timeManager
@@ -73,8 +69,14 @@ public class GameContext {
 
     public void progress(int dt) {
         worldCounter += 1;
+
+        // Broadcast data to all clients
         modelManager.broadcastToClient();
+
+        // Synchronize data with modelManager
         spriteManager.update(dt);
+
+        // Render graphics
         gameScreen.render(dt);
     }
 }
