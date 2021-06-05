@@ -20,4 +20,9 @@ public abstract class Model implements Serializable {
     }
 
     public void update(int delta) {}
+
+    public void setPosition(int posX, int posY) {
+        this.posX = posX;
+        this.posY = posY;
+    }
 }

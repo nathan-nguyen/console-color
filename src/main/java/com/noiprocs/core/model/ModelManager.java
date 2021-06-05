@@ -71,7 +71,7 @@ public class ModelManager {
     }
 
     public void addModel(Model model) {
-        logger.info(this.getClass() + " - Adding Model: " + model.id);
+        logger.info(this.getClass() + " - Adding Model: " + model.id + " - " + model.getClass());
         serverModelManager.modelMap.put(model.id, model);
         gameContext.spriteManager.synchronizeModelData(true);
     }

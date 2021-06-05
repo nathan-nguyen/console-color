@@ -158,21 +158,17 @@ public class MazeModelGenerator {
     private void printWall() {
         System.out.println();
 
-        char[][] display = new char[dimension * WALL_THICKNESS_HEIGHT][dimension * WALL_THICKNESS_WIDTH];
+        char[][] display = new char[dimension][dimension];
         for (int i = 0; i < dimension; ++i){
             for (int j = 0; j < dimension; ++j){
                 if (map[i][j] > 0) continue;
-                for (int x = 0; x < WALL_THICKNESS_HEIGHT; ++x) {
-                    for (int y = 0; y < WALL_THICKNESS_WIDTH; ++y) {
-                        display[i * WALL_THICKNESS_HEIGHT + x][j * WALL_THICKNESS_WIDTH + y] = WALL_TEXTURE;
-                    }
-                }
+                display[i][j] = WALL_TEXTURE;
             }
         }
 
         // Print the maze
-        for (int i = 0; i < dimension * WALL_THICKNESS_HEIGHT; ++i){
-            for (int j = 0; j < dimension * WALL_THICKNESS_WIDTH; ++j) {
+        for (int i = 0; i < dimension; ++i){
+            for (int j = 0; j < dimension; ++j) {
                 if (display[i][j] == 0) System.out.print(" ");
                 else System.out.print(display[i][j]);
             }
@@ -192,8 +188,9 @@ public class MazeModelGenerator {
                     }
                 }
                 MazePartModel mpm = new MazePartModel(
-                        offsetX + MAZE_PART_DIMENSION * i * WALL_THICKNESS_HEIGHT,
-                        offsetY + MAZE_PART_DIMENSION * j * WALL_THICKNESS_WIDTH,
+                        offsetX, offsetY,
+                        MAZE_PART_DIMENSION * i,
+                        MAZE_PART_DIMENSION * j,
                         true,
                         partData
                 );

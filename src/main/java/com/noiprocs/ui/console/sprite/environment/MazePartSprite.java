@@ -4,16 +4,17 @@ import com.noiprocs.core.model.environment.MazePartModel;
 import com.noiprocs.ui.console.sprite.ConsoleSprite;
 
 import static com.noiprocs.core.model.environment.MazePartModel.MAZE_PART_DIMENSION;
-import static com.noiprocs.core.model.environment.MazePartModel.WALL_THICKNESS_HEIGHT;
-import static com.noiprocs.core.model.environment.MazePartModel.WALL_THICKNESS_WIDTH;
 
 public class MazePartSprite extends ConsoleSprite {
+    private static final int WALL_THICKNESS_HEIGHT = 4;
+    private static final int WALL_THICKNESS_WIDTH = 8;
     private static final char WALL_TEXTURE = '░';
 
     public MazePartSprite(String id) {
         super(EMPTY_TEXTURE, id);
 
-        int[][] mazeData = ((MazePartModel) getModel()).data;
+        MazePartModel mpm = (MazePartModel) getModel();
+        int[][] mazeData = mpm.data;
         char[][] mazeTexture = new char[MAZE_PART_DIMENSION * WALL_THICKNESS_HEIGHT][MAZE_PART_DIMENSION * WALL_THICKNESS_WIDTH];
         for (int i = 0; i < MAZE_PART_DIMENSION; ++i){
             for (int j = 0; j < MAZE_PART_DIMENSION; ++j){
@@ -27,6 +28,10 @@ public class MazePartSprite extends ConsoleSprite {
         }
 
         this.setTexture(mazeTexture);
+        mpm.setPosition(
+                mpm.offsetX + mpm.posX * WALL_THICKNESS_HEIGHT,
+                mpm.offsetY + mpm.posY * WALL_THICKNESS_WIDTH
+        );
     }
 
     @Override

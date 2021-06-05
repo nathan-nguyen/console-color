@@ -4,7 +4,7 @@ import com.noiprocs.core.graphics.RenderableSprite;
 
 public abstract class ConsoleSprite extends RenderableSprite {
     protected static final char[][] EMPTY_TEXTURE = new char[0][0];
-    protected char[][] texture;
+    private char[][] texture;
 
     public ConsoleSprite(char[][] texture, String id) {
         super(id);
