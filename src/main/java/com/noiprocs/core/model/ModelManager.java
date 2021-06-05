@@ -57,7 +57,7 @@ public class ModelManager {
             }
         } else {
             serverModelManager = new ServerModelManager();
-            gameContext.networkManager.broadcastDataOverNetwork(("join " + gameContext.username).getBytes());
+            gameContext.networkManager.broadcastDataOverNetwork("join " + gameContext.username);
         }
     }
 
@@ -67,16 +67,7 @@ public class ModelManager {
     public void broadcastToClient() {
         if (!gameContext.isServer) return;
 
-        try {
-            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-            ObjectOutputStream oos = new ObjectOutputStream(buffer);
-            oos.writeObject(serverModelManager);
-            oos.flush();
-            gameContext.networkManager.broadcastDataOverNetwork(buffer.toByteArray());
-            buffer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        gameContext.networkManager.broadcastDataOverNetwork(serverModelManager);
     }
 
     public void addModel(Model model) {
@@ -106,17 +97,11 @@ public class ModelManager {
     /**
      * Update ServerModelManager from byte array.
      * This method is for Client only
-     * @param bytes ServerModelManager object in byte array.
+     * @param object ServerModelManager object.
      */
-    public void updateServerModelManager(byte[] bytes) {
-        try {
-            ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
-            ObjectInput in = new ObjectInputStream(bis);
-            serverModelManager = (ServerModelManager) in.readObject();
-            in.close();
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+    public void updateServerModelManager(Object object) {
+        this.serverModelManager = (ServerModelManager) object;
+        PlayerModel playerModel = (PlayerModel) serverModelManager.modelMap.get(gameContext.username);
     }
 
     public void update(int dt) {

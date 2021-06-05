@@ -20,7 +20,7 @@ public class ControlManager {
         if (command.length() == 0) return;
 
         if (!gameContext.isServer) {
-            gameContext.networkManager.broadcastDataOverNetwork((gameContext.username + " " + command).getBytes());
+            gameContext.networkManager.broadcastDataOverNetwork(gameContext.username + " " + command);
             return;
         }
 
@@ -39,6 +39,8 @@ public class ControlManager {
         }
 
         PlayerModel playerModel = (PlayerModel) gameContext.modelManager.getModel(username);
+
+        logger.info("Executing command: " + command + " for player " + username);
 
         for (int i = 0; i < command.length(); ++i) {
             switch (command.charAt(i)) {

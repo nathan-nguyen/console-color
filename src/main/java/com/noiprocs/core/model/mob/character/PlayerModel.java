@@ -60,4 +60,9 @@ public class PlayerModel extends Model {
         }
         else movingDirection = MovingDirection.STOP;
     }
+
+    @Override
+    public String toString() {
+        return "Player: " + id + " - posX: " + posX + " - posY: " + posY;
+    }
 }

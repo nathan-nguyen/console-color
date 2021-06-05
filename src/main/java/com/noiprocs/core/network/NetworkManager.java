@@ -43,16 +43,17 @@ public class NetworkManager implements ClientInterface {
     /**
      * If server: Send data to all clients.
      * If client: Send data to server.
-     * @param bytes: Information to send to corresponding server / clients
+     * @param object: Information to send to corresponding server / clients
      */
-    public void broadcastDataOverNetwork(byte[] bytes) {
-        communicationManager.sendMessage(bytes);
+    public void broadcastDataOverNetwork(Object object) {
+        communicationManager.sendMessage(object);
     }
 
     @Override
-    public void receiveMessage(int clientId, byte[] bytes) {
-        if (!gameContext.isServer) gameContext.modelManager.updateServerModelManager(bytes);
-        else processClientCommand(clientId, bytes);
+    public void receiveMessage(int clientId, Object object) {
+//        logger.info("Received message " + object + " from clientId " + clientId);
+        if (!gameContext.isServer) gameContext.modelManager.updateServerModelManager(object);
+        else processClientCommand(clientId, object);
     }
 
     @Override
@@ -74,9 +75,11 @@ public class NetworkManager implements ClientInterface {
         gameContext.modelManager.saveGameData();
     }
 
-    private void processClientCommand(int clientId, byte[] bytes) {
-        String command = new String(bytes);
-//        logger.info("[Server] Receiving message from client: " + clientId + " - Content: " + command);
+    private void processClientCommand(int clientId, Object object) {
+        logger.info("[Server] Object:" + object);
+        String command = new String((byte[]) object);
+
+        logger.info("[Server] Receiving message from client: " + clientId + " - Content: " + command);
 
         if (command.startsWith("join ")) {
             String clientUserName = command.substring(5);
