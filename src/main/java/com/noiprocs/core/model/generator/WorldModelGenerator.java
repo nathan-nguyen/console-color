@@ -23,7 +23,7 @@ public class WorldModelGenerator {
         }
 
         // Generate trees
-        this.generateTree(20, -60, 0, -40, 40);
+        this.generateTree(20, -60, -10, -40, 40);
 
         // Generate maze
         MazeModelGenerator mmg = new MazeModelGenerator(40);

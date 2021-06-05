@@ -57,6 +57,7 @@ public class ControlManager {
                     playerModel.moveDown();
                     break;
                 case 'h': playerModel.stop(); break;
+                case 'f': playerModel.triggerAction(); break;
             }
         }
     }
