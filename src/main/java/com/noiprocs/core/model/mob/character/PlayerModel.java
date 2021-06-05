@@ -4,8 +4,8 @@ import com.noiprocs.core.model.Model;
 import com.noiprocs.core.util.Helper;
 
 public class PlayerModel extends Model {
-    private static final int HORIZONTAL_SPEED = 2;
-    private static final int VERTICAL_SPEED = 2;
+    private static final int HORIZONTAL_SPEED = 1;
+    private static final int VERTICAL_SPEED = 1;
 
     public enum MovingDirection {
         STOP, UP, DOWN, LEFT, RIGHT

@@ -21,10 +21,18 @@ public class WorldModelGenerator {
             gameContext.modelManager.addModel(new PlayerModel(gameContext.username, 0, 0, true));
         }
 
-        for (int i = 0; i < 20; ++i) {
+//        this.generateTree(20, 60, 40);
+        MazeModelGenerator mmg = new MazeModelGenerator(40);
+        mmg.constructMaze(10, 10);
+        gameContext.modelManager.addModelList(mmg.getMazePartModelList());
+
+    }
+
+    private void generateTree(int number, int rangeX, int rangeY) {
+        for (int i = 0; i < number; ++i) {
             Model treeModel = new TreeModel(
-                    random.nextInt(60) - 30,
-                    random.nextInt(40) - 20,
+                    random.nextInt(rangeX) - rangeX / 2,
+                    random.nextInt(rangeY) - rangeY / 2,
                     true
             );
             if (gameContext.hitboxManager.isValid(treeModel, treeModel.posX, treeModel.posY)) {
