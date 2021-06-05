@@ -5,7 +5,7 @@ import com.noiprocs.core.util.Helper;
 
 public class PlayerModel extends Model {
     private static final int HORIZONTAL_SPEED = 2;
-    private static final int VERTICAL_SPEED = 3;
+    private static final int VERTICAL_SPEED = 2;
 
     public enum MovingDirection {
         STOP, UP, DOWN, LEFT, RIGHT

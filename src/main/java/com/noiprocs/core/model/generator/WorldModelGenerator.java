@@ -1,7 +1,8 @@
-package com.noiprocs.core.model;
+package com.noiprocs.core.model.generator;
 
 import com.noiprocs.core.GameContext;
 import com.noiprocs.core.config.Config;
+import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.environment.TreeModel;
 import com.noiprocs.core.model.mob.character.PlayerModel;
 

@@ -9,7 +9,6 @@ import com.noiprocs.ui.console.sprite.environment.TreeSprite;
 import com.noiprocs.ui.console.sprite.mob.character.PlayerSprite;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,7 +24,7 @@ public class ConsoleSpriteManager extends SpriteManager {
         }
         if (model instanceof TreeModel) return new TreeSprite(model.id);
 
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     @Override

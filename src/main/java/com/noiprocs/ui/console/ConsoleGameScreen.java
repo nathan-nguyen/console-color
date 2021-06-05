@@ -45,8 +45,9 @@ public class ConsoleGameScreen implements GameScreenInterface {
         renderableSpriteList.sort(
                 (u, v) -> {
                     Model uModel = u.getModel();
-                    if (uModel instanceof PlayerModel) return 1;
                     Model vModel = v.getModel();
+                    if (uModel.id.equals(gameContext.username)) return 1;
+                    if (vModel.id.equals(gameContext.username)) return -1;
                     return Integer.compare(uModel.posY, vModel.posY);
                 }
         );

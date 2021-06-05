@@ -5,6 +5,7 @@ import com.noiprocs.core.config.Config;
 import com.noiprocs.core.graphics.HitboxManagerInterface;
 import com.noiprocs.core.graphics.RenderableSprite;
 import com.noiprocs.core.model.Model;
+import com.noiprocs.core.model.mob.character.PlayerModel;
 import com.noiprocs.ui.console.sprite.ConsoleSprite;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +34,9 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
         int offsetX = nextX - HEIGHT / 2;
         int offsetY = nextY - WIDTH / 2;
 
-        boolean[][] map = constructCurrentHitboxMap(offsetX, offsetY, renderableSpriteList);
+        boolean[][] map = constructCurrentHitboxMap(
+                offsetX, offsetY, renderableSpriteList, model instanceof PlayerModel
+        );
 
         boolean isExisting = gameContext.spriteManager.renderableSpriteMap.containsKey(model.id);
         RenderableSprite renderableSprite = isExisting ? gameContext.spriteManager.renderableSpriteMap.get(model.id)
@@ -89,7 +92,7 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
 
     // Construct current hitbox map
     private boolean[][] constructCurrentHitboxMap(
-            int offsetX, int offsetY, List<RenderableSprite> renderableSpriteList
+            int offsetX, int offsetY, List<RenderableSprite> renderableSpriteList, boolean ignorePlayer
     ) {
         boolean[][] map = new boolean[HEIGHT][WIDTH];
 
@@ -99,6 +102,10 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
             char[][] texture = ((ConsoleSprite) renderableSprite).getTexture();
 
             Model model = renderableSprite.getModel();
+
+            // Allow players to go through each other
+            if (ignorePlayer && model instanceof PlayerModel) continue;
+
             int posX = model.posX;
             int posY = model.posY;
 

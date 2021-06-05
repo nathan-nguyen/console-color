@@ -3,6 +3,7 @@ package com.noiprocs.core.model;
 import com.noiprocs.core.GameContext;
 import com.noiprocs.core.SaveLoadManager;
 import com.noiprocs.core.config.Config;
+import com.noiprocs.core.model.generator.WorldModelGenerator;
 import com.noiprocs.core.model.mob.character.PlayerModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
