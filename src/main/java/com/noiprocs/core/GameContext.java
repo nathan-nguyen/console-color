@@ -18,10 +18,9 @@ public class GameContext {
     public final String hostname;
     public final int port;
 
-    public int worldCounter = 0;
-
     public SpriteManager spriteManager;
     public HitboxManagerInterface hitboxManager;
+    public int worldCounter = 0;
 
     private GameScreenInterface gameScreen;
 

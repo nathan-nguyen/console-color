@@ -2,15 +2,42 @@
 
 ## Architecture
 
+### Overall architecture
 ```
-|- GameScreen [package graphics]
-    |- 
-|- model: Game models
-|   |- ModelManager
-|   |   |_ ServerModelManager: Contain all models
-|   |       |_ Model
-|_ util: Will be decided later
-    |- SaveLoadManager: Save/Load ServerModelManager
+GameContext
+- TimeManager
+- ControlManager
+- NetworkManager
+- ModelManager
+- SpriteManager
+- HitboxManager
+- GameScreen
+```
+
+### Interaction graph
+```mermaid
+graph LR
+  subgraph GameContext
+    subgraph model
+      ModelManager
+    end
+    subgraph network
+      NetworkManager
+    end
+    subgraph graphics
+      SpriteManager
+      HitboxManager
+      GameScreen
+    end
+    ControlManager -.-> NetworkManager;
+    ControlManager -.-> ModelManager;
+    NetworkManager -.-> ControlManager;
+    NetworkManager -.-> ModelManager;
+    SpriteManager -.-> ModelManager;
+    HitboxManager -.-> SpriteManager;
+    GameScreen -.-> SpriteManager;
+    GameScreen -.-> ModelManager;
+  end
 ```
 
 ## Commands

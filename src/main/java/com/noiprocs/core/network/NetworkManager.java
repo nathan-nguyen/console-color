@@ -1,8 +1,8 @@
 package com.noiprocs.core.network;
 
 import com.noiprocs.core.GameContext;
-import com.noiprocs.network.ClientInterface;
 import com.noiprocs.network.CommunicationManager;
+import com.noiprocs.network.ReceiverInterface;
 import com.noiprocs.network.client.Client;
 import com.noiprocs.network.server.Server;
 import org.slf4j.Logger;
@@ -11,15 +11,12 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.Map;
 
-public class NetworkManager implements ClientInterface {
+public class NetworkManager implements ReceiverInterface {
     private static final Logger logger = LoggerFactory.getLogger(NetworkManager.class);
 
     private final GameContext gameContext;
-
-    private CommunicationManager communicationManager;
-
     private final Map<Integer, String> clientIdMap = new HashMap<>();
-
+    private CommunicationManager communicationManager;
 
     public NetworkManager(GameContext gameContext) {
         this.gameContext = gameContext;
@@ -30,8 +27,7 @@ public class NetworkManager implements ClientInterface {
             Server server = new Server();
             this.communicationManager = server.getCommunicationManager();
             server.startService();
-        }
-        else {
+        } else {
             Client client = new Client(hostname, port);
             this.communicationManager = client.getCommunicationManager();
             client.startService();
@@ -43,6 +39,7 @@ public class NetworkManager implements ClientInterface {
     /**
      * If server: Send data to all clients.
      * If client: Send data to server.
+     *
      * @param object: Information to send to corresponding server / clients
      */
     public void broadcastDataOverNetwork(Object object) {
@@ -63,7 +60,7 @@ public class NetworkManager implements ClientInterface {
     }
 
     @Override
-    public void clientConnectionNotify(int clientId) {
+    public void clientConnect(int clientId) {
         logger.info("Client " + clientId + " connected!");
     }
 
@@ -76,17 +73,14 @@ public class NetworkManager implements ClientInterface {
     }
 
     private void processClientCommand(int clientId, Object object) {
-        logger.info("[Server] Object:" + object);
         String command = new String((byte[]) object);
-
         logger.info("[Server] Receiving message from client: " + clientId + " - Content: " + command);
 
         if (command.startsWith("join ")) {
             String clientUserName = command.substring(5);
             gameContext.modelManager.addPlayerModel(clientUserName);
             clientIdMap.put(clientId, clientUserName);
-        }
-        else {
+        } else {
             String[] splitArr = command.split(" ");
             gameContext.controlManager.processCommand(splitArr[0], splitArr[1]);
         }

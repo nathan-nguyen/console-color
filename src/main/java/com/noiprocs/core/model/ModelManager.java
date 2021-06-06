@@ -8,13 +8,14 @@ import com.noiprocs.core.model.mob.character.PlayerModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class ModelManager {
     private static final Logger logger = LoggerFactory.getLogger(ModelManager.class);
+
     private final GameContext gameContext;
 
     public ServerModelManager serverModelManager;
@@ -78,6 +79,7 @@ public class ModelManager {
 
     /**
      * Add Client Player Model to serverModelManager.modelMap
+     *
      * @param playerName: Client Player Username
      */
     public void addPlayerModel(String playerName) {
@@ -85,8 +87,7 @@ public class ModelManager {
         if (!serverModelManager.playerModelMap.containsKey(playerName)) {
             playerModel = new PlayerModel(playerName, 0, 0, true);
             serverModelManager.playerModelMap.put(playerName, playerModel);
-        }
-        else playerModel = serverModelManager.playerModelMap.get(playerName);
+        } else playerModel = serverModelManager.playerModelMap.get(playerName);
 
         // Player initial state must be STOP mode
         playerModel.stop();
@@ -97,11 +98,11 @@ public class ModelManager {
     /**
      * Update ServerModelManager from byte array.
      * This method is for Client only
+     *
      * @param object ServerModelManager object.
      */
     public void updateServerModelManager(Object object) {
         this.serverModelManager = (ServerModelManager) object;
-        PlayerModel playerModel = (PlayerModel) serverModelManager.modelMap.get(gameContext.username);
     }
 
     public void update(int dt) {
@@ -120,16 +121,16 @@ public class ModelManager {
 
     private void removeDisconnectedPlayer() {
         List<String> disconnectedPlayer = new ArrayList<>();
-        for (Model model: serverModelManager.modelMap.values()) {
+        for (Model model : serverModelManager.modelMap.values()) {
             if (model instanceof PlayerModel && !model.id.equals(gameContext.username)) {
                 disconnectedPlayer.add(model.id);
             }
         }
         if (Config.DISABLE_PLAYER) disconnectedPlayer.add(gameContext.username);
-        for (String disconnectedUsername: disconnectedPlayer) this.removeModel(disconnectedUsername);
+        for (String disconnectedUsername : disconnectedPlayer) this.removeModel(disconnectedUsername);
     }
 
     public void addModelList(Iterable<Model> modelList) {
-        for (Model model: modelList) addModel(model);
+        for (Model model : modelList) addModel(model);
     }
 }

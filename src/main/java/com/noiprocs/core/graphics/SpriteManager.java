@@ -13,32 +13,32 @@ import java.util.Map;
 
 public abstract class SpriteManager {
     private static final Logger logger = LoggerFactory.getLogger(SpriteManager.class);
-    private GameContext gameContext;
 
     public final Map<String, RenderableSprite> renderableSpriteMap = new HashMap<>();
-    private int modelSynchronizationDelay = 0;
+
+    private GameContext gameContext;
 
     public void setGameContext(GameContext gameContext) {
         this.gameContext = gameContext;
     }
 
     public void synchronizeModelData(boolean forceSynchronize) {
-        if (!forceSynchronize && modelSynchronizationDelay++ % Config.MODEL_SYNCHRONISATION_DELAY != 0) return;
+        if (!forceSynchronize && gameContext.worldCounter % Config.MODEL_SYNCHRONISATION_DELAY != 0) return;
 
         Map<String, Model> modelMap = gameContext.modelManager.getModelMap();
         List<String> removedKeyList = new ArrayList<>();
 
         // Remove no-longer-exist models
-        for (String key: renderableSpriteMap.keySet()) {
+        for (String key : renderableSpriteMap.keySet()) {
             if (!modelMap.containsKey(key)) {
-                logger.info("Remove Renderable Sprite: " + key);
+                logger.info("Remove RenderableSprite: " + key);
                 removedKeyList.add(key);
             }
         }
-        for (String key: removedKeyList) renderableSpriteMap.remove(key);
+        for (String key : removedKeyList) renderableSpriteMap.remove(key);
 
         // Add newly-created models
-        for (String key: modelMap.keySet()) {
+        for (String key : modelMap.keySet()) {
             if (!renderableSpriteMap.containsKey(key)) {
                 Model model = modelMap.get(key);
                 RenderableSprite renderableObject = createRenderableObject(model);
@@ -48,6 +48,8 @@ public abstract class SpriteManager {
     }
 
     public abstract RenderableSprite createRenderableObject(Model model);
+
     public abstract void update(int dt);
+
     public abstract List<RenderableSprite> getRenderableObjectListWithinRange(int x, int y, int range);
 }

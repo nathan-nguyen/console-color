@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 
 public class ControlManager {
     private static final Logger logger = LoggerFactory.getLogger(ControlManager.class);
+
     private final GameContext gameContext;
 
     public ControlManager(GameContext gameContext) {
@@ -14,6 +15,7 @@ public class ControlManager {
 
     /**
      * Process local input
+     *
      * @param command: Local input command
      */
     public void processInput(String command) {
@@ -30,8 +32,9 @@ public class ControlManager {
     /**
      * Process command for a particular user.
      * Only applicable for Server.
+     *
      * @param username: Username.
-     * @param command: Command to be processed for this user.
+     * @param command:  Command to be processed for this user.
      */
     public void processCommand(String username, String command) {
         if (!gameContext.isServer) {
@@ -56,8 +59,12 @@ public class ControlManager {
                 case 's':
                     playerModel.moveDown();
                     break;
-                case 'h': playerModel.stop(); break;
-                case 'f': playerModel.triggerAction(); break;
+                case 'h':
+                    playerModel.stop();
+                    break;
+                case 'f':
+                    playerModel.triggerAction();
+                    break;
             }
         }
     }
