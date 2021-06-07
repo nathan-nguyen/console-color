@@ -5,7 +5,7 @@ import com.noiprocs.core.model.ModelManager;
 import com.noiprocs.core.util.Helper;
 
 public abstract class RenderableSprite {
-    private String id;
+    public String id;
     private ModelManager modelManager;
 
     public RenderableSprite(String id) {

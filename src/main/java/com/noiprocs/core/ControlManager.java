@@ -43,7 +43,7 @@ public class ControlManager {
 
         PlayerModel playerModel = (PlayerModel) gameContext.modelManager.getModel(username);
 
-        logger.info("Executing command: " + command + " for player " + username);
+//        logger.info("Executing command: " + command + " for player " + username);
 
         for (int i = 0; i < command.length(); ++i) {
             switch (command.charAt(i)) {

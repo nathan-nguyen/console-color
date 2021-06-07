@@ -17,6 +17,7 @@ public class ModelManager {
     private static final Logger logger = LogManager.getLogger(ModelManager.class);
 
     private final GameContext gameContext;
+    private List<Model> spawnModelList = new ArrayList<>();
 
     public ServerModelManager serverModelManager;
 
@@ -107,7 +108,20 @@ public class ModelManager {
     }
 
     public void update(int dt) {
-        serverModelManager.modelMap.values().forEach(model -> model.update(dt));
+        List<String> destroyModelId = new ArrayList<>();
+        spawnModelList.clear();
+
+        serverModelManager.modelMap.values().forEach(model -> {
+            model.update(dt);
+            if (model.isDestroyed) destroyModelId.add(model.id);
+        });
+
+        // Removed destroyed models
+        destroyModelId.forEach(id -> serverModelManager.modelMap.remove(id));
+
+        // Add spawn models
+        spawnModelList.forEach(this::addModel);
+
         this.broadcastToClient();
 
         if (gameContext.isServer && gameContext.worldCounter % Config.AUTO_SAVE_DURATION == 0) {
@@ -124,16 +138,22 @@ public class ModelManager {
 
     private void removeDisconnectedPlayer() {
         List<String> disconnectedPlayer = new ArrayList<>();
+
         for (Model model : serverModelManager.modelMap.values()) {
             if (model instanceof PlayerModel && !model.id.equals(gameContext.username)) {
                 disconnectedPlayer.add(model.id);
             }
         }
+
         if (Config.DISABLE_PLAYER) disconnectedPlayer.add(gameContext.username);
         for (String disconnectedUsername : disconnectedPlayer) this.removeModel(disconnectedUsername);
     }
 
     public void addModelList(Iterable<Model> modelList) {
         for (Model model : modelList) addModel(model);
+    }
+
+    public void addSpawnModel(Model model) {
+        this.spawnModelList.add(model);
     }
 }

@@ -1,4 +1,4 @@
-package com.noiprocs.ui.console.sprite.environment;
+package com.noiprocs.ui.console.sprite.plant;
 
 import com.noiprocs.ui.console.sprite.ConsoleSprite;
 

@@ -74,7 +74,7 @@ public class NetworkManager implements ReceiverInterface {
 
     private void processClientCommand(int clientId, Object object) {
         String command = new String((byte[]) object);
-        logger.info("[Server] Receiving message from client: " + clientId + " - Content: " + command);
+//        logger.info("[Server] Receiving message from client: " + clientId + " - Content: " + command);
 
         if (command.startsWith("join ")) {
             String clientUserName = command.substring(5);

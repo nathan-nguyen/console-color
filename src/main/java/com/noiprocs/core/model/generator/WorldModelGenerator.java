@@ -3,8 +3,8 @@ package com.noiprocs.core.model.generator;
 import com.noiprocs.core.GameContext;
 import com.noiprocs.core.config.Config;
 import com.noiprocs.core.model.Model;
-import com.noiprocs.core.model.environment.BirchTreeModel;
-import com.noiprocs.core.model.environment.TreeModel;
+import com.noiprocs.core.model.plant.BirchTreeModel;
+import com.noiprocs.core.model.plant.TreeModel;
 import com.noiprocs.core.model.mob.character.PlayerModel;
 
 import java.util.Random;

@@ -26,10 +26,43 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
     }
 
     @Override
+    public Model getModel(int locX, int locY, String ignoreModelId) {
+        // Generate current hit box map
+        List<RenderableSprite> renderableSpriteList =
+                gameContext.spriteManager.getAllRenderableObjectListWithinRange(locX, locY, Config.RENDER_RANGE);
+
+        int offsetX = locX - HEIGHT / 2;
+        int offsetY = locY - WIDTH / 2;
+
+        Model[][] map = new Model[HEIGHT][WIDTH];
+
+        for (RenderableSprite renderableSprite : renderableSpriteList) {
+            if (renderableSprite.id.equals(ignoreModelId)) continue;
+
+            char[][] texture = ((ConsoleSprite) renderableSprite).getTexture();
+
+            Model model = renderableSprite.getModel();
+
+            int posX = model.posX;
+            int posY = model.posY;
+
+            for (int i = 0; i < texture.length; ++i) {
+                for (int j = 0; j < texture[0].length; ++j) {
+                    if (texture[i][j] == 0) continue;
+                    int x = posX + i - offsetX;
+                    int y = posY + j - offsetY;
+                    if (x >= 0 && x < HEIGHT && y >= 0 && y < WIDTH) map[x][y] = model;
+                }
+            }
+        }
+        return map[HEIGHT / 2][WIDTH / 2];
+    }
+
+    @Override
     public boolean isValid(Model model, int nextX, int nextY) {
         // Generate current hit box map
         List<RenderableSprite> renderableSpriteList =
-                gameContext.spriteManager.getRenderableObjectListWithinRange(nextX, nextY, Config.RENDER_RANGE);
+                gameContext.spriteManager.getAllRenderableObjectListWithinRange(nextX, nextY, Config.RENDER_RANGE);
 
         int offsetX = nextX - HEIGHT / 2;
         int offsetY = nextY - WIDTH / 2;
@@ -114,7 +147,7 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
                     if (texture[i][j] == 0) continue;
                     int x = posX + i - offsetX;
                     int y = posY + j - offsetY;
-                    if (x >= 0 && x < HEIGHT && y >= 0 && y < WIDTH) map[x][y] = texture[i][j] != 0;
+                    if (x >= 0 && x < HEIGHT && y >= 0 && y < WIDTH) map[x][y] = true;
                 }
             }
         }

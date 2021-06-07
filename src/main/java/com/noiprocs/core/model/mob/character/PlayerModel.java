@@ -1,5 +1,6 @@
 package com.noiprocs.core.model.mob.character;
 
+import com.noiprocs.core.model.InteractiveInterface;
 import com.noiprocs.core.model.Model;
 import com.noiprocs.core.util.Helper;
 
@@ -16,6 +17,8 @@ public class PlayerModel extends Model {
     }
 
     private MovingDirection movingDirection = MovingDirection.STOP;
+    private int[] leftInteractionPoint, rightInteractionPoint;
+
     public Action action = Action.RIGHT_NA;
     public int actionCounter = 0;
 
@@ -58,7 +61,29 @@ public class PlayerModel extends Model {
     private void executeAction() {
         if (action != Action.RIGHT_ACTION && action != Action.LEFT_ACTION) return;
         ++actionCounter;
-        if (actionCounter == 9) stopAction();
+        if (actionCounter == 4) interactAction();
+        if (actionCounter == 6) stopAction();
+    }
+
+    private void interactAction() {
+        Model interactModel = null;
+        if (action == Action.LEFT_ACTION) {
+            interactModel = Helper.GAME_CONTEXT.hitboxManager.getModel(
+                    posX + leftInteractionPoint[0],
+                    posY + leftInteractionPoint[1],
+                    id
+            );
+        }
+        else if (action == Action.RIGHT_ACTION) {
+            interactModel = Helper.GAME_CONTEXT.hitboxManager.getModel(
+                    posX + rightInteractionPoint[0],
+                    posY + rightInteractionPoint[1],
+                    id
+            );
+        }
+        if (interactModel != null && interactModel instanceof InteractiveInterface) {
+            ((InteractiveInterface) interactModel).interact(this);
+        }
     }
 
     public void stop() {
@@ -98,5 +123,10 @@ public class PlayerModel extends Model {
     @Override
     public String toString() {
         return "Player: " + id + " - posX: " + posX + " - posY: " + posY;
+    }
+
+    public void setInteractionPoint(int[] leftInteractionPoint, int[] rightInteractionPoint) {
+        this.leftInteractionPoint = leftInteractionPoint;
+        this.rightInteractionPoint = rightInteractionPoint;
     }
 }

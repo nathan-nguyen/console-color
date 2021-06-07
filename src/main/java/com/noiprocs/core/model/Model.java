@@ -7,12 +7,13 @@ public abstract class Model implements Serializable {
 
     public int posX;
     public int posY;
-    public boolean isPhysical;
+    public boolean isVisible, isDestroyed;
 
-    public Model(int x, int y, boolean isPhysical) {
+    public Model(int x, int y, boolean isVisible) {
         this.posX = x;
         this.posY = y;
-        this.isPhysical = isPhysical;
+        this.isVisible = isVisible;
+        this.isDestroyed = false;
     }
 
     public int distanceTo(int x, int y) {
@@ -24,5 +25,9 @@ public abstract class Model implements Serializable {
     public void setPosition(int posX, int posY) {
         this.posX = posX;
         this.posY = posY;
+    }
+
+    protected void destroy() {
+        this.isDestroyed = true;
     }
 }

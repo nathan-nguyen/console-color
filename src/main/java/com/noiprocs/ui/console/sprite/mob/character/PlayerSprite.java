@@ -46,8 +46,12 @@ public class PlayerSprite extends ConsoleSprite {
             {'\'', 0, '/', 0, '\\'}
     };
 
+    private static final int[] LEFT_INTERACTION_POINT = {1, 0};
+    private static final int[] RIGHT_INTERACTION_POINT = {1, 6};
+
     public PlayerSprite(String id) {
         super(TEXTURE, id);
+        ((PlayerModel) this.getModel()).setInteractionPoint(LEFT_INTERACTION_POINT, RIGHT_INTERACTION_POINT);
     }
 
     @Override
@@ -58,13 +62,13 @@ public class PlayerSprite extends ConsoleSprite {
     public char[][] getTexture() {
         PlayerModel pm = (PlayerModel) getModel();
         if (pm.action == PlayerModel.Action.RIGHT_ACTION) {
-            if (pm.actionCounter % 3 == 0) return RIGHT_ACTION_PERFORMANCE_0;
-            else if (pm.actionCounter % 3 == 1) return RIGHT_ACTION_PERFORMANCE_1;
-            else if (pm.actionCounter % 3 == 2) return RIGHT_ACTION_PERFORMANCE_2;
+            if (pm.actionCounter / 2 == 0) return RIGHT_ACTION_PERFORMANCE_0;
+            else if (pm.actionCounter / 2 == 1) return RIGHT_ACTION_PERFORMANCE_1;
+            else if (pm.actionCounter / 2 == 2) return RIGHT_ACTION_PERFORMANCE_2;
         } else if (pm.action == PlayerModel.Action.LEFT_ACTION) {
-            if (pm.actionCounter % 3 == 0) return LEFT_ACTION_PERFORMANCE_0;
-            else if (pm.actionCounter % 3 == 1) return LEFT_ACTION_PERFORMANCE_1;
-            else if (pm.actionCounter % 3 == 2) return LEFT_ACTION_PERFORMANCE_2;
+            if (pm.actionCounter / 2 == 0) return LEFT_ACTION_PERFORMANCE_0;
+            else if (pm.actionCounter / 2 == 1) return LEFT_ACTION_PERFORMANCE_1;
+            else if (pm.actionCounter / 2 == 2) return LEFT_ACTION_PERFORMANCE_2;
         }
         return TEXTURE;
     }

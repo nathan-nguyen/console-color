@@ -1,4 +1,6 @@
-package com.noiprocs.ui.console.sprite.environment;
+package com.noiprocs.ui.console.sprite.plant;
+
+import com.noiprocs.ui.console.sprite.plant.TreeSprite;
 
 public class BirchTreeSprite extends TreeSprite {
     private static final char[][] TEXTURE = {
@@ -7,7 +9,7 @@ public class BirchTreeSprite extends TreeSprite {
             {'&', '%', '%', '&', '%', '%', '&', '&'},
             {'\'', '&', '%', '\\', 'Y', '&', '%', '\''},
             {0, 0, 0, '|', '|' , 0, 0, 0},
-            {0, '~', '~','|', '|', '~', '~', 0}
+            {0, 0, '~','|', '|', '~', 0, 0}
     };
 
     public BirchTreeSprite(String id) {

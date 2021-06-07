@@ -1,4 +1,6 @@
-package com.noiprocs.core.model.environment;
+package com.noiprocs.core.model.plant;
+
+import com.noiprocs.core.model.plant.TreeModel;
 
 public class BirchTreeModel extends TreeModel {
     public BirchTreeModel(int x, int y, boolean isPhysical) {
