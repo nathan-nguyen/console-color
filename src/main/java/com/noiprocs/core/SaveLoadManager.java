@@ -2,13 +2,13 @@ package com.noiprocs.core;
 
 import com.noiprocs.core.config.Config;
 import com.noiprocs.core.model.ServerModelManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 
 public class SaveLoadManager {
-    private static final Logger logger = LoggerFactory.getLogger(SaveLoadManager.class);
+    private static final Logger logger = LogManager.getLogger(SaveLoadManager.class);
 
     public static void saveGameData(ServerModelManager serverModelManager) {
         logger.info("Saving data to " + Config.SAVE_FILE_NAME + " ...");

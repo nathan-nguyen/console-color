@@ -3,8 +3,8 @@ package com.noiprocs.core.graphics;
 import com.noiprocs.core.GameContext;
 import com.noiprocs.core.config.Config;
 import com.noiprocs.core.model.Model;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class SpriteManager {
-    private static final Logger logger = LoggerFactory.getLogger(SpriteManager.class);
+    private static final Logger logger = LogManager.getLogger(SpriteManager.class);
 
     public final Map<String, RenderableSprite> renderableSpriteMap = new HashMap<>();
 

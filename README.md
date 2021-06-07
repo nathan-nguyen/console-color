@@ -51,6 +51,9 @@ mvn compile exec:java -Dexec.mainClass="com.noiprocs.App" -Dexec.args="pc noipro
 
 # Client yaiba
 mvn compile exec:java -Dexec.mainClass="com.noiprocs.App" -Dexec.args="pc yaiba client localhost 8080"
+
+# Assembly
+mvn assembly:single
 ```
 
 ## Future improvement

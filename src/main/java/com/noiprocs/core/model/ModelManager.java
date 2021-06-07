@@ -5,8 +5,8 @@ import com.noiprocs.core.SaveLoadManager;
 import com.noiprocs.core.config.Config;
 import com.noiprocs.core.model.generator.WorldModelGenerator;
 import com.noiprocs.core.model.mob.character.PlayerModel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ModelManager {
-    private static final Logger logger = LoggerFactory.getLogger(ModelManager.class);
+    private static final Logger logger = LogManager.getLogger(ModelManager.class);
 
     private final GameContext gameContext;
 
@@ -47,14 +47,15 @@ public class ModelManager {
 
                 // Remove disconnected player when server starts
                 this.removeDisconnectedPlayer();
+
+                logger.info("serverModelManager.modelMap: " + serverModelManager.modelMap);
+                logger.info("serverModelManager.playerModelMap: " + serverModelManager.playerModelMap);
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
 
                 // Initialize a new Game
                 serverModelManager = new ServerModelManager();
                 new WorldModelGenerator(gameContext).generateWorld();
-
-                this.saveGameData();
             }
         } else {
             serverModelManager = new ServerModelManager();
@@ -109,7 +110,9 @@ public class ModelManager {
         serverModelManager.modelMap.values().forEach(model -> model.update(dt));
         this.broadcastToClient();
 
-        if (gameContext.worldCounter % Config.AUTO_SAVE_DURATION == 0) this.saveGameData();
+        if (gameContext.isServer && gameContext.worldCounter % Config.AUTO_SAVE_DURATION == 0) {
+            this.saveGameData();
+        }
     }
 
     /**

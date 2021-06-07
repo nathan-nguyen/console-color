@@ -7,8 +7,8 @@ import com.noiprocs.core.graphics.RenderableSprite;
 import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.mob.character.PlayerModel;
 import com.noiprocs.ui.console.sprite.ConsoleSprite;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ import static com.noiprocs.ui.console.ConsoleUIConfig.HEIGHT;
 import static com.noiprocs.ui.console.ConsoleUIConfig.WIDTH;
 
 public class ConsoleHitboxManager implements HitboxManagerInterface {
-    private static final Logger logger = LoggerFactory.getLogger(ConsoleHitboxManager.class);
+    private static final Logger logger = LogManager.getLogger(ConsoleHitboxManager.class);
 
     private GameContext gameContext;
 

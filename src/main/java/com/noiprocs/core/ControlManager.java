@@ -1,11 +1,11 @@
 package com.noiprocs.core;
 
 import com.noiprocs.core.model.mob.character.PlayerModel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class ControlManager {
-    private static final Logger logger = LoggerFactory.getLogger(ControlManager.class);
+    private static final Logger logger = LogManager.getLogger(ControlManager.class);
 
     private final GameContext gameContext;
 
