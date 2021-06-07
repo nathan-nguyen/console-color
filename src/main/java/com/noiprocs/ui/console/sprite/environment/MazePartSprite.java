@@ -29,8 +29,8 @@ public class MazePartSprite extends ConsoleSprite {
 
         this.setTexture(mazeTexture);
         mpm.setPosition(
-                mpm.offsetX + mpm.posX * WALL_THICKNESS_HEIGHT,
-                mpm.offsetY + mpm.posY * WALL_THICKNESS_WIDTH
+                mpm.offsetX + mpm.relativePosX * WALL_THICKNESS_HEIGHT,
+                mpm.offsetY + mpm.relativePosY * WALL_THICKNESS_WIDTH
         );
     }
 
