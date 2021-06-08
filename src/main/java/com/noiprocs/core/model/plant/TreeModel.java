@@ -9,8 +9,8 @@ public class TreeModel extends Model implements InteractiveInterface {
 
     private int durability = MAX_DURABILITY;
 
-    public TreeModel(int x, int y, boolean isPhysical) {
-        super(x, y, isPhysical);
+    public TreeModel(int x, int y, boolean isVisible) {
+        super(x, y, isVisible);
     }
 
     @Override
