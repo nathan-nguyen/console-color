@@ -1,5 +1,6 @@
 package com.noiprocs.core;
 
+import com.noiprocs.core.config.Config;
 import com.noiprocs.core.graphics.GameScreenInterface;
 import com.noiprocs.core.graphics.HitboxManagerInterface;
 import com.noiprocs.core.graphics.SpriteManager;
@@ -73,16 +74,16 @@ public class GameContext {
         worldCounter += 1;
 
         /*
-         * Server:
+         * Server only:
          *     - Broadcast data to all clients.
          *     - Periodically save data to disk.
          */
-        modelManager.update(dt);
+        if (isServer) modelManager.update(dt);
 
         // Synchronize data with modelManager
         spriteManager.update(dt);
 
         // Render graphics
-        gameScreen.render(dt);
+        if (!Config.DISABLE_PLAYER) gameScreen.render(dt);
     }
 }

@@ -69,7 +69,7 @@ public class ConsoleGameScreen implements GameScreenInterface {
         }
 
         // Render map
-        if (!Config.IS_FREEZE) this.printMap();
+        this.printMap();
     }
 
     private void clearMap() {

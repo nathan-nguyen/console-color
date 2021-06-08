@@ -3,13 +3,17 @@ package com.noiprocs.core.model.generator;
 import com.noiprocs.core.GameContext;
 import com.noiprocs.core.config.Config;
 import com.noiprocs.core.model.Model;
+import com.noiprocs.core.model.mob.character.PlayerModel;
 import com.noiprocs.core.model.plant.BirchTreeModel;
 import com.noiprocs.core.model.plant.TreeModel;
-import com.noiprocs.core.model.mob.character.PlayerModel;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Random;
 
 public class WorldModelGenerator {
+    private static final Logger logger = LogManager.getLogger(WorldModelGenerator.class);
+
     private final GameContext gameContext;
     private final Random random = new Random();
 

@@ -9,15 +9,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ModelManager {
     private static final Logger logger = LogManager.getLogger(ModelManager.class);
 
     private final GameContext gameContext;
-    private List<Model> spawnModelList = new ArrayList<>();
+    private final List<Model> spawnModelList = new ArrayList<>();
 
     public ServerModelManager serverModelManager;
 
@@ -25,16 +24,41 @@ public class ModelManager {
         this.gameContext = gameContext;
     }
 
-    public Map<String, Model> getModelMap() {
-        return serverModelManager.modelMap;
+    public Model getModel(String id) {
+        if (gameContext.isServer) {
+            ModelChunkManager mcm = serverModelManager.modelMap.get(id);
+
+            if (mcm == null) return null;
+            return mcm.get(id);
+        }
+        for (ModelChunkManager mcm : serverModelManager.chunkMap.values()) {
+            if (mcm.map.containsKey(id)) return mcm.get(id);
+        }
+        return null;
     }
 
-    public Model getModel(String id) {
-        return serverModelManager.modelMap.get(id);
+    public void addModel(Model model) {
+        logger.info("Adding Model: " + model.id + " - " + model.getClass());
+
+        ModelChunkManager mcm = getChunkFromModelPosition(model.posX, model.posY);
+        mcm.add(model.id, model);
+
+        serverModelManager.modelMap.put(model.id, mcm);
+
+        gameContext.spriteManager.synchronizeModelData(true);
     }
 
     public void removeModel(String id) {
+        ModelChunkManager mcm = serverModelManager.modelMap.get(id);
+        if (mcm != null) mcm.remove(id);
+
         serverModelManager.modelMap.remove(id);
+    }
+
+    public void switchChunkModel(Model model) {
+        logger.info("Switch chunk Model: " + model.id + " - " + model.getClass());
+        removeModel(model.id);
+        addModel(model);
     }
 
     /**
@@ -50,7 +74,6 @@ public class ModelManager {
                 this.removeDisconnectedPlayer();
 
                 logger.info("serverModelManager.modelMap: " + serverModelManager.modelMap);
-                logger.info("serverModelManager.playerModelMap: " + serverModelManager.playerModelMap);
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
 
@@ -68,15 +91,15 @@ public class ModelManager {
      * This method is used only for Server, broadcast serverModelManager object to all clients
      */
     public void broadcastToClient() {
-        if (!gameContext.isServer) return;
+        gameContext.networkManager.clientIdMap.forEach((clientId, playerName) -> {
+            PlayerModel pm = serverModelManager.playerModelMap.get(playerName);
 
-        gameContext.networkManager.broadcastDataOverNetwork(serverModelManager);
-    }
-
-    public void addModel(Model model) {
-        logger.info(this.getClass() + " - Adding Model: " + model.id + " - " + model.getClass());
-        serverModelManager.modelMap.put(model.id, model);
-        gameContext.spriteManager.synchronizeModelData(true);
+            Map<String, ModelChunkManager> chunkMap = new HashMap<>();
+            getSurroundedChunk(pm).forEach(
+                    mcm -> chunkMap.put(mcm.getChunkId(), mcm)
+            );
+            gameContext.networkManager.sentClientData(clientId, chunkMap);
+        });
     }
 
     /**
@@ -103,21 +126,43 @@ public class ModelManager {
      *
      * @param object ServerModelManager object.
      */
-    public void updateServerModelManager(Object object) {
-        this.serverModelManager = (ServerModelManager) object;
+    public void updateSurroundedChunkFromServer(Object object) {
+        serverModelManager.chunkMap = (Map<String, ModelChunkManager>) object;
     }
 
     public void update(int dt) {
         List<String> destroyModelId = new ArrayList<>();
+        List<Model> switchChunkModelList = new ArrayList<>();
         spawnModelList.clear();
 
-        serverModelManager.modelMap.values().forEach(model -> {
-            model.update(dt);
-            if (model.isDestroyed) destroyModelId.add(model.id);
-        });
+        // Get all distinct chunk surrounded players
+        Set<ModelChunkManager> processChunk = new HashSet<>();
+        gameContext.networkManager.getConnectedPlayerId().forEach(
+                playerName -> {
+                    PlayerModel pm = serverModelManager.playerModelMap.get(playerName);
+                    processChunk.addAll(getSurroundedChunk(pm));
+                }
+        );
+
+        // Process models from surrounded chunks
+        processChunk.forEach(
+                mcm -> {
+                    String currentChunkId = mcm.getChunkId();
+                    mcm.getAllModel().forEach(model -> {
+                        model.update(dt);
+
+                        if (model.isDestroyed) destroyModelId.add(model.id);
+
+                        String nextChunkId = getChunkIdFromModelPosition(model.posX, model.posY);
+                        if (!nextChunkId.equals(currentChunkId)) switchChunkModelList.add(model);
+                    });
+                });
 
         // Removed destroyed models
-        destroyModelId.forEach(id -> serverModelManager.modelMap.remove(id));
+        destroyModelId.forEach(this::removeModel);
+
+        // Switch chunks
+        switchChunkModelList.forEach(this::switchChunkModel);
 
         // Add spawn models
         spawnModelList.forEach(this::addModel);
@@ -137,16 +182,15 @@ public class ModelManager {
     }
 
     private void removeDisconnectedPlayer() {
-        List<String> disconnectedPlayer = new ArrayList<>();
-
-        for (Model model : serverModelManager.modelMap.values()) {
-            if (model instanceof PlayerModel && !model.id.equals(gameContext.username)) {
-                disconnectedPlayer.add(model.id);
-            }
-        }
+        List<String> disconnectedPlayer = serverModelManager.playerModelMap.keySet().stream().filter(
+                playername -> !playername.equals(gameContext.username)
+        ).collect(Collectors.toList());
 
         if (Config.DISABLE_PLAYER) disconnectedPlayer.add(gameContext.username);
-        for (String disconnectedUsername : disconnectedPlayer) this.removeModel(disconnectedUsername);
+        disconnectedPlayer.forEach(model -> {
+            logger.info("Removing " + model);
+            removeModel(model);
+        });
     }
 
     public void addModelList(Iterable<Model> modelList) {
@@ -155,5 +199,43 @@ public class ModelManager {
 
     public void addSpawnModel(Model model) {
         this.spawnModelList.add(model);
+    }
+
+    private ModelChunkManager getChunkFromModelPosition(int posX, int posY) {
+        int chunkX = posX / ModelChunkManager.CHUNK_HEIGHT;
+        int chunkY = posY / ModelChunkManager.CHUNK_WIDTH;
+        return getChunk(chunkX, chunkY);
+    }
+
+    private ModelChunkManager getChunk(int posX, int posY) {
+        String chunkId = posX + "_" + posY;
+        if (serverModelManager.chunkMap.containsKey(chunkId)) return serverModelManager.chunkMap.get(chunkId);
+
+        ModelChunkManager mcm = new ModelChunkManager(posX, posY);
+        serverModelManager.chunkMap.put(chunkId, mcm);
+        return mcm;
+    }
+
+    public List<ModelChunkManager> getSurroundedChunk(Model model) {
+        List<ModelChunkManager> result = new ArrayList<>();
+        int chunkX = model.posX / ModelChunkManager.CHUNK_HEIGHT;
+        int chunkY = model.posY / ModelChunkManager.CHUNK_WIDTH;
+
+        for (int i = -1; i < 2; ++i) {
+            for (int j = -1; j < 2; ++j) {
+                result.add(getChunk(chunkX + i, chunkY + j));
+            }
+        }
+        return result;
+    }
+
+    private String getChunkIdFromModelPosition(int posX, int posY) {
+        int chunkX = posX / ModelChunkManager.CHUNK_HEIGHT;
+        int chunkY = posY / ModelChunkManager.CHUNK_WIDTH;
+        return chunkX + "_" + chunkY;
+    }
+
+    public Iterable<ModelChunkManager> getLocalChunk() {
+        return serverModelManager.chunkMap.values();
     }
 }

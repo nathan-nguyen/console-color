@@ -15,7 +15,7 @@ public class NetworkManager implements ReceiverInterface {
     private static final Logger logger = LogManager.getLogger(NetworkManager.class);
 
     private final GameContext gameContext;
-    private final Map<Integer, String> clientIdMap = new HashMap<>();
+    public final Map<Integer, String> clientIdMap = new HashMap<>();
     private CommunicationManager communicationManager;
 
     public NetworkManager(GameContext gameContext) {
@@ -46,10 +46,14 @@ public class NetworkManager implements ReceiverInterface {
         communicationManager.sendMessage(object);
     }
 
+    public void sentClientData(int clientId, Object object) {
+        communicationManager.sendMessage(clientId, object);
+    }
+
     @Override
     public void receiveMessage(int clientId, Object object) {
 //        logger.info("Received message " + object + " from clientId " + clientId);
-        if (!gameContext.isServer) gameContext.modelManager.updateServerModelManager(object);
+        if (!gameContext.isServer) gameContext.modelManager.updateSurroundedChunkFromServer(object);
         else processClientCommand(clientId, object);
     }
 
@@ -68,8 +72,11 @@ public class NetworkManager implements ReceiverInterface {
     public void clientDisconnect(int clientId) {
         String disconnectedClientUserName = clientIdMap.get(clientId);
         logger.info("Client " + clientId + " - User " + disconnectedClientUserName + " disconnected!");
+
         gameContext.modelManager.removeModel(disconnectedClientUserName);
         gameContext.modelManager.saveGameData();
+
+        clientIdMap.remove(clientId);
     }
 
     private void processClientCommand(int clientId, Object object) {
@@ -84,5 +91,9 @@ public class NetworkManager implements ReceiverInterface {
             String[] splitArr = command.split(" ");
             gameContext.controlManager.processCommand(splitArr[0], splitArr[1]);
         }
+    }
+
+    public Iterable<String> getConnectedPlayerId() {
+        return clientIdMap.values();
     }
 }
