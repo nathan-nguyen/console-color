@@ -5,6 +5,7 @@ import com.noiprocs.core.config.Config;
 import com.noiprocs.core.graphics.GameScreenInterface;
 import com.noiprocs.core.graphics.RenderableSprite;
 import com.noiprocs.core.model.Model;
+import com.noiprocs.core.model.item.Item;
 import com.noiprocs.core.model.mob.character.PlayerModel;
 import com.noiprocs.ui.console.sprite.ConsoleSprite;
 
@@ -69,7 +70,7 @@ public class ConsoleGameScreen implements GameScreenInterface {
         }
 
         // Render map
-        this.printMap();
+        this.printMap(playerModel);
     }
 
     private void clearMap() {
@@ -89,10 +90,23 @@ public class ConsoleGameScreen implements GameScreenInterface {
         }
     }
 
-    private void printMap() {
+    private String getHudString(PlayerModel playerModel) {
+        StringBuilder inventorySb = new StringBuilder();
+        for (Item item: playerModel.inventory) {
+            if (item == null) continue;
+            inventorySb.append(item.name).append(": ").append(item.amount).append(' ');
+        }
+        return playerModel.id + " - [" + playerModel.posX + ", " + playerModel.posY +
+                "] - Inventory: [" + inventorySb + ']';
+    }
+
+    private void printMap(PlayerModel playerModel) {
         System.out.print("\033[H\033[2J");
         System.out.flush();
+
         StringBuilder sb = new StringBuilder();
+        sb.append(getHudString(playerModel)).append('\n');
+
         for (int i = 0; i < map.length; ++i) {
             // Add top border
             if (i == 0) {

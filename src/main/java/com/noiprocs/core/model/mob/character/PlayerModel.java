@@ -3,11 +3,13 @@ package com.noiprocs.core.model.mob.character;
 import com.noiprocs.core.config.Config;
 import com.noiprocs.core.model.InteractiveInterface;
 import com.noiprocs.core.model.Model;
+import com.noiprocs.core.model.item.Item;
 import com.noiprocs.core.util.Helper;
 
 public class PlayerModel extends Model {
     private static final int HORIZONTAL_SPEED = Config.MAX_FPS / 15;
     private static final int VERTICAL_SPEED = Config.MAX_FPS / 15;
+    private static final int MAX_INVENTORY_SIZE = 10;
 
     public enum MovingDirection {
         STOP, UP, DOWN, LEFT, RIGHT
@@ -18,10 +20,12 @@ public class PlayerModel extends Model {
     }
 
     private MovingDirection movingDirection = MovingDirection.STOP;
-    private int[] leftInteractionPoint, rightInteractionPoint;
+    private int[][] leftInteractionPoint, rightInteractionPoint;
 
     public Action action = Action.RIGHT_NA;
     public int actionCounter = 0;
+    public Item[] inventory = new Item[MAX_INVENTORY_SIZE];
+
 
     public PlayerModel(String id, int x, int y, boolean isPhysical) {
         super(x, y, isPhysical);
@@ -69,18 +73,10 @@ public class PlayerModel extends Model {
     private void interactAction() {
         Model interactModel = null;
         if (action == Action.LEFT_ACTION) {
-            interactModel = Helper.GAME_CONTEXT.hitboxManager.getModel(
-                    posX + leftInteractionPoint[0],
-                    posY + leftInteractionPoint[1],
-                    id
-            );
+            interactModel = Helper.GAME_CONTEXT.hitboxManager.getModel(posX, posY, id, leftInteractionPoint);
         }
         else if (action == Action.RIGHT_ACTION) {
-            interactModel = Helper.GAME_CONTEXT.hitboxManager.getModel(
-                    posX + rightInteractionPoint[0],
-                    posY + rightInteractionPoint[1],
-                    id
-            );
+            interactModel = Helper.GAME_CONTEXT.hitboxManager.getModel(posX, posY, id, rightInteractionPoint);
         }
         if (interactModel instanceof InteractiveInterface) {
             ((InteractiveInterface) interactModel).interact(this);
@@ -114,7 +110,8 @@ public class PlayerModel extends Model {
     }
 
     private void move(int x, int y) {
-        if (movingDirection != MovingDirection.STOP && Helper.GAME_CONTEXT.hitboxManager.isValid(this, posX + x, posY + y)) {
+        if (movingDirection != MovingDirection.STOP
+                && Helper.GAME_CONTEXT.hitboxManager.isValid(this, posX + x, posY + y)) {
             posX += x;
             posY += y;
         }
@@ -126,8 +123,23 @@ public class PlayerModel extends Model {
         return "Player: " + id + " - posX: " + posX + " - posY: " + posY;
     }
 
-    public void setInteractionPoint(int[] leftInteractionPoint, int[] rightInteractionPoint) {
+    public void setInteractionPoint(int[][] leftInteractionPoint, int[][] rightInteractionPoint) {
         this.leftInteractionPoint = leftInteractionPoint;
         this.rightInteractionPoint = rightInteractionPoint;
+    }
+
+    public boolean addInventoryItem(Item item) {
+        int emptySlot = Integer.MAX_VALUE;
+        for (int i = 0; i < MAX_INVENTORY_SIZE; ++i) {
+            Item existingItem = inventory[i];
+            if (existingItem == null) emptySlot = Math.min(emptySlot, i);
+            if (existingItem != null && existingItem.name.equals(item.name)) {
+                existingItem.amount += item.amount;
+                return true;
+            }
+        }
+        if (emptySlot > MAX_INVENTORY_SIZE) return false;
+        inventory[emptySlot] = item;
+        return true;
     }
 }

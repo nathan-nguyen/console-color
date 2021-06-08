@@ -26,7 +26,7 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
     }
 
     @Override
-    public Model getModel(int locX, int locY, String ignoreModelId) {
+    public Model getModel(int locX, int locY, String ignoreModelId, int[][] interactivePointArr) {
         // Generate current hit box map
         List<RenderableSprite> renderableSpriteList =
                 gameContext.spriteManager.getAllRenderableObjectListWithinRange(locX, locY, Config.RENDER_RANGE);
@@ -55,7 +55,12 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
                 }
             }
         }
-        return map[HEIGHT / 2][WIDTH / 2];
+
+        for (int[] point: interactivePointArr) {
+            Model model = map[point[0] + HEIGHT / 2][point[1] + WIDTH / 2];
+            if (model != null) return model;
+        }
+        return null;
     }
 
     @Override
