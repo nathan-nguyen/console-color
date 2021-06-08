@@ -91,15 +91,18 @@ public class ModelManager {
      * This method is used only for Server, broadcast serverModelManager object to all clients
      */
     public void broadcastToClient() {
-        gameContext.networkManager.clientIdMap.forEach((clientId, playerName) -> {
-            PlayerModel pm = serverModelManager.playerModelMap.get(playerName);
+        // Avoid ConcurrentModificationException
+        synchronized (gameContext.networkManager.clientIdMap) {
+            gameContext.networkManager.clientIdMap.forEach((clientId, playerName) -> {
+                PlayerModel pm = serverModelManager.playerModelMap.get(playerName);
 
-            Map<String, ModelChunkManager> chunkMap = new HashMap<>();
-            getSurroundedChunk(pm).forEach(
-                    mcm -> chunkMap.put(mcm.getChunkId(), mcm)
-            );
-            gameContext.networkManager.sentClientData(clientId, chunkMap);
-        });
+                Map<String, ModelChunkManager> chunkMap = new HashMap<>();
+                getSurroundedChunk(pm).forEach(
+                        mcm -> chunkMap.put(mcm.getChunkId(), mcm)
+                );
+                gameContext.networkManager.sentClientData(clientId, chunkMap);
+            });
+        }
     }
 
     /**

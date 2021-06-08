@@ -76,7 +76,10 @@ public class NetworkManager implements ReceiverInterface {
         gameContext.modelManager.removeModel(disconnectedClientUserName);
         gameContext.modelManager.saveGameData();
 
-        clientIdMap.remove(clientId);
+        // Avoid ConcurrentModificationException
+        synchronized (clientIdMap) {
+            clientIdMap.remove(clientId);
+        }
     }
 
     private void processClientCommand(int clientId, Object object) {

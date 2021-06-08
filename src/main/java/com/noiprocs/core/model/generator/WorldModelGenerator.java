@@ -6,6 +6,7 @@ import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.environment.WorldBoundaryModel;
 import com.noiprocs.core.model.mob.character.PlayerModel;
 import com.noiprocs.core.model.plant.BirchTreeModel;
+import com.noiprocs.core.model.plant.PineTreeModel;
 import com.noiprocs.core.model.plant.TreeModel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -43,10 +44,16 @@ public class WorldModelGenerator {
 
     private void generateTree(int number, int startX, int startY, int endX, int endY) {
         for (int i = 0; i < number; ++i) {
-            int treeType = random.nextInt(2);
+            int treeType = random.nextInt(3);
             Model treeModel;
             if (treeType == 1) {
                 treeModel = new BirchTreeModel(
+                        random.nextInt(endX - startX) + startX,
+                        random.nextInt(endY - startY) + startY,
+                        true
+                );
+            } else if (treeType == 2) {
+                treeModel = new PineTreeModel(
                         random.nextInt(endX - startX) + startX,
                         random.nextInt(endY - startY) + startY,
                         true
