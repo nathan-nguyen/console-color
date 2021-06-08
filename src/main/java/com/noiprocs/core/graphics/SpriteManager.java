@@ -24,6 +24,7 @@ public abstract class SpriteManager {
 
     public void synchronizeModelData(boolean forceSynchronize) {
         if (!forceSynchronize && gameContext.worldCounter % Config.MODEL_SYNCHRONISATION_DELAY != 0) return;
+//        logger.info("Synchronizing data with ModelManager");
 
         Map<String, Model> modelMap = new HashMap<>();
         gameContext.modelManager.getLocalChunk().forEach(mcm -> modelMap.putAll(mcm.map));

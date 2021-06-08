@@ -167,7 +167,7 @@ public class ModelManager {
         // Add spawn models
         spawnModelList.forEach(this::addModel);
 
-        this.broadcastToClient();
+        if (gameContext.isServer && gameContext.worldCounter % Config.BROADCAST_DELAY == 0) this.broadcastToClient();
 
         if (gameContext.isServer && gameContext.worldCounter % Config.AUTO_SAVE_DURATION == 0) {
             this.saveGameData();

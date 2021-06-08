@@ -74,11 +74,11 @@ public class GameContext {
         worldCounter += 1;
 
         /*
-         * Server only:
+         * Server:
          *     - Broadcast data to all clients.
          *     - Periodically save data to disk.
          */
-        if (isServer) modelManager.update(dt);
+        modelManager.update(dt);
 
         // Synchronize data with modelManager
         spriteManager.update(dt);
