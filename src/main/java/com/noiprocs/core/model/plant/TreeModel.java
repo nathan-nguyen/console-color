@@ -24,5 +24,12 @@ public class TreeModel extends Model implements InteractiveInterface {
         super.destroy();
         Helper.GAME_CONTEXT.modelManager.addSpawnModel(new WoodLogModel(posX, posY, true));
         Helper.GAME_CONTEXT.modelManager.addSpawnModel(new WoodLogModel(posX + 1, posY + 1, true));
+
+        int seedDrop = Helper.random.nextInt(10);
+        // 0 drop: 20%
+        // 1 drop: 50%
+        // 2 drop: 30%
+        if (seedDrop >= 2) Helper.GAME_CONTEXT.modelManager.addSpawnModel(new SaplingModel(posX,posY + 2, true));
+        if (seedDrop >= 7) Helper.GAME_CONTEXT.modelManager.addSpawnModel(new SaplingModel(posX + 1,posY + 2, true));
     }
 }

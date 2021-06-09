@@ -3,18 +3,12 @@ package com.noiprocs.ui.console;
 import com.noiprocs.core.graphics.RenderableSprite;
 import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.environment.WorldBoundaryModel;
-import com.noiprocs.core.model.plant.BirchTreeModel;
+import com.noiprocs.core.model.plant.*;
 import com.noiprocs.core.model.environment.MazePartModel;
-import com.noiprocs.core.model.plant.PineTreeModel;
-import com.noiprocs.core.model.plant.TreeModel;
-import com.noiprocs.core.model.plant.WoodLogModel;
 import com.noiprocs.core.model.mob.character.PlayerModel;
 import com.noiprocs.ui.console.sprite.environment.WorldBoundarySprite;
-import com.noiprocs.ui.console.sprite.plant.BirchTreeSprite;
+import com.noiprocs.ui.console.sprite.plant.*;
 import com.noiprocs.ui.console.sprite.environment.MazePartSprite;
-import com.noiprocs.ui.console.sprite.plant.PineTreeSprite;
-import com.noiprocs.ui.console.sprite.plant.TreeSprite;
-import com.noiprocs.ui.console.sprite.plant.WoodLogSprite;
 import com.noiprocs.ui.console.sprite.mob.character.PlayerSprite;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,6 +28,7 @@ public class ConsoleSpriteFactory {
         if (model instanceof TreeModel) return new TreeSprite(model.id);
 
         if (model instanceof WoodLogModel) return new WoodLogSprite(model.id);
+        if (model instanceof SaplingModel) return new SaplingSprite(model.id);
 
         if (model instanceof MazePartModel) return new MazePartSprite(model.id);
         if (model instanceof WorldBoundaryModel) return new WorldBoundarySprite(model.id);
