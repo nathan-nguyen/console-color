@@ -17,4 +17,7 @@ public class MazePartModel extends Model {
         this.relativePosY = relativePosY;
         this.data = data;
     }
+
+    @Override
+    public void update(int delta) {}
 }

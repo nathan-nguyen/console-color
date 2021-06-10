@@ -65,6 +65,21 @@ public class ControlManager {
                 case 'f':
                     playerModel.triggerAction();
                     break;
+                case 't':
+                    playerModel.useItem();
+                    break;
+                case '1':
+                    playerModel.setCurrentInventorySlot(0);
+                    break;
+                case '2':
+                    playerModel.setCurrentInventorySlot(1);
+                    break;
+                case '3':
+                    playerModel.setCurrentInventorySlot(2);
+                    break;
+                case '4':
+                    playerModel.setCurrentInventorySlot(3);
+                    break;
             }
         }
     }

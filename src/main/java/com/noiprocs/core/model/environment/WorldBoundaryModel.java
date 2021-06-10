@@ -18,4 +18,7 @@ public class WorldBoundaryModel extends Model {
         this.relativePosY = relativePosY;
         this.isVertical = isVertical;
     }
+
+    @Override
+    public void update(int delta) {}
 }

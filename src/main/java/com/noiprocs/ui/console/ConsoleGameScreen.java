@@ -92,10 +92,10 @@ public class ConsoleGameScreen implements GameScreenInterface {
 
     private String getHudString(PlayerModel playerModel) {
         StringBuilder inventorySb = new StringBuilder();
-        for (Item item: playerModel.inventory) {
-            if (item == null) continue;
-            inventorySb.append(item.name).append(": ").append(item.amount).append(' ');
-        }
+
+        Item item = playerModel.inventory[playerModel.currentInventorySlot];
+        if (item != null) inventorySb.append(item.name).append(": ").append(item.amount);
+
         return playerModel.id + " - [" + playerModel.posX + ", " + playerModel.posY +
                 "] - Inventory: [" + inventorySb + ']';
     }
@@ -113,7 +113,7 @@ public class ConsoleGameScreen implements GameScreenInterface {
                 for (int j = 0; j < map[0].length + 2; ++j) sb.append('-');
                 sb.append('\n');
             }
-            
+
             // Add map content
             for (int j = 0; j < map[0].length; ++j) {
                 // Add left border

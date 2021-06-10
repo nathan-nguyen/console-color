@@ -9,7 +9,7 @@ import com.noiprocs.core.util.Helper;
 public class PlayerModel extends Model {
     private static final int HORIZONTAL_SPEED = Config.MAX_FPS / 15;
     private static final int VERTICAL_SPEED = Config.MAX_FPS / 15;
-    private static final int MAX_INVENTORY_SIZE = 10;
+    private static final int MAX_INVENTORY_SIZE = 4;
 
     public enum MovingDirection {
         STOP, UP, DOWN, LEFT, RIGHT
@@ -25,6 +25,7 @@ public class PlayerModel extends Model {
     public Action action = Action.RIGHT_NA;
     public int actionCounter = 0;
     public Item[] inventory = new Item[MAX_INVENTORY_SIZE];
+    public int currentInventorySlot = 0;
 
 
     public PlayerModel(String id, int x, int y, boolean isPhysical) {
@@ -141,5 +142,17 @@ public class PlayerModel extends Model {
         if (emptySlot > MAX_INVENTORY_SIZE) return false;
         inventory[emptySlot] = item;
         return true;
+    }
+
+    public void setCurrentInventorySlot(int currentInventorySlot) {
+        this.currentInventorySlot = currentInventorySlot;
+    }
+
+    public void useItem() {
+        Item item = inventory[currentInventorySlot];
+        if (item == null) return;
+
+        item.use(this);
+        if (item.amount == 0) inventory[currentInventorySlot] = null;
     }
 }

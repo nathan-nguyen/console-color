@@ -11,6 +11,9 @@ public class WoodLogModel extends Model implements InteractiveInterface {
     }
 
     @Override
+    public void update(int delta) {}
+
+    @Override
     public void interact(Model model) {
         if (model instanceof PlayerModel) {
             if (((PlayerModel) model).addInventoryItem(new WoodLogItem(1))) {

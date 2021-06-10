@@ -20,7 +20,7 @@ public abstract class Model implements Serializable {
         return (int) Math.sqrt((x - posX) * (x - posX) + (y - posY) * (y - posY));
     }
 
-    public void update(int delta) {}
+    public abstract void update(int delta);
 
     public void setPosition(int posX, int posY) {
         this.posX = posX;

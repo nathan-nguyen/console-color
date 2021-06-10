@@ -16,7 +16,7 @@ public class ModelManager {
     private static final Logger logger = LogManager.getLogger(ModelManager.class);
 
     private final GameContext gameContext;
-    private final List<Model> spawnModelList = new ArrayList<>();
+    private final Queue<Model> spawnModelList = new LinkedList<>();
 
     public ServerModelManager serverModelManager;
 
@@ -136,7 +136,6 @@ public class ModelManager {
     public void update(int dt) {
         List<String> destroyModelId = new ArrayList<>();
         List<Model> switchChunkModelList = new ArrayList<>();
-        spawnModelList.clear();
 
         // Get all distinct chunk surrounded players
         Set<ModelChunkManager> processChunk = new HashSet<>();
@@ -168,7 +167,7 @@ public class ModelManager {
         switchChunkModelList.forEach(this::switchChunkModel);
 
         // Add spawn models
-        spawnModelList.forEach(this::addModel);
+        while (!spawnModelList.isEmpty()) this.addModel(spawnModelList.poll());
 
         if (gameContext.isServer && gameContext.worldCounter % Config.BROADCAST_DELAY == 0) this.broadcastToClient();
 
@@ -201,7 +200,7 @@ public class ModelManager {
     }
 
     public void addSpawnModel(Model model) {
-        this.spawnModelList.add(model);
+        this.spawnModelList.offer(model);
     }
 
     private ModelChunkManager getChunkFromModelPosition(int posX, int posY) {
