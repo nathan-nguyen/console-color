@@ -16,7 +16,7 @@ import static com.noiprocs.ui.console.ConsoleUIConfig.WIDTH;
 
 public class ConsoleGameScreen implements GameScreenInterface {
     private final char[][] map = new char[HEIGHT][WIDTH];
-    private GameContext gameContext;
+    protected GameContext gameContext;
 
     @Override
     public void setGameContext(GameContext gameContext) {
@@ -32,6 +32,11 @@ public class ConsoleGameScreen implements GameScreenInterface {
         // Only render when playerModel is existing
         if (playerModel == null) return;
 
+        // Render map
+        System.out.println(getScreenContentInString(playerModel));
+    }
+
+    protected String getScreenContentInString(PlayerModel playerModel) {
         // Get list of visible objects not far from player
         List<RenderableSprite> renderableSpriteList = gameContext.spriteManager
                 .getVisibleRenderableObjectListWithinRange(
@@ -70,7 +75,7 @@ public class ConsoleGameScreen implements GameScreenInterface {
         }
 
         // Render map
-        this.printMap(playerModel);
+        return convertMapToString(playerModel);
     }
 
     private void clearMap() {
@@ -100,7 +105,7 @@ public class ConsoleGameScreen implements GameScreenInterface {
                 "] - Inventory: [" + inventorySb + ']';
     }
 
-    private void printMap(PlayerModel playerModel) {
+    private String convertMapToString(PlayerModel playerModel) {
         System.out.print("\033[H\033[2J");
         System.out.flush();
 
@@ -132,6 +137,6 @@ public class ConsoleGameScreen implements GameScreenInterface {
                 sb.append('\n');
             }
         }
-        System.out.println(sb);
+        return sb.toString();
     }
 }
