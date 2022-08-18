@@ -56,5 +56,13 @@ mvn compile exec:java -Dexec.mainClass="com.noiprocs.App" -Dexec.args="pc yaiba 
 mvn assembly:single
 ```
 
+## Control
+
+- A D W S : Movement
+- H: Stop
+- F: Trigger action
+- T: Use current item
+- 1 2 3 4: Switch item in inventory.
+
 ## Future improvement
 - Divide ModelManager into chunks.

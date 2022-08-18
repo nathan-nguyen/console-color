@@ -10,40 +10,40 @@ public class PlayerSprite extends ConsoleSprite {
             {0, 0, '/', 0, '\\'},
     };
 
-    private static final char[][] RIGHT_ACTION_PERFORMANCE_0 = {
-            {0, 0, 0, 'o', 0, '_'},
-            {0, 0, '/', '|', '\\', '|'},
-            {0, 0, '/', 0, '\\', 0}
+    private static final char[][][] RIGHT_ACTION_PERFORMANCE = {
+            {
+                    {0, 0, 0, 'o', 0, '_'},
+                    {0, 0, '/', '|', '\\', '|'},
+                    {0, 0, '/', 0, '\\', 0}
+            },
+            {
+                    {0, 0, 0, 'o', 0, 0, 0},
+                    {0, 0, '/', '|', '\\', '/', '\''},
+                    {0, 0, '/', 0, '\\', 0, 0}
+            },
+            {
+                    {0, 0, 0, 'o', 0, 0, 0},
+                    {0, 0, '/', '|', '\\', '_', '_'},
+                    {0, 0, '/', 0, '\\', 0, '\''}
+            }
     };
 
-    private static final char[][] RIGHT_ACTION_PERFORMANCE_1 = {
-            {0, 0, 0, 'o', 0, 0, 0},
-            {0, 0, '/', '|', '\\', '/', '\''},
-            {0, 0, '/', 0, '\\', 0, 0}
-    };
-
-    private static final char[][] RIGHT_ACTION_PERFORMANCE_2 = {
-            {0, 0, 0, 'o', 0, 0, 0},
-            {0, 0, '/', '|', '\\', '_', '_'},
-            {0, 0, '/', 0, '\\', 0, '\''}
-    };
-
-    private static final char[][] LEFT_ACTION_PERFORMANCE_0 = {
-            {0, '_', 0, 'o', 0},
-            {0, '|', '/', '|', '\\'},
-            {0, 0, '/', 0, '\\'}
-    };
-
-    private static final char[][] LEFT_ACTION_PERFORMANCE_1 = {
-            {0, 0, 0, 'o', 0},
-            {'\'', '\\', '/', '|', '\\'},
-            {0, 0, '/', 0, '\\'}
-    };
-
-    private static final char[][] LEFT_ACTION_PERFORMANCE_2 = {
-            {0, 0, 0, 'o', 0},
-            {'_', '_', '/', '|', '\\'},
-            {'\'', 0, '/', 0, '\\'}
+    private static final char[][][] LEFT_ACTION_PERFORMANCE = {
+            {
+                    {0, '_', 0, 'o', 0},
+                    {0, '|', '/', '|', '\\'},
+                    {0, 0, '/', 0, '\\'}
+            },
+            {
+                    {0, 0, 0, 'o', 0},
+                    {'\'', '\\', '/', '|', '\\'},
+                    {0, 0, '/', 0, '\\'}
+            },
+            {
+                    {0, 0, 0, 'o', 0},
+                    {'_', '_', '/', '|', '\\'},
+                    {'\'', 0, '/', 0, '\\'}
+            }
     };
 
     private static final int[][] LEFT_INTERACTION_POINT = {{0, 1}, {1, 0}, {1, 1}, {2, 0}};
@@ -62,13 +62,9 @@ public class PlayerSprite extends ConsoleSprite {
     public char[][] getTexture() {
         PlayerModel pm = (PlayerModel) getModel();
         if (pm.action == PlayerModel.Action.RIGHT_ACTION) {
-            if (pm.actionCounter / 2 == 0) return RIGHT_ACTION_PERFORMANCE_0;
-            else if (pm.actionCounter / 2 == 1) return RIGHT_ACTION_PERFORMANCE_1;
-            else if (pm.actionCounter / 2 == 2) return RIGHT_ACTION_PERFORMANCE_2;
+            return RIGHT_ACTION_PERFORMANCE[(pm.actionCounter / 2) % RIGHT_ACTION_PERFORMANCE.length];
         } else if (pm.action == PlayerModel.Action.LEFT_ACTION) {
-            if (pm.actionCounter / 2 == 0) return LEFT_ACTION_PERFORMANCE_0;
-            else if (pm.actionCounter / 2 == 1) return LEFT_ACTION_PERFORMANCE_1;
-            else if (pm.actionCounter / 2 == 2) return LEFT_ACTION_PERFORMANCE_2;
+            return LEFT_ACTION_PERFORMANCE[(pm.actionCounter / 2) % LEFT_ACTION_PERFORMANCE.length];
         }
         return TEXTURE;
     }
