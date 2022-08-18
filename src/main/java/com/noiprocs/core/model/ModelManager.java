@@ -38,7 +38,7 @@ public class ModelManager {
     }
 
     public void addModel(Model model) {
-        logger.info("Adding Model: " + model.id + " - " + model.getClass());
+        logger.debug("Adding Model: " + model.id + " - " + model.getClass());
 
         ModelChunkManager mcm = getChunkFromModelPosition(model.posX, model.posY);
         mcm.add(model.id, model);
@@ -56,7 +56,7 @@ public class ModelManager {
     }
 
     public void switchChunkModel(Model model) {
-        logger.info("Switch chunk Model: " + model.id + " - " + model.getClass());
+        logger.debug("Switch chunk Model: " + model.id + " - " + model.getClass());
         removeModel(model.id);
         addModel(model);
     }
@@ -73,7 +73,7 @@ public class ModelManager {
                 // Remove disconnected player when server starts
                 this.removeDisconnectedPlayer();
 
-                logger.info("serverModelManager.modelMap: " + serverModelManager.modelMap);
+                logger.debug("serverModelManager.modelMap: " + serverModelManager.modelMap);
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
 
@@ -190,7 +190,7 @@ public class ModelManager {
 
         if (Config.DISABLE_PLAYER) disconnectedPlayer.add(gameContext.username);
         disconnectedPlayer.forEach(model -> {
-            logger.info("Removing " + model);
+            logger.debug("Removing " + model);
             removeModel(model);
         });
     }

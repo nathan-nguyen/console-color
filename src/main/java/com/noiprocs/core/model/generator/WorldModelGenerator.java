@@ -34,15 +34,15 @@ public class WorldModelGenerator {
         // Generate world boundary
         this.generateWorldBoundary(-80, -40, 10, 10);
 
-        // Generate trees
-        this.generateTree(20, -60, -40, -10, 40);
-
-        this.generateMob(100, -60, -40, -10, 40);
-
         // Generate maze
         MazeModelGenerator mmg = new MazeModelGenerator(40);
         mmg.constructMaze(10, 10);
         gameContext.modelManager.addModelList(mmg.getMazePartModelList());
+
+        // Generate trees
+        this.generateTree(200, -80, -40, 316, 554);
+
+        this.generateMob(200, -80, -40, 316, 554);
     }
 
     private void generateWorldBoundary(int startX, int startY, int heightPart, int widthPart) {
