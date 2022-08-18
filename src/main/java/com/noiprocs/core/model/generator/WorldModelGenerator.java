@@ -37,7 +37,7 @@ public class WorldModelGenerator {
         // Generate trees
         this.generateTree(20, -60, -40, -10, 40);
 
-        this.generateMob(1, -60, -40, -10, 40);
+        this.generateMob(100, -60, -40, -10, 40);
 
         // Generate maze
         MazeModelGenerator mmg = new MazeModelGenerator(40);

@@ -9,7 +9,7 @@ public class MobModel extends Model {
         STOP, UP, DOWN, LEFT, RIGHT
     }
 
-    protected MovingDirection movingDirection = MovingDirection.STOP;
+    public MovingDirection movingDirection = MovingDirection.STOP;
     private final int horizontalSpeed;
     private final int verticalSpeed;
 
@@ -43,9 +43,10 @@ public class MobModel extends Model {
         }
     }
 
-    private void move(int x, int y) {
-        if (movingDirection != MovingDirection.STOP
-                && Helper.GAME_CONTEXT.hitboxManager.isValid(this, posX + x, posY + y)) {
+    protected void move(int x, int y) {
+        if (movingDirection == MovingDirection.STOP) return;
+
+        if (Helper.GAME_CONTEXT.hitboxManager.isValid(this, posX + x, posY + y)) {
             posX += x;
             posY += y;
         }
