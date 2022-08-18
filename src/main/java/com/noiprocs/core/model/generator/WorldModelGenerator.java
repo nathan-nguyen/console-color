@@ -4,6 +4,7 @@ import com.noiprocs.core.GameContext;
 import com.noiprocs.core.config.Config;
 import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.environment.WorldBoundaryModel;
+import com.noiprocs.core.model.mob.CotMobModel;
 import com.noiprocs.core.model.mob.character.PlayerModel;
 import com.noiprocs.core.model.plant.BirchTreeModel;
 import com.noiprocs.core.model.plant.PineTreeModel;
@@ -36,41 +37,12 @@ public class WorldModelGenerator {
         // Generate trees
         this.generateTree(20, -60, -40, -10, 40);
 
+        this.generateMob(1, -60, -40, -10, 40);
+
         // Generate maze
         MazeModelGenerator mmg = new MazeModelGenerator(40);
         mmg.constructMaze(10, 10);
         gameContext.modelManager.addModelList(mmg.getMazePartModelList());
-    }
-
-    private void generateTree(int number, int startX, int startY, int endX, int endY) {
-        for (int i = 0; i < number; ++i) {
-            int treeType = random.nextInt(3);
-            Model treeModel;
-            if (treeType == 1) {
-                treeModel = new BirchTreeModel(
-                        random.nextInt(endX - startX) + startX,
-                        random.nextInt(endY - startY) + startY,
-                        true
-                );
-            } else if (treeType == 2) {
-                treeModel = new PineTreeModel(
-                        random.nextInt(endX - startX) + startX,
-                        random.nextInt(endY - startY) + startY,
-                        true
-                );
-            } else {
-                treeModel = new TreeModel(
-                        random.nextInt(endX - startX) + startX,
-                        random.nextInt(endY - startY) + startY,
-                        true
-                );
-            }
-
-            if (gameContext.hitboxManager.isValid(treeModel, treeModel.posX, treeModel.posY)) {
-                gameContext.modelManager.addModel(treeModel);
-            }
-            else --i;
-        }
     }
 
     private void generateWorldBoundary(int startX, int startY, int heightPart, int widthPart) {
@@ -99,5 +71,39 @@ public class WorldModelGenerator {
         }
 
         gameContext.modelManager.addModelList(result);
+    }
+
+    private void generateTree(int number, int startX, int startY, int endX, int endY) {
+        while (number-- > 0) {
+            int treeType = random.nextInt(3);
+            Model treeModel;
+            int modelPosX = random.nextInt(endX - startX) + startX;
+            int modelPosY = random.nextInt(endY - startY) + startY;
+            if (treeType == 1) {
+                treeModel = new BirchTreeModel(modelPosX, modelPosY, true);
+            } else if (treeType == 2) {
+                treeModel = new PineTreeModel(modelPosX, modelPosY, true);
+            } else {
+                treeModel = new TreeModel(modelPosX, modelPosY, true);
+            }
+
+            if (gameContext.hitboxManager.isValid(treeModel, modelPosX, modelPosY)) {
+                gameContext.modelManager.addModel(treeModel);
+            }
+            else ++number;
+        }
+    }
+
+    private void generateMob(int number, int startX, int startY, int endX, int endY) {
+        while (number-- > 0) {
+            int modelPosX = random.nextInt(endX - startX) + startX;
+            int modelPosY = random.nextInt(endY - startY) + startY;
+            Model cotMobModel = new CotMobModel(modelPosX, modelPosY, true);
+
+            if (gameContext.hitboxManager.isValid(cotMobModel, modelPosX, modelPosY)) {
+                gameContext.modelManager.addModel(cotMobModel);
+            }
+            else ++number;
+        }
     }
 }

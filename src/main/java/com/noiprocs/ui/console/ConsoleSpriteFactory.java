@@ -3,10 +3,12 @@ package com.noiprocs.ui.console;
 import com.noiprocs.core.graphics.RenderableSprite;
 import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.environment.WorldBoundaryModel;
+import com.noiprocs.core.model.mob.CotMobModel;
 import com.noiprocs.core.model.plant.*;
 import com.noiprocs.core.model.environment.MazePartModel;
 import com.noiprocs.core.model.mob.character.PlayerModel;
 import com.noiprocs.ui.console.sprite.environment.WorldBoundarySprite;
+import com.noiprocs.ui.console.sprite.mob.CotMobSprite;
 import com.noiprocs.ui.console.sprite.plant.*;
 import com.noiprocs.ui.console.sprite.environment.MazePartSprite;
 import com.noiprocs.ui.console.sprite.mob.character.PlayerSprite;
@@ -33,6 +35,7 @@ public class ConsoleSpriteFactory {
         if (model instanceof MazePartModel) return new MazePartSprite(model.id);
         if (model instanceof WorldBoundaryModel) return new WorldBoundarySprite(model.id);
 
+        if (model instanceof CotMobModel) return new CotMobSprite(model.id);
         throw new UnsupportedOperationException();
     }
 }
