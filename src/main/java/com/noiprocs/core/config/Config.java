@@ -8,7 +8,7 @@ public class Config {
     public static final int RENDER_RANGE = 120;
     public static final boolean IS_FREEZE = false;
 
-    public static final int BROADCAST_DELAY = 1;
+    public static final int BROADCAST_DELAY = 2;
     public static final int AUTO_SAVE_DURATION = 1800;
 
     public static boolean DISABLE_PLAYER = false;

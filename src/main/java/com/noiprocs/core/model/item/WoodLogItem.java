@@ -10,5 +10,5 @@ public class WoodLogItem extends Item {
     }
 
     @Override
-    public void use(Model moel) {}
+    public void use(Model model) {}
 }

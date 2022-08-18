@@ -2,11 +2,13 @@ package com.noiprocs.ui.console;
 
 import com.noiprocs.core.graphics.RenderableSprite;
 import com.noiprocs.core.model.Model;
+import com.noiprocs.core.model.building.FenceModel;
 import com.noiprocs.core.model.environment.WorldBoundaryModel;
 import com.noiprocs.core.model.mob.CotMobModel;
 import com.noiprocs.core.model.plant.*;
 import com.noiprocs.core.model.environment.MazePartModel;
 import com.noiprocs.core.model.mob.character.PlayerModel;
+import com.noiprocs.ui.console.sprite.building.FenceSprite;
 import com.noiprocs.ui.console.sprite.environment.WorldBoundarySprite;
 import com.noiprocs.ui.console.sprite.mob.CotMobSprite;
 import com.noiprocs.ui.console.sprite.plant.*;
@@ -36,6 +38,9 @@ public class ConsoleSpriteFactory {
         if (model instanceof WorldBoundaryModel) return new WorldBoundarySprite(model.id);
 
         if (model instanceof CotMobModel) return new CotMobSprite(model.id);
-        throw new UnsupportedOperationException();
+
+        if (model instanceof FenceModel) return new FenceSprite(model.id);
+
+        throw new UnsupportedOperationException("Could not find corresponding Sprite with model " + model.getClass());
     }
 }

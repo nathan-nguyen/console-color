@@ -13,5 +13,5 @@ public abstract class Item implements Serializable {
         this.amount = amount;
     }
 
-    public abstract void use(Model moel);
+    public abstract void use(Model model);
 }
