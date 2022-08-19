@@ -38,9 +38,7 @@ public class WorldModelGenerator {
         this.generateWorldBoundary(-80, -40, 10, 10);
 
         // Generate maze
-        MazeModelGenerator mmg = new MazeModelGenerator(40);
-        mmg.constructMaze(10, 10);
-        gameContext.modelManager.addModelList(mmg.getMazePartModelList());
+//        this.generateMaze(10, 10, 40);
 
         // Generate trees
         this.generateTree(500, -80, -40, 316, 554);
@@ -92,6 +90,12 @@ public class WorldModelGenerator {
         }
 
         gameContext.modelManager.addModelList(result);
+    }
+
+    private void generateMaze(int posX, int posY, int mazeDimension) {
+        MazeModelGenerator mmg = new MazeModelGenerator(mazeDimension);
+        mmg.constructMaze(posX, posY);
+        gameContext.modelManager.addModelList(mmg.getMazePartModelList());
     }
 
     private void generateTree(int number, int startX, int startY, int endX, int endY) {

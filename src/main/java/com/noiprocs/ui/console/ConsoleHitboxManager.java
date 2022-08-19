@@ -25,20 +25,20 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
     }
 
     @Override
-    public Model getModel(int locX, int locY, String ignoreModelId, int[][] interactivePointArr) {
+    public Model getModel(Model targetModel, int directionX, int directionY) {
         // Generate current hit box map
-        List<Model> surroundedModelList = gameContext.modelManager.getSurroundedChunk(locX, locY).stream()
+        List<Model> surroundedModelList = gameContext.modelManager.getSurroundedChunk(targetModel).stream()
                 .flatMap(modelChunkManager -> modelChunkManager.map.values().stream())
-                .filter(surroundedModel -> surroundedModel.distanceTo(locX, locY) <= Config.RENDER_RANGE)
+                .filter(surroundedModel -> surroundedModel.distanceTo(targetModel.posX, targetModel.posY) <= Config.RENDER_RANGE)
                 .collect(Collectors.toList());
 
-        int offsetX = locX - HEIGHT / 2;
-        int offsetY = locY - WIDTH / 2;
+        int offsetX = targetModel.posX - HEIGHT / 2;
+        int offsetY = targetModel.posY - WIDTH / 2;
 
         Model[][] map = new Model[HEIGHT][WIDTH];
 
         for (Model model : surroundedModelList) {
-            if (model.id.equals(ignoreModelId)) continue;
+            if (model == targetModel) continue;
 
             int posX = model.posX;
             int posY = model.posY;
@@ -52,10 +52,18 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
             }
         }
 
-        for (int[] point: interactivePointArr) {
-            Model model = map[point[0] + HEIGHT / 2][point[1] + WIDTH / 2];
-            if (model != null) return model;
+        int intensityX = 1 - Math.abs(directionX);
+        int intensityY = 1 - Math.abs(directionY);
+        int count = intensityX * targetModel.hitboxHeight + intensityY * targetModel.hitboxWidth;
+
+        for (int i = 0; i < count; ++i) {
+            int pointX = intensityX * i + (directionX == -1 ? -1 : directionX * targetModel.hitboxHeight);
+            int pointY = intensityY * i + (directionY == -1 ? -1 : directionY * targetModel.hitboxWidth);
+
+            Model returnModel = map[pointX + HEIGHT / 2][pointY + WIDTH / 2];
+            if (returnModel != null) return returnModel;
         }
+
         return null;
     }
 

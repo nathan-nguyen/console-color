@@ -47,12 +47,8 @@ public class PlayerSprite extends ConsoleSprite {
             }
     };
 
-    private static final int[][] LEFT_INTERACTION_POINT = {{0, 1}, {1, 0}, {1, 1}, {2, 0}};
-    private static final int[][] RIGHT_INTERACTION_POINT = {{0, 5}, {1, 5}, {1, 6}, {2, 6}};
-
     public PlayerSprite(String id) {
         super(TEXTURE, id, OFFSET_X, OFFSET_Y);
-        ((PlayerModel) this.getModel()).setInteractionPoint(LEFT_INTERACTION_POINT, RIGHT_INTERACTION_POINT);
     }
 
     @Override

@@ -15,8 +15,6 @@ public class PlayerModel extends MobModel {
         RIGHT_NA, LEFT_NA, RIGHT_ACTION, LEFT_ACTION
     }
 
-    private int[][] leftInteractionPoint, rightInteractionPoint;
-
     public Action action = Action.RIGHT_NA;
     public int actionCounter = 0;
     public Item[] inventory = new Item[MAX_INVENTORY_SIZE];
@@ -68,12 +66,13 @@ public class PlayerModel extends MobModel {
 
     private void interactAction() {
         Model interactModel = null;
-        if (action == Action.LEFT_ACTION) {
-            interactModel = Helper.GAME_CONTEXT.hitboxManager.getModel(posX, posY, id, leftInteractionPoint);
+        if (action == Action.RIGHT_ACTION) {
+            interactModel = Helper.GAME_CONTEXT.hitboxManager.getModel(this, 0, 1);
         }
-        else if (action == Action.RIGHT_ACTION) {
-            interactModel = Helper.GAME_CONTEXT.hitboxManager.getModel(posX, posY, id, rightInteractionPoint);
+        else if (action == Action.LEFT_ACTION) {
+            interactModel = Helper.GAME_CONTEXT.hitboxManager.getModel(this, 0, -1);
         }
+
         if (interactModel instanceof InteractiveInterface) {
             ((InteractiveInterface) interactModel).interact(this);
         }
@@ -92,11 +91,6 @@ public class PlayerModel extends MobModel {
     @Override
     public String toString() {
         return "Player: " + id + " - posX: " + posX + " - posY: " + posY;
-    }
-
-    public void setInteractionPoint(int[][] leftInteractionPoint, int[][] rightInteractionPoint) {
-        this.leftInteractionPoint = leftInteractionPoint;
-        this.rightInteractionPoint = rightInteractionPoint;
     }
 
     public boolean addInventoryItem(Item item) {

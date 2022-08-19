@@ -17,7 +17,6 @@ public class TreeModel extends Model implements InteractiveInterface {
 
     public TreeModel(int x, int y) {
         super(x, y, true, HITBOX_HEIGHT, HITBOX_WIDTH);
-        this.treeAge = MATURE_AGE;
     }
     public TreeModel(int x, int y, int hitBoxHeight, int hitBoxWidth) {
         super(x, y, true, hitBoxHeight, hitBoxWidth);

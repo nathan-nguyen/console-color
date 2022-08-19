@@ -232,6 +232,7 @@ public class ModelManager {
         }
         return result;
     }
+
     public List<ModelChunkManager> getSurroundedChunk(Model model) {
         return getSurroundedChunk(model.posX, model.posY);
     }
