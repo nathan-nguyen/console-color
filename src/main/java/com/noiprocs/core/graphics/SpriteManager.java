@@ -58,7 +58,5 @@ public abstract class SpriteManager {
 
     public abstract void update(int dt);
 
-    public abstract List<RenderableSprite> getAllRenderableObjectListWithinRange(int x, int y, int range);
-
     public abstract List<RenderableSprite> getVisibleRenderableObjectListWithinRange(int x, int y, int range);
 }

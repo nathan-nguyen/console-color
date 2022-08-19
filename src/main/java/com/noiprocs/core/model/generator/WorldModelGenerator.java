@@ -43,9 +43,9 @@ public class WorldModelGenerator {
         gameContext.modelManager.addModelList(mmg.getMazePartModelList());
 
         // Generate trees
-        this.generateTree(200, -80, -40, 316, 554);
+        this.generateTree(500, -80, -40, 316, 554);
 
-        this.generateCotMob(200, -80, -40, 316, 554);
+        this.generateCotMob(500, -80, -40, 316, 554);
 
         this.generateSupportingObject(0, 0, 10, 10);
     }

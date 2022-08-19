@@ -3,14 +3,13 @@ package com.noiprocs.ui.console;
 import com.noiprocs.core.GameContext;
 import com.noiprocs.core.config.Config;
 import com.noiprocs.core.graphics.HitboxManagerInterface;
-import com.noiprocs.core.graphics.RenderableSprite;
 import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.mob.character.PlayerModel;
-import com.noiprocs.ui.console.sprite.ConsoleSprite;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.noiprocs.ui.console.ConsoleUIConfig.HEIGHT;
 import static com.noiprocs.ui.console.ConsoleUIConfig.WIDTH;
@@ -28,27 +27,24 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
     @Override
     public Model getModel(int locX, int locY, String ignoreModelId, int[][] interactivePointArr) {
         // Generate current hit box map
-        List<RenderableSprite> renderableSpriteList =
-                gameContext.spriteManager.getAllRenderableObjectListWithinRange(locX, locY, Config.RENDER_RANGE);
+        List<Model> surroundedModelList = gameContext.modelManager.getSurroundedChunk(locX, locY).stream()
+                .flatMap(modelChunkManager -> modelChunkManager.map.values().stream())
+                .filter(surroundedModel -> surroundedModel.distanceTo(locX, locY) <= Config.RENDER_RANGE)
+                .collect(Collectors.toList());
 
         int offsetX = locX - HEIGHT / 2;
         int offsetY = locY - WIDTH / 2;
 
         Model[][] map = new Model[HEIGHT][WIDTH];
 
-        for (RenderableSprite renderableSprite : renderableSpriteList) {
-            if (renderableSprite.id.equals(ignoreModelId)) continue;
-
-            char[][] texture = ((ConsoleSprite) renderableSprite).getTexture();
-
-            Model model = renderableSprite.getModel();
+        for (Model model : surroundedModelList) {
+            if (model.id.equals(ignoreModelId)) continue;
 
             int posX = model.posX;
             int posY = model.posY;
 
-            for (int i = 0; i < texture.length; ++i) {
-                for (int j = 0; j < texture[0].length; ++j) {
-                    if (texture[i][j] == 0) continue;
+            for (int i = 0; i < model.hitboxHeight; ++i) {
+                for (int j = 0; j < model.hitboxWidth; ++j) {
                     int x = posX + i - offsetX;
                     int y = posY + j - offsetY;
                     if (x >= 0 && x < HEIGHT && y >= 0 && y < WIDTH) map[x][y] = model;
@@ -66,19 +62,16 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
     @Override
     public boolean isValid(Model model, int nextX, int nextY) {
         // Generate current hit box map
-        List<RenderableSprite> renderableSpriteList =
-                gameContext.spriteManager.getAllRenderableObjectListWithinRange(nextX, nextY, Config.RENDER_RANGE);
+        List<Model> surroundedModelList = gameContext.modelManager.getSurroundedChunk(model).stream()
+                .flatMap(modelChunkManager -> modelChunkManager.map.values().stream())
+                .filter(surroundedModel -> surroundedModel.distanceTo(nextX, nextY) <= Config.RENDER_RANGE)
+                .collect(Collectors.toList());
 
         int offsetX = nextX - HEIGHT / 2;
         int offsetY = nextY - WIDTH / 2;
 
         boolean[][] collideHitboxMap = constructCurrentHitboxMap(
-                offsetX, offsetY, renderableSpriteList, model
-        );
-
-        RenderableSprite renderableSprite = gameContext.spriteManager.renderableSpriteMap.getOrDefault(
-                model.id,
-                gameContext.spriteManager.createRenderableObject(model)
+                offsetX, offsetY, surroundedModelList, model
         );
 
         // Check whether next position is valid
@@ -103,16 +96,12 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
 
     // Construct current hitbox map
     private boolean[][] constructCurrentHitboxMap(
-            int offsetX, int offsetY, List<RenderableSprite> renderableSpriteList, Model targetModel
+            int offsetX, int offsetY, List<Model> surroundedModelList, Model targetModel
     ) {
         boolean ignorePlayer = targetModel instanceof PlayerModel;
         boolean[][] map = new boolean[HEIGHT][WIDTH];
 
-        logger.debug("Constructing hit box map with existing model: " + renderableSpriteList.size());
-
-        for (RenderableSprite renderableSprite : renderableSpriteList) {
-            Model model = renderableSprite.getModel();
-
+        for (Model model : surroundedModelList) {
             // To avoid targetModel colliding with itself.
             if (model == targetModel) continue;
 

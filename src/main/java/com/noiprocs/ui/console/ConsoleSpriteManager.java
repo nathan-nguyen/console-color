@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class ConsoleSpriteManager extends SpriteManager {
     private static final Logger logger = LogManager.getLogger(ConsoleSpriteManager.class);
-    private ConsoleSpriteFactory consoleSpriteFactory = new ConsoleSpriteFactory();
+    private final ConsoleSpriteFactory consoleSpriteFactory = new ConsoleSpriteFactory();
 
     @Override
     public RenderableSprite createRenderableObject(Model model) {
@@ -21,16 +21,6 @@ public class ConsoleSpriteManager extends SpriteManager {
     @Override
     public void update(int dt) {
         this.synchronizeModelData(false);
-    }
-
-    @Override
-    public List<RenderableSprite> getAllRenderableObjectListWithinRange(int x, int y, int range) {
-        return renderableSpriteMap.values().stream().filter(
-                renderableSprite -> {
-                    Model model = renderableSprite.getModel();
-                    return model != null && renderableSprite.getModel().distanceTo(x, y) <= range;
-                }
-        ).collect(Collectors.toList());
     }
 
     @Override

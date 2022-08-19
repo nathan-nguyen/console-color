@@ -73,7 +73,7 @@ public class ModelManager {
                 // Remove disconnected player when server starts
                 this.removeDisconnectedPlayer();
 
-                logger.debug("serverModelManager.modelMap: " + serverModelManager.modelMap);
+                logger.info("serverModelManager.modelMap: " + serverModelManager.modelMap);
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
 
@@ -190,7 +190,7 @@ public class ModelManager {
 
         if (Config.DISABLE_PLAYER) disconnectedPlayer.add(gameContext.username);
         disconnectedPlayer.forEach(model -> {
-            logger.debug("Removing " + model);
+            logger.info("Removing player" + model);
             removeModel(model);
         });
     }
@@ -220,10 +220,10 @@ public class ModelManager {
         return mcm;
     }
 
-    public List<ModelChunkManager> getSurroundedChunk(Model model) {
+    public List<ModelChunkManager> getSurroundedChunk(int posX, int posY) {
         List<ModelChunkManager> result = new ArrayList<>();
-        int chunkX = model.posX / ModelChunkManager.CHUNK_HEIGHT;
-        int chunkY = model.posY / ModelChunkManager.CHUNK_WIDTH;
+        int chunkX = posX / ModelChunkManager.CHUNK_HEIGHT;
+        int chunkY = posY / ModelChunkManager.CHUNK_WIDTH;
 
         for (int i = -1; i < 2; ++i) {
             for (int j = -1; j < 2; ++j) {
@@ -231,6 +231,9 @@ public class ModelManager {
             }
         }
         return result;
+    }
+    public List<ModelChunkManager> getSurroundedChunk(Model model) {
+        return getSurroundedChunk(model.posX, model.posY);
     }
 
     private String getChunkIdFromModelPosition(int posX, int posY) {
