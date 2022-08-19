@@ -7,8 +7,8 @@ import java.util.Random;
 public class CotPsychoModel extends CotMobModel {
     private final Random random = new Random();
 
-    public CotPsychoModel(int x, int y, boolean isVisible) {
-        super(x, y, isVisible);
+    public CotPsychoModel(int x, int y) {
+        super(x, y);
     }
 
     @Override

@@ -14,9 +14,7 @@ public class FenceItem extends Item {
     @Override
     public void use(Model model) {
         System.out.println("Use " + this);
-        Helper.GAME_CONTEXT.modelManager.addSpawnModel(
-                new FenceModel(model.posX, model.posY, true)
-        );
+        Helper.GAME_CONTEXT.modelManager.addSpawnModel(new FenceModel(model.posX, model.posY));
         --amount;
     }
 }

@@ -47,15 +47,13 @@ public class ConsoleGameScreen implements GameScreenInterface {
 
         /* Render order:
          * - PlayerModel renders last.
-         * - Models with smaller posY render first.
+         * - Models with smaller posX render first.
          */
         renderableSpriteList.sort(
                 (u, v) -> {
                     Model uModel = u.getModel();
                     Model vModel = v.getModel();
-                    if (uModel.id.equals(gameContext.username)) return 1;
-                    if (vModel.id.equals(gameContext.username)) return -1;
-                    return Integer.compare(uModel.posY, vModel.posY);
+                    return Integer.compare(uModel.posX, vModel.posX);
                 }
         );
 
@@ -65,13 +63,14 @@ public class ConsoleGameScreen implements GameScreenInterface {
         this.clearMap();
 
         for (RenderableSprite renderableSprite : renderableSpriteList) {
-            char[][] texture = ((ConsoleSprite) renderableSprite).getTexture();
+            ConsoleSprite consoleSprite = (ConsoleSprite) renderableSprite;
+            char[][] texture = consoleSprite.getTexture();
 
             Model model = renderableSprite.getModel();
-            int posX = model.posX;
-            int posY = model.posY;
+            int posX = model.posX - offsetX - consoleSprite.offsetX;
+            int posY = model.posY - offsetY - consoleSprite.offsetY;
 
-            this.updateMap(posX, posY, texture, offsetX, offsetY);
+            this.updateMap(posX, posY, texture);
         }
 
         // Render map
@@ -84,12 +83,12 @@ public class ConsoleGameScreen implements GameScreenInterface {
         }
     }
 
-    private void updateMap(int posX, int posY, char[][] texture, int offsetX, int offsetY) {
+    private void updateMap(int posX, int posY, char[][] texture) {
         for (int i = 0; i < texture.length; ++i) {
             for (int j = 0; j < texture[0].length; ++j) {
                 if (texture[i][j] == 0) continue;
-                int x = posX + i - offsetX;
-                int y = posY + j - offsetY;
+                int x = posX + i;
+                int y = posY + j;
                 if (x >= 0 && x < HEIGHT && y >= 0 && y < WIDTH) map[x][y] = texture[i][j];
             }
         }

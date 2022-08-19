@@ -6,8 +6,10 @@ import com.noiprocs.core.model.item.SaplingItem;
 import com.noiprocs.core.model.mob.character.PlayerModel;
 
 public class SaplingModel extends Model implements InteractiveInterface {
-    public SaplingModel(int x, int y, boolean isVisible) {
-        super(x, y, isVisible);
+    private static final int HITBOX_WIDTH = 1, HITBOX_HEIGHT = 1;
+
+    public SaplingModel(int x, int y) {
+        super(x, y, true, HITBOX_HEIGHT, HITBOX_WIDTH);
     }
 
     @Override

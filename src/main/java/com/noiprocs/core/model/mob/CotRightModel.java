@@ -4,8 +4,8 @@ import com.noiprocs.core.util.Helper;
 
 public class CotRightModel extends CotMobModel {
 
-    public CotRightModel(int x, int y, boolean isVisible) {
-        super(x, y, isVisible);
+    public CotRightModel(int x, int y) {
+        super(x, y);
     }
 
     @Override

@@ -27,7 +27,11 @@ public abstract class SpriteManager {
         logger.debug("Synchronizing data with ModelManager");
 
         Map<String, Model> modelMap = new HashMap<>();
-        gameContext.modelManager.getLocalChunk().forEach(mcm -> modelMap.putAll(mcm.map));
+        gameContext.modelManager.getLocalChunk().forEach(
+                modelChunkManager -> modelMap.putAll(
+                        modelChunkManager.map
+                )
+        );
 
         List<String> removedKeyList = new ArrayList<>();
 

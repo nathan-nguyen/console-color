@@ -4,6 +4,7 @@ import com.noiprocs.core.model.mob.character.PlayerModel;
 import com.noiprocs.ui.console.sprite.ConsoleSprite;
 
 public class PlayerSprite extends ConsoleSprite {
+    private static final int OFFSET_X = 2, OFFSET_Y = 2;
     private static final char[][] TEXTURE = {
             {0, 0, 0, 'o', 0},
             {0, 0, '(', '|', ')'},
@@ -50,7 +51,7 @@ public class PlayerSprite extends ConsoleSprite {
     private static final int[][] RIGHT_INTERACTION_POINT = {{0, 5}, {1, 5}, {1, 6}, {2, 6}};
 
     public PlayerSprite(String id) {
-        super(TEXTURE, id);
+        super(TEXTURE, id, OFFSET_X, OFFSET_Y);
         ((PlayerModel) this.getModel()).setInteractionPoint(LEFT_INTERACTION_POINT, RIGHT_INTERACTION_POINT);
     }
 

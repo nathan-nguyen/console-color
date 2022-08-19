@@ -3,7 +3,7 @@ package com.noiprocs.core.model.mob;
 import com.noiprocs.core.model.Model;
 import com.noiprocs.core.util.Helper;
 
-public class MobModel extends Model {
+public abstract class MobModel extends Model {
     private static final int SKIP_MOVEMENT_FRAME = 2;
     public enum MovingDirection {
         STOP, UP, DOWN, LEFT, RIGHT
@@ -13,8 +13,14 @@ public class MobModel extends Model {
     private final int horizontalSpeed;
     private final int verticalSpeed;
 
-    public MobModel(int x, int y, boolean isVisible, int horizontalSpeed, int verticalSpeed) {
-        super(x, y, isVisible);
+    public MobModel(int x,
+                    int y,
+                    boolean isVisible,
+                    int hitboxHeight,
+                    int hitboxWidth,
+                    int horizontalSpeed,
+                    int verticalSpeed) {
+        super(x, y, isVisible, hitboxHeight, hitboxWidth);
         this.horizontalSpeed = horizontalSpeed;
         this.verticalSpeed = verticalSpeed;
     }

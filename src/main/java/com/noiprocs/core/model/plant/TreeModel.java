@@ -5,23 +5,23 @@ import com.noiprocs.core.model.Model;
 import com.noiprocs.core.util.Helper;
 
 public class TreeModel extends Model implements InteractiveInterface {
+    private static final int HITBOX_HEIGHT = 1, HITBOX_WIDTH = 4;
     private static final int MAX_DURABILITY = 10;
 
-    private static final int OLD_AGE = 3600;
+    private static final int MATURE_AGE = 3600;
     private static final int MIDDLE_AGE = 1800;
 
     private int durability = MAX_DURABILITY;
 
     public int treeAge = 0;
 
-
-    public TreeModel(int x, int y, boolean isVisible) {
-        super(x, y, isVisible);
-        this.treeAge = OLD_AGE;
-    }
-
     public TreeModel(int x, int y) {
-        super(x, y, true);
+        super(x, y, true, HITBOX_HEIGHT, HITBOX_WIDTH);
+        this.treeAge = MATURE_AGE;
+    }
+    public TreeModel(int x, int y, int hitBoxHeight, int hitBoxWidth) {
+        super(x, y, true, hitBoxHeight, hitBoxWidth);
+        this.treeAge = MATURE_AGE;
     }
 
     @Override
@@ -40,32 +40,32 @@ public class TreeModel extends Model implements InteractiveInterface {
         super.destroy();
 
         if (this.isOldAge()) {
-            Helper.GAME_CONTEXT.modelManager.addSpawnModel(new WoodLogModel(posX, posY, true));
-            Helper.GAME_CONTEXT.modelManager.addSpawnModel(new WoodLogModel(posX + 1, posY + 1, true));
+            Helper.GAME_CONTEXT.modelManager.addSpawnModel(new WoodLogModel(posX, posY));
+            Helper.GAME_CONTEXT.modelManager.addSpawnModel(new WoodLogModel(posX + 1, posY + 1));
 
             int seedDrop = Helper.random.nextInt(10);
             // 0 drop: 20%
             // 1 drop: 50%
             // 2 drop: 30%
             if (seedDrop >= 2) {
-                Helper.GAME_CONTEXT.modelManager.addSpawnModel(new SaplingModel(posX, posY + 2, true));
+                Helper.GAME_CONTEXT.modelManager.addSpawnModel(new SaplingModel(posX, posY + 2));
             }
             if (seedDrop >= 7)
                 Helper.GAME_CONTEXT.modelManager.addSpawnModel(
-                        new SaplingModel(posX + 1, posY + 2, true)
+                        new SaplingModel(posX + 1, posY + 2)
                 );
         }
         else if (this.isMiddleAge()) {
-            Helper.GAME_CONTEXT.modelManager.addSpawnModel(new WoodLogModel(posX, posY, true));
+            Helper.GAME_CONTEXT.modelManager.addSpawnModel(new WoodLogModel(posX, posY));
         }
     }
 
     public boolean isOldAge() {
-        return treeAge >= OLD_AGE;
+        return treeAge >= MATURE_AGE;
     }
 
     public boolean isMiddleAge() {
-        return treeAge >= MIDDLE_AGE && treeAge < OLD_AGE;
+        return treeAge >= MIDDLE_AGE && treeAge < MATURE_AGE;
     }
 
     public boolean isYoungAge() {

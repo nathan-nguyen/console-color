@@ -5,15 +5,18 @@ import java.io.Serializable;
 public abstract class Model implements Serializable {
     public String id = String.valueOf(this.hashCode());
 
-    public int posX;
-    public int posY;
-    public boolean isVisible, isDestroyed;
+    public int posX, posY;
+    public boolean isVisible;
+    public boolean isDestroyed = false;
 
-    public Model(int x, int y, boolean isVisible) {
+    public int hitboxHeight, hitboxWidth;
+
+    public Model(int x, int y, boolean isVisible, int hitboxHeight, int hitboxWidth) {
         this.posX = x;
         this.posY = y;
         this.isVisible = isVisible;
-        this.isDestroyed = false;
+        this.hitboxHeight = hitboxHeight;
+        this.hitboxWidth = hitboxWidth;
     }
 
     public int distanceTo(int x, int y) {

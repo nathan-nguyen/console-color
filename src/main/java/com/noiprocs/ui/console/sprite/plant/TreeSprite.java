@@ -4,6 +4,7 @@ import com.noiprocs.core.model.plant.TreeModel;
 import com.noiprocs.ui.console.sprite.ConsoleSprite;
 
 public class TreeSprite extends ConsoleSprite {
+    private static final int OFFSET_X = 4, OFFSET_Y = 3;
     private static final char[][] TEXTURE = {
             {0, '▒', '▒', '▒', '▒', '▒', '▒', '▒', '▒', 0},
             {'▒','▐','▒','▐','▒','▒','▒','▒','▌','▒'},
@@ -29,11 +30,11 @@ public class TreeSprite extends ConsoleSprite {
     };
 
     public TreeSprite(String id) {
-        super(TEXTURE, id);
+        super(TEXTURE, id, OFFSET_X, OFFSET_Y);
     }
 
-    public TreeSprite(char[][] texture, String id) {
-        super(texture, id);
+    public TreeSprite(char[][] texture, String id, int offsetX, int offsetY) {
+        super(texture, id, offsetX, offsetY);
     }
 
     @Override

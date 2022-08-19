@@ -73,33 +73,24 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
         int offsetY = nextY - WIDTH / 2;
 
         boolean[][] collideHitboxMap = constructCurrentHitboxMap(
-                offsetX, offsetY, renderableSpriteList, model instanceof PlayerModel
+                offsetX, offsetY, renderableSpriteList, model
         );
 
-        boolean isExisting = gameContext.spriteManager.renderableSpriteMap.containsKey(model.id);
-        RenderableSprite renderableSprite = isExisting ? gameContext.spriteManager.renderableSpriteMap.get(model.id)
-                : gameContext.spriteManager.createRenderableObject(model);
-
-        logger.debug("Model " + model + " is already existing: " + isExisting);
-
-        // Model is already existing, remove it from collideHitboxMap to avoid colliding with itself.
-        if (isExisting) {
-            this.removeFromHitboxMap(collideHitboxMap, offsetX, offsetY, renderableSprite);
-        }
+        RenderableSprite renderableSprite = gameContext.spriteManager.renderableSpriteMap.getOrDefault(
+                model.id,
+                gameContext.spriteManager.createRenderableObject(model)
+        );
 
         // Check whether next position is valid
-        return isValidNextPosition(nextX, nextY, collideHitboxMap, offsetX, offsetY, renderableSprite);
+        return isValidNextPosition(nextX, nextY, collideHitboxMap, offsetX, offsetY, model);
     }
 
     // Check whether next object position is valid
     private boolean isValidNextPosition(
-            int nextX, int nextY, boolean[][] map, int offsetX, int offsetY, RenderableSprite renderableSprite
+            int nextX, int nextY, boolean[][] map, int offsetX, int offsetY, Model targetModel
     ) {
-        char[][] texture = ((ConsoleSprite) renderableSprite).getTexture();
-
-        for (int i = 0; i < texture.length; ++i) {
-            for (int j = 0; j < texture[0].length; ++j) {
-                if (texture[i][j] == 0) continue;
+        for (int i = 0; i < targetModel.hitboxHeight; ++i) {
+            for (int j = 0; j < targetModel.hitboxWidth; ++j) {
                 int x = nextX + i - offsetX;
                 int y = nextY + j - offsetY;
                 if (x >= 0 && x < HEIGHT && y >= 0 && y < WIDTH) {
@@ -110,28 +101,11 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
         return true;
     }
 
-    // Remove current object from hitbox map
-    private void removeFromHitboxMap(boolean[][] map, int offsetX, int offsetY, RenderableSprite renderableSprite) {
-        char[][] texture = ((ConsoleSprite) renderableSprite).getTexture();
-
-        Model model = renderableSprite.getModel();
-        int posX = model.posX;
-        int posY = model.posY;
-
-        for (int i = 0; i < texture.length; ++i) {
-            for (int j = 0; j < texture[0].length; ++j) {
-                if (texture[i][j] == 0) continue;
-                int x = posX + i - offsetX;
-                int y = posY + j - offsetY;
-                if (x >= 0 && x < HEIGHT && y >= 0 && y < WIDTH) map[x][y] = false;
-            }
-        }
-    }
-
     // Construct current hitbox map
     private boolean[][] constructCurrentHitboxMap(
-            int offsetX, int offsetY, List<RenderableSprite> renderableSpriteList, boolean ignorePlayer
+            int offsetX, int offsetY, List<RenderableSprite> renderableSpriteList, Model targetModel
     ) {
+        boolean ignorePlayer = targetModel instanceof PlayerModel;
         boolean[][] map = new boolean[HEIGHT][WIDTH];
 
         logger.debug("Constructing hit box map with existing model: " + renderableSpriteList.size());
@@ -139,17 +113,17 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
         for (RenderableSprite renderableSprite : renderableSpriteList) {
             Model model = renderableSprite.getModel();
 
+            // To avoid targetModel colliding with itself.
+            if (model == targetModel) continue;
+
             // Allow players to go through each other
             if (ignorePlayer && model instanceof PlayerModel) continue;
-
-            char[][] texture = ((ConsoleSprite) renderableSprite).getTexture();
 
             int posX = model.posX;
             int posY = model.posY;
 
-            for (int i = 0; i < texture.length; ++i) {
-                for (int j = 0; j < texture[0].length; ++j) {
-                    if (texture[i][j] == 0) continue;
+            for (int i = 0; i < model.hitboxHeight; ++i) {
+                for (int j = 0; j < model.hitboxWidth; ++j) {
                     int x = posX + i - offsetX;
                     int y = posY + j - offsetY;
                     if (x >= 0 && x < HEIGHT && y >= 0 && y < WIDTH) map[x][y] = true;

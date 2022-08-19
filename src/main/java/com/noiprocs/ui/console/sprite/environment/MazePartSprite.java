@@ -6,14 +6,16 @@ import com.noiprocs.ui.console.sprite.ConsoleSprite;
 import static com.noiprocs.core.model.environment.MazePartModel.MAZE_PART_DIMENSION;
 
 public class MazePartSprite extends ConsoleSprite {
+    private static final int OFFSET_X = 0, OFFSET_Y = 0;
     private static final int WALL_THICKNESS_HEIGHT = 4;
     private static final int WALL_THICKNESS_WIDTH = 8;
     private static final char WALL_TEXTURE = '░';
 
     public MazePartSprite(String id) {
-        super(EMPTY_TEXTURE, id);
+        super(EMPTY_TEXTURE, id, OFFSET_X, OFFSET_Y);
 
         MazePartModel mpm = (MazePartModel) getModel();
+
         int[][] mazeData = mpm.data;
         char[][] mazeTexture = new char[MAZE_PART_DIMENSION * WALL_THICKNESS_HEIGHT][MAZE_PART_DIMENSION * WALL_THICKNESS_WIDTH];
         for (int i = 0; i < MAZE_PART_DIMENSION; ++i){

@@ -191,7 +191,6 @@ public class MazeModelGenerator {
                         offsetX, offsetY,
                         MAZE_PART_DIMENSION * i,
                         MAZE_PART_DIMENSION * j,
-                        true,
                         partData
                 );
                 result.add(mpm);

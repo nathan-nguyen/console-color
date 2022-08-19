@@ -7,8 +7,8 @@ import com.noiprocs.core.model.mob.MobModel;
 import com.noiprocs.core.util.Helper;
 
 public class PlayerModel extends MobModel {
-    private static final int HORIZONTAL_SPEED = 2;
-    private static final int VERTICAL_SPEED = 1;
+    private static final int HITBOX_HEIGHT = 1, HITBOX_WIDTH = 3;
+    private static final int HORIZONTAL_SPEED = 2, VERTICAL_SPEED = 1;
     private static final int MAX_INVENTORY_SIZE = 4;
 
     public enum Action {
@@ -23,8 +23,8 @@ public class PlayerModel extends MobModel {
     public int currentInventorySlot = 0;
 
 
-    public PlayerModel(String id, int x, int y, boolean isPhysical) {
-        super(x, y, isPhysical, HORIZONTAL_SPEED, VERTICAL_SPEED);
+    public PlayerModel(String id, int x, int y, boolean isVisible) {
+        super(x, y, isVisible, HITBOX_HEIGHT, HITBOX_WIDTH, HORIZONTAL_SPEED, VERTICAL_SPEED);
         this.id = id;
     }
 

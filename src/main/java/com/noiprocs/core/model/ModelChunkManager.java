@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ModelChunkManager implements Serializable {
-    protected static final int CHUNK_HEIGHT = 120;
-    protected static final int CHUNK_WIDTH = 120;
+    public static final int CHUNK_HEIGHT = 120;
+    public static final int CHUNK_WIDTH = 120;
 
     private final int posX, posY;
     public final Map<String, Model> map = new HashMap<>();
