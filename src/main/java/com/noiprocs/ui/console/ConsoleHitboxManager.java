@@ -72,7 +72,7 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
         int offsetX = nextX - HEIGHT / 2;
         int offsetY = nextY - WIDTH / 2;
 
-        boolean[][] map = constructCurrentHitboxMap(
+        boolean[][] collideHitboxMap = constructCurrentHitboxMap(
                 offsetX, offsetY, renderableSpriteList, model instanceof PlayerModel
         );
 
@@ -80,15 +80,15 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
         RenderableSprite renderableSprite = isExisting ? gameContext.spriteManager.renderableSpriteMap.get(model.id)
                 : gameContext.spriteManager.createRenderableObject(model);
 
-//        logger.info("Model " + model + " is already existing: " + isExisting);
+        logger.debug("Model " + model + " is already existing: " + isExisting);
 
-        // Model is already existing
+        // Model is already existing, remove it from collideHitboxMap to avoid colliding with itself.
         if (isExisting) {
-            this.removeFromHitboxMap(map, offsetX, offsetY, renderableSprite);
+            this.removeFromHitboxMap(collideHitboxMap, offsetX, offsetY, renderableSprite);
         }
 
         // Check whether next position is valid
-        return isValidNextPosition(nextX, nextY, map, offsetX, offsetY, renderableSprite);
+        return isValidNextPosition(nextX, nextY, collideHitboxMap, offsetX, offsetY, renderableSprite);
     }
 
     // Check whether next object position is valid
@@ -134,15 +134,15 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
     ) {
         boolean[][] map = new boolean[HEIGHT][WIDTH];
 
-//        logger.info("Constructing hit box map with existing model: " + renderableSpriteList.size());
+        logger.debug("Constructing hit box map with existing model: " + renderableSpriteList.size());
 
         for (RenderableSprite renderableSprite : renderableSpriteList) {
-            char[][] texture = ((ConsoleSprite) renderableSprite).getTexture();
-
             Model model = renderableSprite.getModel();
 
             // Allow players to go through each other
             if (ignorePlayer && model instanceof PlayerModel) continue;
+
+            char[][] texture = ((ConsoleSprite) renderableSprite).getTexture();
 
             int posX = model.posX;
             int posY = model.posY;

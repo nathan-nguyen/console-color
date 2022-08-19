@@ -211,7 +211,9 @@ public class ModelManager {
 
     private ModelChunkManager getChunk(int posX, int posY) {
         String chunkId = posX + "_" + posY;
-        if (serverModelManager.chunkMap.containsKey(chunkId)) return serverModelManager.chunkMap.get(chunkId);
+        if (serverModelManager.chunkMap.containsKey(chunkId)) {
+            return serverModelManager.chunkMap.get(chunkId);
+        }
 
         ModelChunkManager mcm = new ModelChunkManager(posX, posY);
         serverModelManager.chunkMap.put(chunkId, mcm);
