@@ -23,16 +23,18 @@ public class NetworkManager implements ReceiverInterface {
         this.gameContext = gameContext;
     }
 
-    public void startNetworkService(boolean isServer, String hostname, int port) {
-        if (isServer) {
-            Server server = new Server();
-            this.communicationManager = server.getCommunicationManager();
-            server.startService();
-        } else {
-            Client client = new Client(hostname, port);
-            this.communicationManager = client.getCommunicationManager();
-            client.startService();
-        }
+    public void startServerNetworkService(int port) {
+        Server server = new Server(port);
+        this.communicationManager = server.getCommunicationManager();
+        server.startService();
+
+        communicationManager.setReceiver(this);
+    }
+
+    public void startClientNetworkService(String hostname, int port) {
+        Client client = new Client(hostname, port);
+        this.communicationManager = client.getCommunicationManager();
+        client.startService();
 
         communicationManager.setReceiver(this);
     }

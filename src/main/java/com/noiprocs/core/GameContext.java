@@ -44,15 +44,21 @@ public class GameContext {
     }
 
     public void run() {
-        // Start network services
-        networkManager.startNetworkService(isServer, hostname, port);
+        if (isServer) {
+            // Server: Load data from save file or generate new world.
 
-        /*
-         * If Server: Load data from save file or generate new world.
-         * If client: Send join command to server. This required network connection to be setup beforehand.
-         */
-        if (isServer) modelManager.startServer();
-        else modelManager.startClient();
+            // Start network services
+            networkManager.startServerNetworkService(port);
+            modelManager.startServer();
+        }
+        else {
+            // Client: Send join command to server.
+            // This required network connection to be setup beforehand.
+
+            // Start network services
+            networkManager.startClientNetworkService(hostname, port);
+            modelManager.startClient();
+        }
 
         // Initialize timeManager
         TimeManager timeManager = new TimeManager() {

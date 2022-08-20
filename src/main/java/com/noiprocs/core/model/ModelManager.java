@@ -94,14 +94,15 @@ public class ModelManager {
      */
     public void broadcastToClient() {
         try {
-            gameContext.networkManager.clientIdMap.forEach((clientId, playerName) -> {
+            gameContext.networkManager.clientIdMap.entrySet().parallelStream().forEach(entry -> {
+                String playerName = entry.getValue();
+                int clientId = entry.getKey();
                 PlayerModel pm = serverModelManager.playerModelMap.get(playerName);
 
                 Map<String, ModelChunk> chunkMap = new HashMap<>();
                 getSurroundedChunk(pm).forEach(
                         modelChunk -> chunkMap.put(modelChunk.getChunkId(), modelChunk)
                 );
-
                 gameContext.networkManager.sentClientData(clientId, chunkMap);
             });
         }

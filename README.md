@@ -66,7 +66,11 @@ mvn assembly:single
 - 1 2 3 4: Switch item in inventory.
 
 ## Future improvement
+
+- Broadcast data to client asynchronously.
 - Use netty for network.
 
 ## Improvements
-- Divide ModelManager into chunks.
+
+- Divided ModelManager into chunks.
+
