@@ -25,6 +25,13 @@
             <version>2.12.1</version>
         </dependency>
 
+        <!-- To serialize object asynchronously -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.12.0</version>
+        </dependency>
+
         <!-- In-house dependencies -->
         <dependency>
             <groupId>com.noiprocs</groupId>

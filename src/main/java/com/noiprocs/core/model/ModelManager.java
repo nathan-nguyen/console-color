@@ -5,6 +5,7 @@ import com.noiprocs.core.SaveLoadManager;
 import com.noiprocs.core.config.Config;
 import com.noiprocs.core.model.generator.WorldModelGenerator;
 import com.noiprocs.core.model.mob.character.PlayerModel;
+import org.apache.commons.lang3.SerializationUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -137,7 +138,13 @@ public class ModelManager {
      * @param object ServerModelManager object.
      */
     public void updateSurroundedChunkFromServer(Object object) {
-        serverModelManager.chunkMap = (Map<String, ModelChunk>) object;
+        try {
+            serverModelManager.chunkMap = SerializationUtils.deserialize((byte[]) object);
+        }
+        catch (Exception e) {
+            logger.error("Failed to deserialized data from Server!");
+            e.printStackTrace();
+        }
     }
 
     public void update(int dt) {
