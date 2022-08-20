@@ -19,6 +19,8 @@ public class NetworkManager implements ReceiverInterface {
     public final Map<Integer, String> clientIdMap = new Hashtable<>();
     private CommunicationManager communicationManager;
 
+    private ServerMessageQueue serverMessageQueue;
+
     public NetworkManager(GameContext gameContext) {
         this.gameContext = gameContext;
     }
@@ -29,6 +31,9 @@ public class NetworkManager implements ReceiverInterface {
         server.startService();
 
         communicationManager.setReceiver(this);
+
+        serverMessageQueue = new ServerMessageQueue(communicationManager);
+        new Thread(serverMessageQueue).start();
     }
 
     public void startClientNetworkService(String hostname, int port) {
@@ -49,8 +54,11 @@ public class NetworkManager implements ReceiverInterface {
         communicationManager.sendMessage(object);
     }
 
+    /**
+     * This method is used only for Server.
+     */
     public void sentClientData(int clientId, Object object) {
-        communicationManager.sendMessage(clientId, object);
+        serverMessageQueue.addMessage(clientId, object);
     }
 
     @Override
@@ -89,6 +97,7 @@ public class NetworkManager implements ReceiverInterface {
         if (command.startsWith("join ")) {
             String clientUserName = command.substring(5);
             gameContext.modelManager.addPlayerModel(clientUserName);
+
             clientIdMap.put(clientId, clientUserName);
         } else {
             String[] splitArr = command.split(" ");
