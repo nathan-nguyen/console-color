@@ -32,7 +32,7 @@ public class NetworkManager implements ReceiverInterface {
 
         communicationManager.setReceiver(this);
 
-        serverMessageQueue = new ServerMessageQueue(communicationManager);
+        serverMessageQueue = new ServerMessageQueue(communicationManager, clientIdMap.keySet());
         new Thread(serverMessageQueue).start();
     }
 

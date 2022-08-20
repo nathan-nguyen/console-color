@@ -12,41 +12,50 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class ServerMessageQueue implements Runnable {
     private static final Logger logger = LogManager.getLogger(ServerMessageQueue.class);
 
-    public static final int MAX_QUEUE_SIZE = 10;
+    public static final int MAX_QUEUE_SIZE = 3;
     private final CommunicationManager communicationManager;
+    private final Set<Integer> clientIdSet;
 
-    public ServerMessageQueue(CommunicationManager communicationManager) {
+    public ServerMessageQueue(CommunicationManager communicationManager, Set<Integer> clientIdSet) {
         this.communicationManager = communicationManager;
+        this.clientIdSet = clientIdSet;
     }
 
-    static class ObjectWrapper {
-        public int clientId;
-        public Serializable object;
-
-        public ObjectWrapper(int clientId, Object object) {
-            this.clientId = clientId;
-            this.object = (Serializable) object;
-        }
-    }
-
-    private final Queue<ObjectWrapper> queue = new ConcurrentLinkedQueue<>();
+    private final Map<Integer, Queue<Serializable>> clientQueueMap = new HashMap<>();
 
     public void run() {
         while (true) {
-            while (!queue.isEmpty()) {
-                ObjectWrapper ow = queue.poll();
-                try {
-                    communicationManager.sendMessage(ow.clientId, SerializationUtils.serialize(ow.object));
-                } catch (Exception e) {
-                    logger.error("Failed to send data to client " + ow.clientId);
-                    e.printStackTrace();
-                }
+            try {
+                clientIdSet.parallelStream().forEach(
+                        clientId -> {
+                            Queue<Serializable> queue = clientQueueMap.get(clientId);
+                            if (queue == null || queue.isEmpty()) return;
+
+                            try {
+                                communicationManager.sendMessage(clientId, SerializationUtils.serialize(queue.poll()));
+                            } catch (Exception e) {
+                                logger.error("Failed to send data to client " + clientId);
+                                e.printStackTrace();
+                                clientQueueMap.remove(clientId);
+                            }
+                        }
+                );
+            } catch (ConcurrentModificationException e) {
+                // Possible reason: clientIdSet was updated
+                e.printStackTrace();
             }
         }
     }
 
     public void addMessage(int clientId, Object object) {
+        Queue<Serializable> queue;
+        if (!clientQueueMap.containsKey(clientId)) {
+            queue = new ConcurrentLinkedQueue<>();
+            clientQueueMap.put(clientId, queue);
+        } else {
+            queue = clientQueueMap.get(clientId);
+        }
         if (queue.size() > MAX_QUEUE_SIZE) return;
-        queue.offer(new ObjectWrapper(clientId, object));
+        queue.offer((Serializable) object);
     }
 }

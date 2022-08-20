@@ -2,6 +2,7 @@ package com.noiprocs.core.model;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 
 public class ModelChunk implements Serializable {

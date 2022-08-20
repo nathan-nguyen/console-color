@@ -41,9 +41,9 @@ public class WorldModelGenerator {
 //        this.generateMaze(10, 10, 40);
 
         // Generate trees
-        this.generateTree(500, -80, -40, 316, 554);
+        this.generateTree(1000, -80, -40, 316, 554);
 
-        this.generateCotMob(500, -80, -40, 316, 554);
+        this.generateCotMob(1000, -80, -40, 316, 554);
 
         this.generateSupportingObject(0, 0, 10, 10);
     }

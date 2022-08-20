@@ -95,9 +95,8 @@ public class ModelManager {
      */
     public void broadcastToClient() {
         try {
-            gameContext.networkManager.clientIdMap.entrySet().parallelStream().forEach(entry -> {
-                String playerName = entry.getValue();
-                int clientId = entry.getKey();
+            gameContext.networkManager.clientIdMap.forEach((key, playerName) -> {
+                int clientId = key;
                 PlayerModel pm = serverModelManager.playerModelMap.get(playerName);
 
                 Map<String, ModelChunk> chunkMap = new HashMap<>();
