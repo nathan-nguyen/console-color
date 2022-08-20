@@ -11,7 +11,7 @@ public class SaveLoadManager {
     private static final Logger logger = LogManager.getLogger(SaveLoadManager.class);
 
     public static void saveGameData(ServerModelManager serverModelManager) {
-        logger.info("Saving data to " + Config.SAVE_FILE_NAME + " ...");
+        logger.debug("Saving data to " + Config.SAVE_FILE_NAME + " ...");
 
         try {
             FileOutputStream f = new FileOutputStream(Config.SAVE_FILE_NAME);
@@ -28,7 +28,7 @@ public class SaveLoadManager {
     }
 
     public static ServerModelManager loadGameData() throws IOException, ClassNotFoundException {
-        logger.info("Loading data from " + Config.SAVE_FILE_NAME);
+        logger.debug("Loading data from " + Config.SAVE_FILE_NAME);
         FileInputStream fi = new FileInputStream(Config.SAVE_FILE_NAME);
         ObjectInputStream oi = new ObjectInputStream(fi);
 

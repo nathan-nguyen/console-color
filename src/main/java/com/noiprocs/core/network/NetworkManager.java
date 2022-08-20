@@ -8,6 +8,7 @@ import com.noiprocs.network.server.Server;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Map;
@@ -39,33 +40,35 @@ public class NetworkManager implements ReceiverInterface {
     public void startClientNetworkService(String hostname, int port) {
         Client client = new Client(hostname, port);
         this.communicationManager = client.getCommunicationManager();
-        client.startService();
 
+        client.startService();
         communicationManager.setReceiver(this);
     }
 
     /**
-     * If server: Send data to all clients.
-     * If client: Send data to server.
-     *
-     * @param object: Information to send to corresponding server / clients
+     * This method is used only for Client.
      */
-    public void broadcastDataOverNetwork(Object object) {
-        communicationManager.sendMessage(object);
+    public void sendDataToServer(byte[] bytes) {
+        communicationManager.sendMessage(bytes);
     }
 
     /**
      * This method is used only for Server.
      */
-    public void sentClientData(int clientId, Object object) {
+    public void sentClientData(int clientId, Serializable object) {
         serverMessageQueue.addMessage(clientId, object);
     }
 
     @Override
-    public void receiveMessage(int clientId, Object object) {
-        logger.debug("Received message " + object + " from clientId " + clientId);
-        if (!gameContext.isServer) gameContext.modelManager.updateSurroundedChunkFromServer(object);
-        else processClientCommand(clientId, object);
+    public void receiveMessage(int clientId, byte[] bytes) {
+        logger.debug("Received byte[] size " + bytes.length + " from clientId " + clientId);
+
+        if (!gameContext.isServer) {
+            gameContext.modelManager.updateSurroundedChunkFromServer(bytes);
+        }
+        else {
+            processClientCommand(clientId, bytes);
+        }
     }
 
     @Override
@@ -90,8 +93,8 @@ public class NetworkManager implements ReceiverInterface {
         clientIdMap.remove(clientId);
     }
 
-    private void processClientCommand(int clientId, Object object) {
-        String command = new String((byte[]) object);
+    private void processClientCommand(int clientId, byte[] bytes) {
+        String command = new String(bytes);
         logger.debug("[Server] Receiving message from client: " + clientId + " - Content: " + command);
 
         if (command.startsWith("join ")) {

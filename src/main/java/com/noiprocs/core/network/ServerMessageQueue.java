@@ -47,7 +47,7 @@ public class ServerMessageQueue implements Runnable {
         }
     }
 
-    public void addMessage(int clientId, Object object) {
+    public void addMessage(int clientId, Serializable object) {
         Queue<Serializable> queue;
         if (!clientQueueMap.containsKey(clientId)) {
             queue = new ConcurrentLinkedQueue<>();
@@ -56,6 +56,6 @@ public class ServerMessageQueue implements Runnable {
             queue = clientQueueMap.get(clientId);
         }
         if (queue.size() > MAX_QUEUE_SIZE) return;
-        queue.offer((Serializable) object);
+        queue.offer(object);
     }
 }

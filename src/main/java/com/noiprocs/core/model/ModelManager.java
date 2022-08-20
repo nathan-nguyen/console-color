@@ -10,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -66,13 +67,14 @@ public class ModelManager {
      * Load data from save file or generate new world.
      */
     public void startServer() {
+        logger.info("Starting server");
         try {
             serverModelManager = SaveLoadManager.loadGameData();
 
             // Remove disconnected player when server starts
             this.removeDisconnectedPlayer();
 
-            logger.info("serverModelManager.modelMap: " + serverModelManager.modelMap);
+            logger.debug("serverModelManager.modelMap: " + serverModelManager.modelMap);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
 
@@ -86,8 +88,9 @@ public class ModelManager {
      * Send `join` command to server.
      */
     public void startClient() {
+        logger.info("Starting client");
         serverModelManager = new ServerModelManager();
-        gameContext.networkManager.broadcastDataOverNetwork("join " + gameContext.username);
+        gameContext.networkManager.sendDataToServer(("join " + gameContext.username).getBytes());
     }
 
     /**
@@ -103,7 +106,7 @@ public class ModelManager {
                 getSurroundedChunk(pm).forEach(
                         modelChunk -> chunkMap.put(modelChunk.getChunkId(), modelChunk)
                 );
-                gameContext.networkManager.sentClientData(clientId, chunkMap);
+                gameContext.networkManager.sentClientData(clientId, (Serializable) chunkMap);
             });
         }
         catch (Exception e) {
@@ -134,11 +137,11 @@ public class ModelManager {
      * Update ServerModelManager from byte array.
      * This method is for Client only.
      *
-     * @param object ServerModelManager object.
+     * @param bytes ServerModelManager object.
      */
-    public void updateSurroundedChunkFromServer(Object object) {
+    public void updateSurroundedChunkFromServer(byte[] bytes) {
         try {
-            serverModelManager.chunkMap = SerializationUtils.deserialize((byte[]) object);
+            serverModelManager.chunkMap = SerializationUtils.deserialize(bytes);
         }
         catch (Exception e) {
             logger.error("Failed to deserialized data from Server!");
@@ -197,7 +200,7 @@ public class ModelManager {
 
         if (Config.DISABLE_PLAYER) disconnectedPlayer.add(gameContext.username);
         disconnectedPlayer.forEach(model -> {
-            logger.info("Removing player" + model);
+            logger.info("Removing player: " + model);
             removeModel(model);
         });
     }
