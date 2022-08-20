@@ -91,8 +91,7 @@ public class ModelManager {
      * This method is used only for Server, broadcast serverModelManager object to all clients
      */
     public void broadcastToClient() {
-        // Avoid ConcurrentModificationException
-        synchronized (gameContext.networkManager.clientIdMap) {
+        try {
             gameContext.networkManager.clientIdMap.forEach((clientId, playerName) -> {
                 PlayerModel pm = serverModelManager.playerModelMap.get(playerName);
 
@@ -100,8 +99,13 @@ public class ModelManager {
                 getSurroundedChunk(pm).forEach(
                         mcm -> chunkMap.put(mcm.getChunkId(), mcm)
                 );
+
                 gameContext.networkManager.sentClientData(clientId, chunkMap);
             });
+        }
+        catch (Exception e) {
+            logger.error("Failed to broadcast data!");
+            e.printStackTrace();
         }
     }
 

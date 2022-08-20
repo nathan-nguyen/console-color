@@ -9,14 +9,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 
 public class NetworkManager implements ReceiverInterface {
     private static final Logger logger = LogManager.getLogger(NetworkManager.class);
 
     private final GameContext gameContext;
-    public final Map<Integer, String> clientIdMap = new HashMap<>();
+    public final Map<Integer, String> clientIdMap = new Hashtable<>();
     private CommunicationManager communicationManager;
 
     public NetworkManager(GameContext gameContext) {
@@ -77,10 +77,7 @@ public class NetworkManager implements ReceiverInterface {
         gameContext.modelManager.removeModel(disconnectedClientUserName);
         gameContext.modelManager.saveGameData();
 
-        // Avoid ConcurrentModificationException
-        synchronized (clientIdMap) {
-            clientIdMap.remove(clientId);
-        }
+        clientIdMap.remove(clientId);
     }
 
     private void processClientCommand(int clientId, Object object) {
@@ -89,12 +86,8 @@ public class NetworkManager implements ReceiverInterface {
 
         if (command.startsWith("join ")) {
             String clientUserName = command.substring(5);
-
-            // Avoid ConcurrentModificationException
-            synchronized (clientIdMap) {
-                gameContext.modelManager.addPlayerModel(clientUserName);
-                clientIdMap.put(clientId, clientUserName);
-            }
+            gameContext.modelManager.addPlayerModel(clientUserName);
+            clientIdMap.put(clientId, clientUserName);
         } else {
             String[] splitArr = command.split(" ");
             gameContext.controlManager.processCommand(splitArr[0], splitArr[1]);
