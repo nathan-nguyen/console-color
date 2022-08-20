@@ -75,6 +75,7 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
                 .filter(surroundedModel -> surroundedModel.distanceTo(nextX, nextY) <= Config.RENDER_RANGE)
                 .collect(Collectors.toList());
 
+        logger.debug("Model: " + model + "with number of surrounded models: " + surroundedModelList.size());
         int offsetX = nextX - HEIGHT / 2;
         int offsetY = nextY - WIDTH / 2;
 

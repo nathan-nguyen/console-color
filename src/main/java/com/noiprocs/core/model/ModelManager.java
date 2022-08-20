@@ -138,13 +138,13 @@ public class ModelManager {
         List<Model> switchChunkModelList = new ArrayList<>();
 
         // Get all distinct chunk surrounded players
-        Set<ModelChunkManager> processChunk = new HashSet<>();
-        gameContext.networkManager.getConnectedPlayerId().forEach(
-                playerName -> {
-                    PlayerModel pm = serverModelManager.playerModelMap.get(playerName);
-                    processChunk.addAll(getSurroundedChunk(pm));
-                }
-        );
+        Set<ModelChunkManager> processChunk = gameContext.networkManager.getConnectedPlayerId().stream()
+                .flatMap(
+                        playerName -> {
+                            PlayerModel pm = serverModelManager.playerModelMap.get(playerName);
+                            return getSurroundedChunk(pm).stream();
+                        }
+                ).collect(Collectors.toSet());
 
         // Process models from surrounded chunks
         processChunk.forEach(

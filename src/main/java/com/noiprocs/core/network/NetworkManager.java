@@ -8,6 +8,7 @@ import com.noiprocs.network.server.Server;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -84,19 +85,23 @@ public class NetworkManager implements ReceiverInterface {
 
     private void processClientCommand(int clientId, Object object) {
         String command = new String((byte[]) object);
-//        logger.info("[Server] Receiving message from client: " + clientId + " - Content: " + command);
+        logger.debug("[Server] Receiving message from client: " + clientId + " - Content: " + command);
 
         if (command.startsWith("join ")) {
             String clientUserName = command.substring(5);
-            gameContext.modelManager.addPlayerModel(clientUserName);
-            clientIdMap.put(clientId, clientUserName);
+
+            // Avoid ConcurrentModificationException
+            synchronized (clientIdMap) {
+                gameContext.modelManager.addPlayerModel(clientUserName);
+                clientIdMap.put(clientId, clientUserName);
+            }
         } else {
             String[] splitArr = command.split(" ");
             gameContext.controlManager.processCommand(splitArr[0], splitArr[1]);
         }
     }
 
-    public Iterable<String> getConnectedPlayerId() {
+    public Collection<String> getConnectedPlayerId() {
         return clientIdMap.values();
     }
 }
