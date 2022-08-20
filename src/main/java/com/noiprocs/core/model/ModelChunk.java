@@ -4,14 +4,14 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ModelChunkManager implements Serializable {
+public class ModelChunk implements Serializable {
     public static final int CHUNK_HEIGHT = 120;
     public static final int CHUNK_WIDTH = 120;
 
     private final int posX, posY;
     public final Map<String, Model> map = new HashMap<>();
 
-    public ModelChunkManager(int posX, int posY) {
+    public ModelChunk(int posX, int posY) {
         this.posX = posX;
         this.posY = posY;
     }

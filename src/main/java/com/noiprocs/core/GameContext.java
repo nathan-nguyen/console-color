@@ -2,7 +2,6 @@ package com.noiprocs.core;
 
 import com.noiprocs.core.config.Config;
 import com.noiprocs.core.graphics.GameScreenInterface;
-import com.noiprocs.core.graphics.HitboxManagerInterface;
 import com.noiprocs.core.graphics.SpriteManager;
 import com.noiprocs.core.model.ModelManager;
 import com.noiprocs.core.network.NetworkManager;
@@ -24,7 +23,7 @@ public class GameContext {
     public final int port;
 
     public SpriteManager spriteManager;
-    public HitboxManagerInterface hitboxManager;
+    public HitboxManager hitboxManager = new HitboxManager(this);
     public int worldCounter = 0;
 
     private GameScreenInterface gameScreen;
@@ -52,7 +51,8 @@ public class GameContext {
          * If Server: Load data from save file or generate new world.
          * If client: Send join command to server. This required network connection to be setup beforehand.
          */
-        modelManager.start();
+        if (isServer) modelManager.startServer();
+        else modelManager.startClient();
 
         // Initialize timeManager
         TimeManager timeManager = new TimeManager() {
@@ -74,28 +74,23 @@ public class GameContext {
         this.gameScreen.setGameContext(this);
     }
 
-    public void setHitboxManager(HitboxManagerInterface hitboxManager) {
-        this.hitboxManager = hitboxManager;
-        hitboxManager.setGameContext(this);
-    }
-
     public void progress(int dt) {
         worldCounter += 1;
 
-        /*
-         * Server:
-         *     - Broadcast data to all clients.
-         *     - Periodically save data to disk.
-         */
         long statsTime = System.currentTimeMillis();
         modelManager.update(dt);
         modelManagerRuntimeStats.add(System.currentTimeMillis() - statsTime);
 
-        // Broadcast data
+        // Server: Broadcast data to all clients
         if (isServer && worldCounter % Config.BROADCAST_DELAY == 0) {
             statsTime = System.currentTimeMillis();
             modelManager.broadcastToClient();
             broadcastRuntimeStats.add(System.currentTimeMillis() - statsTime);
+        }
+
+        // Server: Periodically save data to disk.
+        if (isServer && worldCounter % Config.AUTO_SAVE_DURATION == 0) {
+            modelManager.saveGameData();
         }
 
         // Synchronize data with modelManager

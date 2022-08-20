@@ -21,22 +21,23 @@ graph LR
     subgraph model
       ModelManager
     end
+
     subgraph network
       NetworkManager
     end
+
     subgraph graphics
-      SpriteManager
-      HitboxManager
-      GameScreen
+      GameScreen -.-> SpriteManager;
     end
-    ControlManager -.-> NetworkManager;
+
+    ControlManager -.-> |Client commands| NetworkManager;
+    NetworkManager -.-> |Server commands| ControlManager;
     ControlManager -.-> ModelManager;
-    NetworkManager -.-> ControlManager;
     NetworkManager -.-> ModelManager;
+
+    HitboxManager -.-> ModelManager
+
     SpriteManager -.-> ModelManager;
-    HitboxManager -.-> SpriteManager;
-    GameScreen -.-> SpriteManager;
-    GameScreen -.-> ModelManager;
   end
 ```
 
@@ -65,4 +66,7 @@ mvn assembly:single
 - 1 2 3 4: Switch item in inventory.
 
 ## Future improvement
+- Use netty for network.
+
+## Improvements
 - Divide ModelManager into chunks.

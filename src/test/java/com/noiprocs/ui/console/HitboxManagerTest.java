@@ -2,7 +2,7 @@ package com.noiprocs.ui.console;
 
 import org.junit.Test;
 
-public class ConsoleHitboxManagerTest {
+public class HitboxManagerTest {
     @Test
     public void testInterationPoint() {
         solve(0, 1);   //  0 -  3 ;  1 -  3

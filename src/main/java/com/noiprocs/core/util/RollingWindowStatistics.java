@@ -7,7 +7,7 @@ public class RollingWindowStatistics {
     private final int maxSize;
 
     private int sum;
-    private Queue<Long> queue = new LinkedList<>();
+    private final Queue<Long> queue = new LinkedList<>();
 
     public RollingWindowStatistics(int maxSize) {
         this.maxSize = maxSize;

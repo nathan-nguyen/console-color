@@ -1,8 +1,6 @@
-package com.noiprocs.ui.console;
+package com.noiprocs.core;
 
-import com.noiprocs.core.GameContext;
 import com.noiprocs.core.config.Config;
-import com.noiprocs.core.graphics.HitboxManagerInterface;
 import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.mob.character.PlayerModel;
 import org.apache.logging.log4j.LogManager;
@@ -14,17 +12,15 @@ import java.util.stream.Collectors;
 import static com.noiprocs.ui.console.ConsoleUIConfig.HEIGHT;
 import static com.noiprocs.ui.console.ConsoleUIConfig.WIDTH;
 
-public class ConsoleHitboxManager implements HitboxManagerInterface {
-    private static final Logger logger = LogManager.getLogger(ConsoleHitboxManager.class);
+public class HitboxManager {
+    private static final Logger logger = LogManager.getLogger(HitboxManager.class);
 
-    private GameContext gameContext;
+    private final GameContext gameContext;
 
-    @Override
-    public void setGameContext(GameContext gameContext) {
+    public HitboxManager(GameContext gameContext) {
         this.gameContext = gameContext;
     }
 
-    @Override
     public Model getModel(Model targetModel, int directionX, int directionY) {
         // Generate current hit box map
         List<Model> surroundedModelList = gameContext.modelManager.getSurroundedChunk(targetModel).stream()
@@ -67,7 +63,6 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
         return null;
     }
 
-    @Override
     public boolean isValid(Model model, int nextX, int nextY) {
         // Generate current hit box map
         List<Model> surroundedModelList = gameContext.modelManager.getSurroundedChunk(model).stream()

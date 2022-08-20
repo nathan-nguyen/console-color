@@ -3,9 +3,7 @@ package com.noiprocs;
 import com.noiprocs.core.GameContext;
 import com.noiprocs.core.config.Config;
 import com.noiprocs.core.graphics.GameScreenInterface;
-import com.noiprocs.core.graphics.HitboxManagerInterface;
 import com.noiprocs.ui.console.ConsoleGameScreen;
-import com.noiprocs.ui.console.ConsoleHitboxManager;
 import com.noiprocs.ui.console.ConsoleSpriteManager;
 
 import java.util.Scanner;
@@ -24,9 +22,6 @@ public class App {
 
         GameScreenInterface gameScreen = new ConsoleGameScreen();
         gameContext.setGameScreen(gameScreen);
-
-        HitboxManagerInterface hitboxManager = new ConsoleHitboxManager();
-        gameContext.setHitboxManager(hitboxManager);
 
         // Start a separate thread for game, main thread is for control
         Runnable task = () -> gameContext.run();

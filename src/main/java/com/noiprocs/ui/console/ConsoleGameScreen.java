@@ -25,9 +25,10 @@ public class ConsoleGameScreen implements GameScreenInterface {
 
     @Override
     public void render(int delta) {
-        if (Config.DISABLE_PLAYER) return;
+        RenderableSprite playerSprite = gameContext.spriteManager.renderableSpriteMap.get(gameContext.username);
+        if (playerSprite == null) return;
 
-        PlayerModel playerModel = (PlayerModel) gameContext.modelManager.getModel(gameContext.username);
+        PlayerModel playerModel = (PlayerModel) playerSprite.getModel();
 
         // Only render when playerModel is existing
         if (playerModel == null) return;
