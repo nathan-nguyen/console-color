@@ -12,4 +12,6 @@ public class Config {
     public static final int AUTO_SAVE_DURATION = 1800;
 
     public static boolean DISABLE_PLAYER = false;
+
+    public static int STATISTICS_LOG_DELAY = 100;
 }

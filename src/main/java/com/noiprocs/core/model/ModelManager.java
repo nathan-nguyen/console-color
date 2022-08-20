@@ -169,8 +169,6 @@ public class ModelManager {
         // Add spawn models
         while (!spawnModelList.isEmpty()) this.addModel(spawnModelList.poll());
 
-        if (gameContext.isServer && gameContext.worldCounter % Config.BROADCAST_DELAY == 0) this.broadcastToClient();
-
         if (gameContext.isServer && gameContext.worldCounter % Config.AUTO_SAVE_DURATION == 0) {
             this.saveGameData();
         }

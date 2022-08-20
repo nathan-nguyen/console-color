@@ -53,7 +53,7 @@ public class NetworkManager implements ReceiverInterface {
 
     @Override
     public void receiveMessage(int clientId, Object object) {
-//        logger.info("Received message " + object + " from clientId " + clientId);
+        logger.debug("Received message " + object + " from clientId " + clientId);
         if (!gameContext.isServer) gameContext.modelManager.updateSurroundedChunkFromServer(object);
         else processClientCommand(clientId, object);
     }
