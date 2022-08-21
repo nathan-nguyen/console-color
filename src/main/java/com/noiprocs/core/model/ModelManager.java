@@ -110,6 +110,7 @@ public class ModelManager {
             });
         }
         catch (Exception e) {
+            // Reason: clientIdMap is updated.
             logger.error("Failed to broadcast data!");
             e.printStackTrace();
         }
@@ -144,6 +145,7 @@ public class ModelManager {
             serverModelManager.chunkMap = SerializationUtils.deserialize(bytes);
         }
         catch (Exception e) {
+            // Reason: Due to serialization object under synchronization, server could send corrupted data.
             logger.error("Failed to deserialized data from Server!");
             e.printStackTrace();
         }

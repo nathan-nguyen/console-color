@@ -67,10 +67,14 @@ mvn assembly:single
 
 ## Future improvement
 
-- Broadcast data to client asynchronously.
+- Use better serializer (i.e Kyro, ...).
+- Fix bugs and remove try / catch or move try / catch in proper positions.
+- Improve HitboxManager - isValid method with moving vector.
+- Make ModelManager abstract, seprate into ClientModelManager and ServerModelManager.
 - Use netty for network.
 
-## Improvements
+## Past Improvements
 
 - Divided ModelManager into chunks.
+- Broadcast data to client asynchronously.
 

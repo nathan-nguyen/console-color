@@ -34,6 +34,7 @@ public class ServerMessageQueue implements Runnable {
                             try {
                                 communicationManager.sendMessage(clientId, SerializationUtils.serialize(queue.poll()));
                             } catch (Exception e) {
+                                // Reason: client was disconnected by clientId has been removed from clientIdSet.
                                 logger.error("Failed to send data to client " + clientId);
                                 e.printStackTrace();
                                 clientQueueMap.remove(clientId);
@@ -41,7 +42,7 @@ public class ServerMessageQueue implements Runnable {
                         }
                 );
             } catch (ConcurrentModificationException e) {
-                // Possible reason: clientIdSet was updated
+                // Reason: clientIdSet was updated.
                 e.printStackTrace();
             }
         }

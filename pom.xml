@@ -25,7 +25,7 @@
             <version>2.12.1</version>
         </dependency>
 
-        <!-- To serialize object asynchronously -->
+        <!-- Use for object serialization to byte[] -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
