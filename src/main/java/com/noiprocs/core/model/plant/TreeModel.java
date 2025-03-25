@@ -1,5 +1,6 @@
 package com.noiprocs.core.model.plant;
 
+import com.noiprocs.core.GameContext;
 import com.noiprocs.core.model.InteractiveInterface;
 import com.noiprocs.core.model.Model;
 import com.noiprocs.core.util.Helper;
@@ -39,23 +40,23 @@ public class TreeModel extends Model implements InteractiveInterface {
         super.destroy();
 
         if (this.isOldAge()) {
-            Helper.GAME_CONTEXT.modelManager.addSpawnModel(new WoodLogModel(posX, posY));
-            Helper.GAME_CONTEXT.modelManager.addSpawnModel(new WoodLogModel(posX + 1, posY + 1));
+            GameContext.get().modelManager.addSpawnModel(new WoodLogModel(posX, posY));
+            GameContext.get().modelManager.addSpawnModel(new WoodLogModel(posX + 1, posY + 1));
 
             int seedDrop = Helper.random.nextInt(10);
             // 0 drop: 20%
             // 1 drop: 50%
             // 2 drop: 30%
             if (seedDrop >= 2) {
-                Helper.GAME_CONTEXT.modelManager.addSpawnModel(new SaplingModel(posX, posY + 2));
+                GameContext.get().modelManager.addSpawnModel(new SaplingModel(posX, posY + 2));
             }
             if (seedDrop >= 7)
-                Helper.GAME_CONTEXT.modelManager.addSpawnModel(
+                GameContext.get().modelManager.addSpawnModel(
                         new SaplingModel(posX + 1, posY + 2)
                 );
         }
         else if (this.isMiddleAge()) {
-            Helper.GAME_CONTEXT.modelManager.addSpawnModel(new WoodLogModel(posX, posY));
+            GameContext.get().modelManager.addSpawnModel(new WoodLogModel(posX, posY));
         }
     }
 

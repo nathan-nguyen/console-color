@@ -19,6 +19,8 @@ public class KryoSerializationUtils {
     private static final Kryo kryo = new Kryo();
 
     static {
+        kryo.register(int[].class);
+        kryo.register(int[][].class);
         kryo.register(HashMap.class);
         registerPackage("com.noiprocs.core.model");
         kryo.register(Item[].class);

@@ -12,6 +12,8 @@ import org.apache.logging.log4j.Logger;
 
 public class GameContext {
     private static final Logger logger = LogManager.getLogger(GameContext.class);
+    private static GameContext instance;
+
     public final NetworkManager networkManager = new NetworkManager(this);
     public final ModelManager modelManager = new ModelManager(this);
     public final ControlManager controlManager = new ControlManager(this);
@@ -33,14 +35,21 @@ public class GameContext {
     private final RollingWindowStatistics broadcastRuntimeStats = new RollingWindowStatistics(500);
     private final RollingWindowStatistics spriteManagerRuntimeStats = new RollingWindowStatistics(500);
 
-    public GameContext(String platform, String username, String type, String hostname, int port) {
+    private GameContext(String platform, String username, String type, String hostname, int port) {
         this.platform = platform;
         this.username = username;
         this.isServer = type.equals("server");
         this.hostname = hostname;
         this.port = port;
+    }
 
-        Helper.GAME_CONTEXT = this;
+    public static GameContext build(String platform, String username, String type, String hostname, int port) {
+        instance = new GameContext(platform, username, type, hostname, port);
+        return instance;
+    }
+
+    public static GameContext get() {
+        return instance;
     }
 
     public void run() {

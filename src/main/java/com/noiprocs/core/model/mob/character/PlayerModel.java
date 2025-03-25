@@ -1,10 +1,10 @@
 package com.noiprocs.core.model.mob.character;
 
+import com.noiprocs.core.GameContext;
 import com.noiprocs.core.model.InteractiveInterface;
 import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.item.Item;
 import com.noiprocs.core.model.mob.MobModel;
-import com.noiprocs.core.util.Helper;
 
 public class PlayerModel extends MobModel {
     private static final int HITBOX_HEIGHT = 1, HITBOX_WIDTH = 3;
@@ -67,10 +67,10 @@ public class PlayerModel extends MobModel {
     private void interactAction() {
         Model interactModel = null;
         if (action == Action.RIGHT_ACTION) {
-            interactModel = Helper.GAME_CONTEXT.hitboxManager.getModel(this, 0, 1);
+            interactModel = GameContext.get().hitboxManager.getModel(this, 0, 1);
         }
         else if (action == Action.LEFT_ACTION) {
-            interactModel = Helper.GAME_CONTEXT.hitboxManager.getModel(this, 0, -1);
+            interactModel = GameContext.get().hitboxManager.getModel(this, 0, -1);
         }
 
         if (interactModel instanceof InteractiveInterface) {

@@ -1,7 +1,7 @@
 package com.noiprocs.core.model.mob;
 
+import com.noiprocs.core.GameContext;
 import com.noiprocs.core.model.Model;
-import com.noiprocs.core.util.Helper;
 
 public abstract class MobModel extends Model {
     private static final int SKIP_MOVEMENT_FRAME = 2;
@@ -27,7 +27,7 @@ public abstract class MobModel extends Model {
 
     @Override
     public void update(int delta) {
-        if (Helper.GAME_CONTEXT.worldCounter % SKIP_MOVEMENT_FRAME == 0) return;
+        if (GameContext.get().worldCounter % SKIP_MOVEMENT_FRAME == 0) return;
         this.move();
     }
 
@@ -52,7 +52,7 @@ public abstract class MobModel extends Model {
     protected void move(int x, int y) {
         if (movingDirection == MovingDirection.STOP) return;
 
-        if (Helper.GAME_CONTEXT.hitboxManager.isValid(this, posX + x, posY + y)) {
+        if (GameContext.get().hitboxManager.isValid(this, posX + x, posY + y)) {
             posX += x;
             posY += y;
         }

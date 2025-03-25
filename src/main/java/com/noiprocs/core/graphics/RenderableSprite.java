@@ -1,7 +1,7 @@
 package com.noiprocs.core.graphics;
 
+import com.noiprocs.core.GameContext;
 import com.noiprocs.core.model.Model;
-import com.noiprocs.core.util.Helper;
 
 public abstract class RenderableSprite {
     public String id;
@@ -13,6 +13,6 @@ public abstract class RenderableSprite {
     public abstract void render();
 
     public Model getModel() {
-        return Helper.GAME_CONTEXT.modelManager.getModel(id);
+        return GameContext.get().modelManager.getModel(id);
     }
 }

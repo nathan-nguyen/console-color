@@ -1,8 +1,7 @@
 package com.noiprocs.core.model.mob;
 
+import com.noiprocs.core.GameContext;
 import com.noiprocs.core.util.Helper;
-
-import java.util.Random;
 
 public class CotPsychoModel extends CotMobModel {
     public CotPsychoModel(int x, int y) {
@@ -16,7 +15,7 @@ public class CotPsychoModel extends CotMobModel {
 
     @Override
     protected void move(int x, int y) {
-        if (Helper.GAME_CONTEXT.hitboxManager.isValid(this, posX + x, posY + y)) {
+        if (GameContext.get().hitboxManager.isValid(this, posX + x, posY + y)) {
             posX += x;
             posY += y;
         }
