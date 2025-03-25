@@ -31,7 +31,7 @@ public class ServerMessageQueue implements Runnable {
                             if (queue == null || queue.isEmpty()) return;
 
                             try {
-                                communicationManager.sendMessage(clientId, KryoSerialization.serialize(queue.poll()));
+                                communicationManager.sendMessage(clientId, KryoSerializationUtils.serialize(queue.poll()));
                             } catch (Exception e) {
                                 // Reason: client was disconnected by clientId has been removed from clientIdSet.
                                 logger.error("Failed to send data to client {}", clientId);
