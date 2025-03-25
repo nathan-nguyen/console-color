@@ -18,7 +18,9 @@ public abstract class TimeManager {
             update(deltaMs);
             long waitTime = deltaMs - (System.currentTimeMillis() - lastTimestamp);
             try {
-                if (waitTime < 0) logger.warn("Running longer expected time: " + waitTime);
+                if (waitTime < 0) {
+                    logger.warn("Running longer expected time: {}", waitTime);
+                }
                 TimeUnit.MILLISECONDS.sleep(waitTime);
             } catch (InterruptedException e) {
                 e.printStackTrace();

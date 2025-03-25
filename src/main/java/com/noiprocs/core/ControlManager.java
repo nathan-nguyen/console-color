@@ -19,7 +19,7 @@ public class ControlManager {
      * @param command: Local input command
      */
     public void processInput(String command) {
-        if (command.length() == 0) return;
+        if (command.isEmpty()) return;
 
         if (!gameContext.isServer) {
             String message = gameContext.username + " " + command;
@@ -44,7 +44,7 @@ public class ControlManager {
 
         PlayerModel playerModel = (PlayerModel) gameContext.modelManager.getModel(username);
 
-        logger.debug("Executing command: " + command + " for player " + username);
+        logger.debug("Executing command: {} for player {}", command, username);
 
         for (int i = 0; i < command.length(); ++i) {
             switch (command.charAt(i)) {

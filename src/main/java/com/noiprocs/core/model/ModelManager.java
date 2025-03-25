@@ -40,7 +40,7 @@ public class ModelManager {
     }
 
     public void addModel(Model model) {
-        logger.debug("Adding Model: " + model.id + " - " + model.getClass());
+        logger.debug("Adding Model: {} - {}", model.id, model.getClass());
 
         ModelChunk modelChunk = getChunkFromModelPosition(model.posX, model.posY);
         modelChunk.add(model.id, model);
@@ -197,12 +197,12 @@ public class ModelManager {
 
     private void removeDisconnectedPlayer() {
         List<String> disconnectedPlayer = serverModelManager.playerModelMap.keySet().stream().filter(
-                playername -> !playername.equals(gameContext.username)
+                playerName -> !playerName.equals(gameContext.username)
         ).collect(Collectors.toList());
 
         if (Config.DISABLE_PLAYER) disconnectedPlayer.add(gameContext.username);
         disconnectedPlayer.forEach(model -> {
-            logger.info("Removing player: " + model);
+            logger.info("Removing player: {}", model);
             removeModel(model);
         });
     }

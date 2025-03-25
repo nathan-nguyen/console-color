@@ -35,7 +35,7 @@ public class ServerMessageQueue implements Runnable {
                                 communicationManager.sendMessage(clientId, SerializationUtils.serialize(queue.poll()));
                             } catch (Exception e) {
                                 // Reason: client was disconnected by clientId has been removed from clientIdSet.
-                                logger.error("Failed to send data to client " + clientId);
+                                logger.error("Failed to send data to client {}", clientId);
                                 e.printStackTrace();
                                 clientQueueMap.remove(clientId);
                             }

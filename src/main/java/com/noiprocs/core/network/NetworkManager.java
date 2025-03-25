@@ -61,7 +61,7 @@ public class NetworkManager implements ReceiverInterface {
 
     @Override
     public void receiveMessage(int clientId, byte[] bytes) {
-        logger.debug("Received byte[] size " + bytes.length + " from clientId " + clientId);
+        logger.debug("Received byte[] size {} from clientId {}", bytes.length, clientId);
 
         if (!gameContext.isServer) {
             gameContext.modelManager.updateSurroundedChunkFromServer(bytes);
@@ -79,13 +79,13 @@ public class NetworkManager implements ReceiverInterface {
 
     @Override
     public void clientConnect(int clientId) {
-        logger.info("Client " + clientId + " connected!");
+        logger.info("Client {} connected!", clientId);
     }
 
     @Override
     public void clientDisconnect(int clientId) {
         String disconnectedClientUserName = clientIdMap.get(clientId);
-        logger.info("Client " + clientId + " - User " + disconnectedClientUserName + " disconnected!");
+        logger.info("Client {} - User {} disconnected!", clientId, disconnectedClientUserName);
 
         gameContext.modelManager.removeModel(disconnectedClientUserName);
         gameContext.modelManager.saveGameData();
@@ -95,7 +95,7 @@ public class NetworkManager implements ReceiverInterface {
 
     private void processClientCommand(int clientId, byte[] bytes) {
         String command = new String(bytes);
-        logger.debug("[Server] Receiving message from client: " + clientId + " - Content: " + command);
+        logger.debug("[Server] Receiving message from client: {} - Content: {}", clientId, command);
 
         if (command.startsWith("join ")) {
             String clientUserName = command.substring(5);

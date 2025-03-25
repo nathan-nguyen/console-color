@@ -24,10 +24,11 @@ public class App {
         gameContext.setGameScreen(gameScreen);
 
         // Start a separate thread for game, main thread is for control
-        Runnable task = () -> gameContext.run();
+        Runnable task = gameContext::run;
         Thread thread = new Thread(task);
         thread.start();
 
+        // Does not render player if current instance is server
         if (gameContext.isServer) Config.DISABLE_PLAYER = true;
 
         if (!Config.DISABLE_PLAYER) {

@@ -105,9 +105,9 @@ public class GameContext {
         spriteManagerRuntimeStats.add(System.currentTimeMillis() - statsTime);
 
         if (worldCounter % Config.STATISTICS_LOG_DELAY == 0) {
-            logger.info("ModelManager process time (ms): " + modelManagerRuntimeStats.getAvg());
-            logger.info("Broadcast process time (ms): " + broadcastRuntimeStats.getAvg());
-            logger.info("SpriteManager process time (ms): " + spriteManagerRuntimeStats.getAvg());
+            logger.info("ModelManager process time (ms): {}", modelManagerRuntimeStats.getAvg());
+            logger.info("Broadcast process time (ms): {}", broadcastRuntimeStats.getAvg());
+            logger.info("SpriteManager process time (ms): {}", spriteManagerRuntimeStats.getAvg());
         }
 
         // Render graphics
