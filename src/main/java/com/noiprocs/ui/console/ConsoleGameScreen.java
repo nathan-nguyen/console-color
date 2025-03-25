@@ -47,7 +47,6 @@ public class ConsoleGameScreen implements GameScreenInterface {
                 );
 
         /* Render order:
-         * - PlayerModel renders last.
          * - Models with smaller posX render first.
          */
         renderableSpriteList.sort(
@@ -70,6 +69,14 @@ public class ConsoleGameScreen implements GameScreenInterface {
             Model model = renderableSprite.getModel();
             int posX = model.posX - offsetX - consoleSprite.offsetX;
             int posY = model.posY - offsetY - consoleSprite.offsetY;
+
+            // Main player sprite position is always fixed and does not depend on current model position
+            // Main player model position could be updated after offsetX and offsetY were calculated. If we use normal
+            // way to calculate sprite position, main player sprite might not be rendered in the middle of screen
+            if (model.id.equals(playerModel.id)) {
+                posX = HEIGHT / 2 - consoleSprite.offsetX;
+                posY = WIDTH / 2 - consoleSprite.offsetY;
+            }
 
             this.updateMap(posX, posY, texture);
         }

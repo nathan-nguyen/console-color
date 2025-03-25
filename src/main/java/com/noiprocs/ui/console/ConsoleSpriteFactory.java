@@ -22,7 +22,7 @@ public class ConsoleSpriteFactory {
 
     public RenderableSprite generateRenderableSprite(Model model) {
         if (model instanceof PlayerModel) {
-            logger.info("Creating player " + model.id);
+            logger.info("Creating player {}", model.id);
             return new PlayerSprite(model.id);
         }
 
