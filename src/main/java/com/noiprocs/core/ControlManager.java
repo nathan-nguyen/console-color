@@ -21,13 +21,13 @@ public class ControlManager {
     public void processInput(String command) {
         if (command.isEmpty()) return;
 
-        if (!gameContext.isServer) {
+        if (gameContext.isServer) {
+            processCommand(gameContext.username, command);
+        }
+        else {
             String message = gameContext.username + " " + command;
             gameContext.networkManager.sendDataToServer(message.getBytes());
-            return;
         }
-
-        processCommand(gameContext.username, command);
     }
 
     /**

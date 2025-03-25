@@ -5,7 +5,7 @@ import com.noiprocs.core.SaveLoadManager;
 import com.noiprocs.core.config.Config;
 import com.noiprocs.core.model.generator.WorldModelGenerator;
 import com.noiprocs.core.model.mob.character.PlayerModel;
-import org.apache.commons.lang3.SerializationUtils;
+import com.noiprocs.core.network.KryoDeserialization;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -142,7 +142,7 @@ public class ModelManager {
      */
     public void updateSurroundedChunkFromServer(byte[] bytes) {
         try {
-            serverModelManager.chunkMap = SerializationUtils.deserialize(bytes);
+            serverModelManager.chunkMap = KryoDeserialization.deserialize(bytes);
         }
         catch (Exception e) {
             // Reason: Due to serialization object under synchronization, server could send corrupted data.

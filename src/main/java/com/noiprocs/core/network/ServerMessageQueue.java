@@ -1,7 +1,6 @@
 package com.noiprocs.core.network;
 
 import com.noiprocs.network.CommunicationManager;
-import org.apache.commons.lang3.SerializationUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -32,7 +31,7 @@ public class ServerMessageQueue implements Runnable {
                             if (queue == null || queue.isEmpty()) return;
 
                             try {
-                                communicationManager.sendMessage(clientId, SerializationUtils.serialize(queue.poll()));
+                                communicationManager.sendMessage(clientId, KryoSerialization.serialize(queue.poll()));
                             } catch (Exception e) {
                                 // Reason: client was disconnected by clientId has been removed from clientIdSet.
                                 logger.error("Failed to send data to client {}", clientId);

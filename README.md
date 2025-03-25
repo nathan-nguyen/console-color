@@ -67,14 +67,13 @@ mvn assembly:single
 
 ## Future improvement
 
-- Use better serializer (i.e Kyro, ...).
 - Fix bugs and remove try / catch or move try / catch in proper positions.
 - Improve HitboxManager - isValid method with moving vector.
-- Make ModelManager abstract, seprate into ClientModelManager and ServerModelManager.
+- Make ModelManager abstract, separate into ClientModelManager and ServerModelManager.
 - Use netty for network.
 
 ## Past Improvements
 
 - Divided ModelManager into chunks.
 - Broadcast data to client asynchronously.
-
+- Use better serializer (i.e Kryo, ...). Issue with Java serializer: When object's attributes are updated while object is serialized, this caused serialized data to be corrupted.
