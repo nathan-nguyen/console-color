@@ -5,8 +5,7 @@ import com.noiprocs.core.graphics.GameScreenInterface;
 import com.noiprocs.core.graphics.SpriteManager;
 import com.noiprocs.core.model.ModelManager;
 import com.noiprocs.core.network.NetworkManager;
-import com.noiprocs.core.util.Helper;
-import com.noiprocs.core.util.RollingWindowStatistics;
+import com.noiprocs.core.util.MetricCollector;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -29,11 +28,6 @@ public class GameContext {
     public int worldCounter = 0;
 
     private GameScreenInterface gameScreen;
-
-    // For statistics
-    private final RollingWindowStatistics modelManagerRuntimeStats = new RollingWindowStatistics(500);
-    private final RollingWindowStatistics broadcastRuntimeStats = new RollingWindowStatistics(500);
-    private final RollingWindowStatistics spriteManagerRuntimeStats = new RollingWindowStatistics(500);
 
     private GameContext(String platform, String username, String type, String hostname, int port) {
         this.platform = platform;
@@ -92,13 +86,13 @@ public class GameContext {
 
         long statsTime = System.currentTimeMillis();
         modelManager.update(dt);
-        modelManagerRuntimeStats.add(System.currentTimeMillis() - statsTime);
+        MetricCollector.modelManagerRuntimeStats.add(System.currentTimeMillis() - statsTime);
 
         // Server: Broadcast data to all clients
         if (isServer && worldCounter % Config.BROADCAST_DELAY == 0) {
             statsTime = System.currentTimeMillis();
             modelManager.broadcastToClient();
-            broadcastRuntimeStats.add(System.currentTimeMillis() - statsTime);
+            MetricCollector.broadcastRuntimeStats.add(System.currentTimeMillis() - statsTime);
         }
 
         // Server: Periodically save data to disk.
@@ -109,13 +103,7 @@ public class GameContext {
         // Synchronize data with modelManager
         statsTime = System.currentTimeMillis();
         spriteManager.update(dt);
-        spriteManagerRuntimeStats.add(System.currentTimeMillis() - statsTime);
-
-        if (worldCounter % Config.STATISTICS_LOG_DELAY == 0) {
-            logger.info("ModelManager process time (ms): {}", modelManagerRuntimeStats.getAvg());
-            logger.info("Broadcast process time (ms): {}", broadcastRuntimeStats.getAvg());
-            logger.info("SpriteManager process time (ms): {}", spriteManagerRuntimeStats.getAvg());
-        }
+        MetricCollector.spriteManagerRuntimeStats.add(System.currentTimeMillis() - statsTime);
 
         // Render graphics
         if (!Config.DISABLE_PLAYER) gameScreen.render(dt);

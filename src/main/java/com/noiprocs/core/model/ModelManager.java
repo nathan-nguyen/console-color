@@ -6,6 +6,7 @@ import com.noiprocs.core.config.Config;
 import com.noiprocs.core.model.generator.WorldModelGenerator;
 import com.noiprocs.core.model.mob.character.PlayerModel;
 import com.noiprocs.core.network.KryoSerializationUtils;
+import com.noiprocs.core.util.MetricCollector;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -60,7 +61,7 @@ public class ModelManager {
     }
 
     public void switchChunkModel(Model model) {
-        logger.debug("Switch chunk Model: " + model.id + " - " + model.getClass());
+        logger.debug("Switch chunk Model: {} - {}", model.id, model.getClass());
         removeModel(model.id);
         addModel(model);
     }
@@ -76,7 +77,7 @@ public class ModelManager {
             // Remove disconnected player when server starts
             this.removeDisconnectedPlayer();
 
-            logger.debug("serverModelManager.modelMap: " + serverModelManager.modelMap);
+            logger.debug("serverModelManager.modelMap: {}", serverModelManager.modelMap);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
 
@@ -170,10 +171,16 @@ public class ModelManager {
                 ).collect(Collectors.toSet());
 
         // Process models from surrounded chunks
+        long monitorStartTimeMs = System.currentTimeMillis();
         processChunk.forEach(
                 modelChunk -> {
                     String currentChunkId = modelChunk.getChunkId();
                     modelChunk.getAllModel().forEach(model -> {
+                        if (!(model instanceof LowLatencyModelInterface)
+                                // Add model.hashCode() to avoid all models being updated at same tick
+                                && (gameContext.worldCounter + model.hashCode()) % Config.GAME_TICK_FRAMES != 0) {
+                            return;
+                        }
                         model.update(dt);
 
                         if (model.isDestroyed) destroyModelId.add(model.id);
@@ -182,12 +189,15 @@ public class ModelManager {
                         if (!nextChunkId.equals(currentChunkId)) switchChunkModelList.add(model);
                     });
                 });
+        MetricCollector.updateModelRuntimeStats.add(System.currentTimeMillis() - monitorStartTimeMs);
 
         // Removed destroyed models
         destroyModelId.forEach(this::removeModel);
 
         // Switch chunks
+        monitorStartTimeMs = System.currentTimeMillis();
         switchChunkModelList.forEach(this::switchChunkModel);
+        MetricCollector.switchChunkRuntimeStats.add(System.currentTimeMillis() - monitorStartTimeMs);
 
         // Add spawn models
         while (!spawnModelList.isEmpty()) this.addModel(spawnModelList.poll());

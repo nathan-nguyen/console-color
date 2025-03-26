@@ -2,11 +2,12 @@ package com.noiprocs.core.model.mob.character;
 
 import com.noiprocs.core.GameContext;
 import com.noiprocs.core.model.InteractiveInterface;
+import com.noiprocs.core.model.LowLatencyModelInterface;
 import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.item.Item;
 import com.noiprocs.core.model.mob.MobModel;
 
-public class PlayerModel extends MobModel {
+public class PlayerModel extends MobModel implements LowLatencyModelInterface {
     private static final int HITBOX_HEIGHT = 1, HITBOX_WIDTH = 3;
     private static final int HORIZONTAL_SPEED = 2, VERTICAL_SPEED = 1;
     private static final int MAX_INVENTORY_SIZE = 4;

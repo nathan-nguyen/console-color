@@ -1,6 +1,7 @@
 package com.noiprocs.core;
 
 import com.noiprocs.core.config.Config;
+import com.noiprocs.core.util.MetricCollector;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,6 +21,7 @@ public abstract class TimeManager {
             try {
                 if (waitTime < 0) {
                     logger.warn("Running longer expected time: {}", waitTime);
+                    MetricCollector.printMetrics();
                 }
                 TimeUnit.MILLISECONDS.sleep(waitTime);
             } catch (InterruptedException e) {

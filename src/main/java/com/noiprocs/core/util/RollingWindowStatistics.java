@@ -1,13 +1,12 @@
 package com.noiprocs.core.util;
 
 import java.util.LinkedList;
-import java.util.Queue;
 
 public class RollingWindowStatistics {
     private final int maxSize;
 
     private int sum;
-    private final Queue<Long> queue = new LinkedList<>();
+    private final LinkedList<Long> queue = new LinkedList<>();
 
     public RollingWindowStatistics(int maxSize) {
         this.maxSize = maxSize;
@@ -25,5 +24,11 @@ public class RollingWindowStatistics {
         if (queue.isEmpty())
             return -1;
         return sum / queue.size();
+    }
+
+    public long getLast() {
+        if (queue.isEmpty())
+            return -1;
+        return queue.peekLast();
     }
 }
