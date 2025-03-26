@@ -15,4 +15,7 @@ public class Config {
     public static final int AUTO_SAVE_DURATION = 1800;
 
     public static boolean DISABLE_PLAYER = false;
+    public static boolean CLEAR_SCREEN = true;
+
+    public static int MONITOR_MIN_FPS_THRESHOLD = 55;
 }

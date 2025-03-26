@@ -113,8 +113,10 @@ public class ConsoleGameScreen implements GameScreenInterface {
     }
 
     private String convertMapToString(PlayerModel playerModel) {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
+        if (Config.CLEAR_SCREEN) {
+            System.out.print("\033[H\033[2J");
+            System.out.flush();
+        }
 
         StringBuilder sb = new StringBuilder();
         sb.append(getHudString(playerModel)).append('\n');

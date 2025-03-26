@@ -38,7 +38,7 @@ public abstract class SpriteManager {
         // Remove no-longer-exist models
         for (String key : renderableSpriteMap.keySet()) {
             if (!modelMap.containsKey(key)) {
-                logger.info("Remove RenderableSprite: {}", key);
+                logger.debug("Remove RenderableSprite: {}", key);
                 removedKeyList.add(key);
             }
         }

@@ -172,10 +172,10 @@ public class ModelManager {
 
         // Process models from surrounded chunks
         long monitorStartTimeMs = System.currentTimeMillis();
-        processChunk.forEach(
+        processChunk.parallelStream().forEach(
                 modelChunk -> {
                     String currentChunkId = modelChunk.getChunkId();
-                    modelChunk.getAllModel().forEach(model -> {
+                    modelChunk.map.values().parallelStream().forEach(model -> {
                         if (!(model instanceof LowLatencyModelInterface)
                                 // Add model.hashCode() to avoid all models being updated at same tick
                                 && (gameContext.worldCounter + model.hashCode()) % Config.GAME_TICK_FRAMES != 0) {

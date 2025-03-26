@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.stream.Stream;
 
 public class ModelChunk implements Serializable {
     public static final int CHUNK_HEIGHT = 120;
@@ -27,10 +28,6 @@ public class ModelChunk implements Serializable {
 
     protected void remove(String id) {
         map.remove(id);
-    }
-
-    protected Iterable<Model> getAllModel() {
-        return map.values();
     }
 
     protected String getChunkId() {

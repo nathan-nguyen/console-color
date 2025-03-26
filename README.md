@@ -71,6 +71,7 @@ mvn assembly:single
 - Improve HitboxManager - isValid method with moving vector.
 - Make ModelManager abstract, separate into ClientModelManager and ServerModelManager.
 - Use netty for network.
+- Review the use of `parallelStream`, measure the performance.
 
 ## Past Improvements
 

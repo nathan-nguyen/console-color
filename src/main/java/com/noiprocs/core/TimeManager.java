@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 public abstract class TimeManager {
     private static final Logger logger = LogManager.getLogger(TimeManager.class);
 
-    private long lastTimestamp = 0;
+    private long lastTimestamp = System.currentTimeMillis();
 
     public void run() {
         int deltaMs = 1000 / Config.MAX_FPS;
@@ -18,15 +18,16 @@ public abstract class TimeManager {
         while (true) {
             update(deltaMs);
             long waitTime = deltaMs - (System.currentTimeMillis() - lastTimestamp);
+            if (MetricCollector.getAvgFps() < Config.MONITOR_MIN_FPS_THRESHOLD) {
+                logger.warn("Running longer expected time: {}", waitTime);
+                MetricCollector.printMetrics();
+            }
             try {
-                if (waitTime < 0) {
-                    logger.warn("Running longer expected time: {}", waitTime);
-                    MetricCollector.printMetrics();
-                }
                 TimeUnit.MILLISECONDS.sleep(waitTime);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            MetricCollector.frameTimeMsStats.add(System.currentTimeMillis() - lastTimestamp);
             lastTimestamp = System.currentTimeMillis();
         }
     }

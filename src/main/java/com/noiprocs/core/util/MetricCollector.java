@@ -5,6 +5,9 @@ import org.apache.logging.log4j.Logger;
 
 public class MetricCollector {
     private static final Logger logger = LogManager.getLogger(MetricCollector.class);
+
+    public static final RollingWindowStatistics frameTimeMsStats = new RollingWindowStatistics(500);
+
     public static final RollingWindowStatistics modelManagerRuntimeStats = new RollingWindowStatistics(500);
     public static final RollingWindowStatistics broadcastRuntimeStats = new RollingWindowStatistics(500);
     public static final RollingWindowStatistics spriteManagerRuntimeStats = new RollingWindowStatistics(500);
@@ -22,5 +25,14 @@ public class MetricCollector {
 
         logger.info("ModelManager: Update Models process time (ms): {}", updateModelRuntimeStats.getLast());
         logger.info("ModelManager: Switch Chunk process time (ms): {}", switchChunkRuntimeStats.getLast());
+
+        logger.info("Frame time (ms): Last {} - Average {}",
+                frameTimeMsStats.getLast(),
+                frameTimeMsStats.getAvg()
+        );
+    }
+
+    public static long getAvgFps() {
+        return 1000L / frameTimeMsStats.getAvg();
     }
 }
