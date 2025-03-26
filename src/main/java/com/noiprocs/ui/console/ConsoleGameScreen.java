@@ -7,6 +7,7 @@ import com.noiprocs.core.graphics.RenderableSprite;
 import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.item.Item;
 import com.noiprocs.core.model.mob.character.PlayerModel;
+import com.noiprocs.core.util.MetricCollector;
 import com.noiprocs.ui.console.sprite.ConsoleSprite;
 
 import java.util.List;
@@ -109,7 +110,7 @@ public class ConsoleGameScreen implements GameScreenInterface {
         if (item != null) inventorySb.append(item.name).append(": ").append(item.amount);
 
         return playerModel.id + " - [" + playerModel.posX + ", " + playerModel.posY +
-                "] - Inventory: [" + inventorySb + ']';
+                "] - Inventory: [" + inventorySb + "] - FPS: " + MetricCollector.getAvgFps();
     }
 
     private String convertMapToString(PlayerModel playerModel) {
