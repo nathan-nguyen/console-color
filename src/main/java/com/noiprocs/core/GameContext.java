@@ -61,10 +61,8 @@ public class GameContext {
             modelManager.startServer();
         }
         else {
-            // Client: Send join command to server.
-            // This required network connection to be setup beforehand.
-
             // Start network services
+            // Client: Send join command to server.
             networkManager.startClientNetworkService(hostname, port);
             modelManager.startClient();
         }

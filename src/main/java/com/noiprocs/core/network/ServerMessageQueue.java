@@ -27,6 +27,8 @@ public class ServerMessageQueue implements Runnable {
             try {
                 clientIdSet.parallelStream().forEach(
                         clientId -> {
+                            if (clientId == null) return;
+
                             Queue<Serializable> queue = clientQueueMap.get(clientId);
                             if (queue == null || queue.isEmpty()) return;
 

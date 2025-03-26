@@ -39,6 +39,8 @@ public class ModelManager {
         return null;
     }
 
+    // Use this method with care because it could cause ConcurrentModificationException
+    // Use spawnModelList instead.
     public void addModel(Model model) {
         logger.debug("Adding Model: {} - {}", model.id, model.getClass());
 
@@ -126,12 +128,15 @@ public class ModelManager {
         if (!serverModelManager.playerModelMap.containsKey(playerName)) {
             playerModel = new PlayerModel(playerName, 0, 0, true);
             serverModelManager.playerModelMap.put(playerName, playerModel);
-        } else playerModel = serverModelManager.playerModelMap.get(playerName);
+        }
+        else {
+            playerModel = serverModelManager.playerModelMap.get(playerName);
+        }
 
         // Player initial state must be STOP mode
         playerModel.stop();
 
-        this.addModel(playerModel);
+        this.spawnModelList.offer(playerModel);
     }
 
     /**
