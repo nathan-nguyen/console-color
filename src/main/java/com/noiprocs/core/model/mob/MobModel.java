@@ -4,12 +4,13 @@ import com.noiprocs.core.GameContext;
 import com.noiprocs.core.model.Model;
 
 public abstract class MobModel extends Model {
-    private static final int SKIP_MOVEMENT_FRAME = 2;
+    private static final int DEFAULT_SKIP_MOVEMENT_FRAME = 2;
     public enum MovingDirection {
         STOP, UP, DOWN, LEFT, RIGHT
     }
 
     public MovingDirection movingDirection = MovingDirection.STOP;
+    protected int skipMovementFrame = DEFAULT_SKIP_MOVEMENT_FRAME;
     private final int horizontalSpeed;
     private final int verticalSpeed;
 
@@ -27,8 +28,9 @@ public abstract class MobModel extends Model {
 
     @Override
     public void update(int delta) {
-        if (GameContext.get().worldCounter % SKIP_MOVEMENT_FRAME == 0) return;
-        this.move();
+        if (GameContext.get().worldCounter % skipMovementFrame == 0) {
+            this.move();
+        }
     }
 
     private void move() {
