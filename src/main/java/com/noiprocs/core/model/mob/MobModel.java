@@ -51,6 +51,15 @@ public abstract class MobModel extends Model {
         }
     }
 
+    /**
+     * Default logic for Mob movement.
+     *
+     * @param x: Distance to move in horizontal direction.
+     * @param y: Distance to move in vertical direction.
+     *
+     * Before updating position, check whether next position is valid.
+     * If next position is not valid, stop.
+     */
     protected void move(int x, int y) {
         if (movingDirection == MovingDirection.STOP) return;
 
@@ -58,6 +67,8 @@ public abstract class MobModel extends Model {
             posX += x;
             posY += y;
         }
-        else movingDirection = MovingDirection.STOP;
+        else {
+            movingDirection = MovingDirection.STOP;
+        }
     }
 }

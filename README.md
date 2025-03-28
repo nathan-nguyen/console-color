@@ -86,3 +86,10 @@ This reduces the process time of each frame. However, enabling background thread
 - Corrupted serialization data: When object is serialized, its attributes are updated by another thread. This causes serialized data to be corrupted.
 - `ConcurrentModificationException`: While looping through collections to serialize data, if that collection is updated by another thread, it throws `ConcurrentModificationException`.
 Disabled background thread, broadcast step takes average of 2ms (Measured on 2025-03-28).
+
+## How to benchmark performance
+
+1. Delete save file `last_checkpoint.dat`.
+2. Increase `Config.RENDER_RANGE` to force all chunks to be processed.
+3. Start server and start 1 client.
+4. Record the measurement.

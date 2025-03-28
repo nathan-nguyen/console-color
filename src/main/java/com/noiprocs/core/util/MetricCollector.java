@@ -8,25 +8,31 @@ public class MetricCollector {
 
     public static final RollingWindowStatistics frameTimeMsStats = new RollingWindowStatistics(500);
 
-    public static final RollingWindowStatistics modelManagerRuntimeStats = new RollingWindowStatistics(500);
-    public static final RollingWindowStatistics broadcastRuntimeStats = new RollingWindowStatistics(500);
-    public static final RollingWindowStatistics spriteManagerRuntimeStats = new RollingWindowStatistics(500);
+    public static final RollingWindowStatistics modelManagerProcessTimeNs = new RollingWindowStatistics(500);
+    public static final RollingWindowStatistics broadcastTimeMs = new RollingWindowStatistics(500);
+    public static final RollingWindowStatistics spriteManagerRenderMs = new RollingWindowStatistics(500);
 
-    public static final RollingWindowStatistics updateModelRuntimeStats = new RollingWindowStatistics(500);
-    public static final RollingWindowStatistics switchChunkRuntimeStats = new RollingWindowStatistics(500);
+    public static final RollingWindowStatistics updateModelTimeNs = new RollingWindowStatistics(500);
+    public static final RollingWindowStatistics switchChunkTimeNs = new RollingWindowStatistics(500);
 
     public static final RollingWindowStatistics packageSizePerClientBytes = new RollingWindowStatistics(500);
 
     public static void printMetrics() {
-        logger.info("ModelManager process time (ms): Last {} - Average {}",
-                modelManagerRuntimeStats.getLast(),
-                modelManagerRuntimeStats.getAvg()
+        logger.info("ModelManager process time (ns): Last {} - Average {}",
+                String.format("%,d", modelManagerProcessTimeNs.getLast()),
+                String.format("%,d", modelManagerProcessTimeNs.getAvg())
         );
-        logger.info("Broadcast process time (ms): {}", broadcastRuntimeStats.getLast());
-        logger.info("SpriteManager process time (ms): {}", spriteManagerRuntimeStats.getLast());
+        logger.info("Broadcast process time (ms): {}", broadcastTimeMs.getLast());
+        logger.info("SpriteManager process time (ms): {}", spriteManagerRenderMs.getLast());
 
-        logger.info("ModelManager: Update Models process time (ms): {}", updateModelRuntimeStats.getLast());
-        logger.info("ModelManager: Switch Chunk process time (ms): {}", switchChunkRuntimeStats.getLast());
+        logger.info("ModelManager: Update Models process time (ns): Last {} - Average {}",
+                String.format("%,d", updateModelTimeNs.getLast()),
+                String.format("%,d", updateModelTimeNs.getAvg())
+        );
+        logger.info("ModelManager: Switch Chunk process time (ns): Last {} - Average {}",
+                String.format("%,d", switchChunkTimeNs.getLast()),
+                String.format("%,d", switchChunkTimeNs.getAvg())
+        );
 
         logger.info("Frame time (ms): Last {} - Average {}",
                 frameTimeMsStats.getLast(),

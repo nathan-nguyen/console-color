@@ -17,7 +17,6 @@ public class Config {
     public static boolean DISABLE_PLAYER = false;
     public static boolean CLEAR_SCREEN = true;
 
-    public static int MONITOR_MIN_FPS_THRESHOLD = 55;
     public static int MONITOR_DEBUG_DELAY = 10 * MAX_FPS;
 
     // Whether to use a background thread to broadcast data

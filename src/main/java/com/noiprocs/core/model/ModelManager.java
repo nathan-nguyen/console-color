@@ -171,7 +171,7 @@ public class ModelManager {
                 ).collect(Collectors.toSet());
 
         // Process models from surrounded chunks
-        long monitorStartTimeMs = System.currentTimeMillis();
+        long statsTime = System.nanoTime();
         processChunk.parallelStream().forEach(
                 modelChunk -> {
                     String currentChunkId = modelChunk.getChunkId();
@@ -189,15 +189,15 @@ public class ModelManager {
                         if (!nextChunkId.equals(currentChunkId)) switchChunkModelList.add(model);
                     });
                 });
-        MetricCollector.updateModelRuntimeStats.add(System.currentTimeMillis() - monitorStartTimeMs);
+        MetricCollector.updateModelTimeNs.add(System.nanoTime() - statsTime);
 
         // Removed destroyed models
         destroyModelId.forEach(this::removeModel);
 
         // Switch chunks
-        monitorStartTimeMs = System.currentTimeMillis();
+        statsTime = System.nanoTime();
         switchChunkModelList.forEach(this::switchChunkModel);
-        MetricCollector.switchChunkRuntimeStats.add(System.currentTimeMillis() - monitorStartTimeMs);
+        MetricCollector.switchChunkTimeNs.add(System.nanoTime() - statsTime);
 
         // Add spawn models
         while (!spawnModelList.isEmpty()) this.addModel(spawnModelList.poll());

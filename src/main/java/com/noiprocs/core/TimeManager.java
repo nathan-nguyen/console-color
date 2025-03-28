@@ -18,16 +18,16 @@ public abstract class TimeManager {
         while (true) {
             update(deltaMs);
             long waitTime = deltaMs - (System.currentTimeMillis() - lastTimestamp);
-            if (MetricCollector.getAvgFps() < Config.MONITOR_MIN_FPS_THRESHOLD) {
-                logger.warn("Running longer expected time: {}", waitTime);
-                MetricCollector.printMetrics();
-            }
             try {
                 TimeUnit.MILLISECONDS.sleep(waitTime);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             MetricCollector.frameTimeMsStats.add(System.currentTimeMillis() - lastTimestamp);
+            if (waitTime < 0) {
+                logger.warn("Running longer expected time: {}", waitTime);
+                MetricCollector.printMetrics();
+            }
             lastTimestamp = System.currentTimeMillis();
         }
     }

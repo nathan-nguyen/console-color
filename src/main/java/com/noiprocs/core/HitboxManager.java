@@ -63,9 +63,23 @@ public class HitboxManager {
         return null;
     }
 
+    /**
+     * Check whether the model could be relocated to provided position.
+     * - Find all chunks surrounded the model.
+     * - Find all models in Step 1 chunks.
+     * - Filter out model which are not in render range.
+     * - Construct hitbox map.
+     * - Using hitbox map to check whether provided position is valid for the model.
+     *
+     * @param model: Checking model
+     * @param nextX: Next position in X coordinate.
+     * @param nextY: Next position in Y coordinate.
+     * @return True if model could be relocated.
+     */
     public boolean isValid(Model model, int nextX, int nextY) {
         // Generate current hit box map
-        List<Model> surroundedModelList = gameContext.modelManager.getSurroundedChunk(model).stream()
+        List<Model> surroundedModelList = gameContext.modelManager.getSurroundedChunk(model)
+                .stream()
                 .flatMap(modelChunkManager -> modelChunkManager.map.values().stream())
                 .filter(surroundedModel -> surroundedModel.distanceTo(nextX, nextY) <= Config.RENDER_RANGE)
                 .collect(Collectors.toList());
@@ -74,9 +88,7 @@ public class HitboxManager {
         int offsetX = nextX - HEIGHT / 2;
         int offsetY = nextY - WIDTH / 2;
 
-        boolean[][] collideHitboxMap = constructCurrentHitboxMap(
-                offsetX, offsetY, surroundedModelList, model
-        );
+        boolean[][] collideHitboxMap = constructCurrentHitboxMap(offsetX, offsetY, surroundedModelList, model);
 
         // Check whether next position is valid
         return isValidNextPosition(nextX, nextY, collideHitboxMap, offsetX, offsetY, model);

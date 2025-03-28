@@ -84,9 +84,9 @@ public class GameContext {
     public void progress(int dt) {
         worldCounter += 1;
 
-        long statsTime = System.currentTimeMillis();
+        long statsTime = System.nanoTime();
         modelManager.update(dt);
-        MetricCollector.modelManagerRuntimeStats.add(System.currentTimeMillis() - statsTime);
+        MetricCollector.modelManagerProcessTimeNs.add(System.nanoTime() - statsTime);
 
         // Server: Broadcast data to all clients
         if (isServer && worldCounter % Config.BROADCAST_DELAY == 0) {
@@ -95,7 +95,7 @@ public class GameContext {
             if (!Config.USE_BROADCAST_BG_THREAD) {
                 networkManager.serverMessageQueue.broadcastMessage();
             }
-            MetricCollector.broadcastRuntimeStats.add(System.currentTimeMillis() - statsTime);
+            MetricCollector.broadcastTimeMs.add(System.currentTimeMillis() - statsTime);
         }
 
         // Server: Periodically save data to disk.
@@ -106,7 +106,7 @@ public class GameContext {
         // Synchronize data with modelManager
         statsTime = System.currentTimeMillis();
         spriteManager.update(dt);
-        MetricCollector.spriteManagerRuntimeStats.add(System.currentTimeMillis() - statsTime);
+        MetricCollector.spriteManagerRenderMs.add(System.currentTimeMillis() - statsTime);
 
         // Render graphics
         if (!Config.DISABLE_PLAYER) gameScreen.render(dt);
