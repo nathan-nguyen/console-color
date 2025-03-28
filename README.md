@@ -78,3 +78,11 @@ mvn assembly:single
 - Divided ModelManager into chunks.
 - Broadcast data to client asynchronously.
 - Use better serializer (i.e Kryo, ...). Issue with Java serializer: When object's attributes are updated while object is serialized, this caused serialized data to be corrupted.
+
+## ServerMessageQueue
+
+The idea of `ServerMessageQueue` is to have a background thread to broadcast message to all clients asynchronously.
+This reduces the process time of each frame. However, enabling background thread causes several issues:
+- Corrupted serialization data: When object is serialized, its attributes are updated by another thread. This causes serialized data to be corrupted.
+- `ConcurrentModificationException`: While looping through collections to serialize data, if that collection is updated by another thread, it throws `ConcurrentModificationException`.
+Disabled background thread, broadcast step takes average of 2ms (Measured on 2025-03-28).

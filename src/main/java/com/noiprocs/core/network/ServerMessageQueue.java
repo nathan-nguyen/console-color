@@ -24,28 +24,34 @@ public class ServerMessageQueue implements Runnable {
 
     public void run() {
         while (true) {
-            try {
-                clientIdSet.parallelStream().forEach(
-                        clientId -> {
-                            if (clientId == null) return;
+            broadcastMessage();
+        }
+    }
 
-                            Queue<Serializable> queue = clientQueueMap.get(clientId);
-                            if (queue == null || queue.isEmpty()) return;
+    public void broadcastMessage() {
+        try {
+            clientIdSet.parallelStream().forEach(
+                    clientId -> {
+                        if (clientId == null) return;
 
-                            try {
-                                communicationManager.sendMessage(clientId, KryoSerializationUtils.serialize(queue.poll()));
-                            } catch (Exception e) {
-                                // Reason: client was disconnected by clientId has been removed from clientIdSet.
-                                logger.error("Failed to send data to client {}", clientId);
-                                e.printStackTrace();
-                                clientQueueMap.remove(clientId);
-                            }
+                        Queue<Serializable> queue = clientQueueMap.get(clientId);
+                        if (queue == null || queue.isEmpty()) return;
+
+                        try {
+                            byte[] packages = KryoSerializationUtils.serialize(queue.poll());
+                            communicationManager.sendMessage(clientId, packages);
+                            logger.debug("Package sending to client size {} bytes", packages.length);
+                        } catch (Exception e) {
+                            // Reason: client was disconnected by clientId has been removed from clientIdSet.
+                            logger.error("Failed to send data to client {}", clientId);
+                            e.printStackTrace();
+                            clientQueueMap.remove(clientId);
                         }
-                );
-            } catch (ConcurrentModificationException e) {
-                // Reason: clientIdSet was updated.
-                e.printStackTrace();
-            }
+                    }
+            );
+        } catch (ConcurrentModificationException e) {
+            // Reason: clientIdSet was updated.
+            e.printStackTrace();
         }
     }
 

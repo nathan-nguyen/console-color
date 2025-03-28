@@ -1,6 +1,7 @@
 package com.noiprocs.core.network;
 
 import com.noiprocs.core.GameContext;
+import com.noiprocs.core.config.Config;
 import com.noiprocs.network.CommunicationManager;
 import com.noiprocs.network.ReceiverInterface;
 import com.noiprocs.network.client.Client;
@@ -20,7 +21,7 @@ public class NetworkManager implements ReceiverInterface {
     public final Map<Integer, String> clientIdMap = new Hashtable<>();
     private CommunicationManager communicationManager;
 
-    private ServerMessageQueue serverMessageQueue;
+    public ServerMessageQueue serverMessageQueue;
 
     public NetworkManager(GameContext gameContext) {
         this.gameContext = gameContext;
@@ -34,7 +35,9 @@ public class NetworkManager implements ReceiverInterface {
         communicationManager.setReceiver(this);
 
         serverMessageQueue = new ServerMessageQueue(communicationManager, clientIdMap.keySet());
-        new Thread(serverMessageQueue).start();
+        if (gameContext.isServer && Config.USE_BROADCAST_BG_THREAD) {
+            new Thread(serverMessageQueue).start();
+        }
     }
 
     public void startClientNetworkService(String hostname, int port) {

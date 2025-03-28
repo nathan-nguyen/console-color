@@ -92,6 +92,9 @@ public class GameContext {
         if (isServer && worldCounter % Config.BROADCAST_DELAY == 0) {
             statsTime = System.currentTimeMillis();
             modelManager.broadcastToClient();
+            if (!Config.USE_BROADCAST_BG_THREAD) {
+                networkManager.serverMessageQueue.broadcastMessage();
+            }
             MetricCollector.broadcastRuntimeStats.add(System.currentTimeMillis() - statsTime);
         }
 
@@ -107,5 +110,9 @@ public class GameContext {
 
         // Render graphics
         if (!Config.DISABLE_PLAYER) gameScreen.render(dt);
+
+        if (worldCounter % Config.MONITOR_DEBUG_DELAY == 0) {
+            MetricCollector.printMetrics();
+        }
     }
 }

@@ -15,6 +15,8 @@ public class MetricCollector {
     public static final RollingWindowStatistics updateModelRuntimeStats = new RollingWindowStatistics(500);
     public static final RollingWindowStatistics switchChunkRuntimeStats = new RollingWindowStatistics(500);
 
+    public static final RollingWindowStatistics packageSizePerClientBytes = new RollingWindowStatistics(500);
+
     public static void printMetrics() {
         logger.info("ModelManager process time (ms): Last {} - Average {}",
                 modelManagerRuntimeStats.getLast(),
@@ -30,9 +32,12 @@ public class MetricCollector {
                 frameTimeMsStats.getLast(),
                 frameTimeMsStats.getAvg()
         );
+
+        logger.info("Package size per client: Average {} bytes", packageSizePerClientBytes.getAvg());
     }
 
     public static long getAvgFps() {
-        return 1000L / frameTimeMsStats.getAvg();
+        long avg =  frameTimeMsStats.getAvg();
+        return avg > 0 ? 1000L / avg : -1;
     }
 }
