@@ -77,65 +77,28 @@ public class HitboxManager {
      * @return True if model could be relocated.
      */
     public boolean isValid(Model model, int nextX, int nextY) {
-        // Generate current hit box map
-        List<Model> surroundedModelList = gameContext.modelManager.getSurroundedChunk(model)
+        boolean ignorePlayer = model instanceof PlayerModel;
+
+        return gameContext.modelManager.getSurroundedChunk(model)
                 .stream()
                 .flatMap(modelChunkManager -> modelChunkManager.map.values().stream())
-                .filter(surroundedModel -> surroundedModel.distanceTo(nextX, nextY) <= Config.RENDER_RANGE)
-                .collect(Collectors.toList());
-
-        logger.debug("Model {} with number of surrounded models: {}", model, surroundedModelList.size());
-        int offsetX = nextX - HEIGHT / 2;
-        int offsetY = nextY - WIDTH / 2;
-
-        boolean[][] collideHitboxMap = constructCurrentHitboxMap(offsetX, offsetY, surroundedModelList, model);
-
-        // Check whether next position is valid
-        return isValidNextPosition(nextX, nextY, collideHitboxMap, offsetX, offsetY, model);
+                .noneMatch(surroundedModel -> {
+                    if (surroundedModel == model) return false;
+                    // Allow players to go through each other
+                    if (ignorePlayer && surroundedModel instanceof PlayerModel) return false;
+                    return isOverlapped(
+                            nextX, nextY, nextX + model.hitboxHeight, nextY + model.hitboxWidth,
+                            surroundedModel.posX, surroundedModel.posY, surroundedModel.posX + surroundedModel.hitboxHeight, surroundedModel.posY + surroundedModel.hitboxWidth
+                    );
+                });
     }
 
-    // Check whether next object position is valid
-    private boolean isValidNextPosition(
-            int nextX, int nextY, boolean[][] map, int offsetX, int offsetY, Model targetModel
+    // Check whether 2 rectangles overlapped, providing top-left and bottom-right positions
+    // Note: X is increasing from top to bottom, Y is increasing from left to right.
+    public static boolean isOverlapped(
+            int tlX1, int tlY1, int brX1, int brY1,
+            int tlX2, int tlY2, int brX2, int brY2
     ) {
-        for (int i = 0; i < targetModel.hitboxHeight; ++i) {
-            for (int j = 0; j < targetModel.hitboxWidth; ++j) {
-                int x = nextX + i - offsetX;
-                int y = nextY + j - offsetY;
-                if (x >= 0 && x < HEIGHT && y >= 0 && y < WIDTH) {
-                    if (map[x][y]) return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    // Construct current hitbox map
-    private boolean[][] constructCurrentHitboxMap(
-            int offsetX, int offsetY, List<Model> surroundedModelList, Model targetModel
-    ) {
-        boolean ignorePlayer = targetModel instanceof PlayerModel;
-        boolean[][] map = new boolean[HEIGHT][WIDTH];
-
-        for (Model model : surroundedModelList) {
-            // To avoid targetModel colliding with itself.
-            if (model == targetModel) continue;
-
-            // Allow players to go through each other
-            if (ignorePlayer && model instanceof PlayerModel) continue;
-
-            int posX = model.posX;
-            int posY = model.posY;
-
-            for (int i = 0; i < model.hitboxHeight; ++i) {
-                for (int j = 0; j < model.hitboxWidth; ++j) {
-                    int x = posX + i - offsetX;
-                    int y = posY + j - offsetY;
-                    if (x >= 0 && x < HEIGHT && y >= 0 && y < WIDTH) map[x][y] = true;
-                }
-            }
-        }
-
-        return map;
+        return tlX1 < brX2 && brX1 > tlX2 && tlY1 < brY2  && brY1 > tlY2;
     }
 }

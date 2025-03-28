@@ -93,3 +93,8 @@ Disabled background thread, broadcast step takes average of 2ms (Measured on 202
 2. Increase `Config.RENDER_RANGE` to force all chunks to be processed.
 3. Start server and start 1 client.
 4. Record the measurement.
+
+## Hitbox
+
+- Hitbox is draw using `model.posX`, `model.posY`, `model.hitboxHeight` and `model.hitboxWidth`.
+- Position (`model.posX`, `model.posY`) presents top left corner of hitbox rectangle.
