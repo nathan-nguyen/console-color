@@ -5,7 +5,7 @@ import java.util.LinkedList;
 public class RollingWindowStatistics {
     private final int maxSize;
 
-    private int sum;
+    private long sum;
     private final LinkedList<Long> queue = new LinkedList<>();
 
     public RollingWindowStatistics(int maxSize) {
