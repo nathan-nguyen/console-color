@@ -4,10 +4,14 @@ import com.noiprocs.core.model.mob.character.PlayerModel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
 public class ControlManager {
     private static final Logger logger = LogManager.getLogger(ControlManager.class);
 
     private final GameContext gameContext;
+    private final Queue<String> commandQueue = new ConcurrentLinkedQueue<>();
 
     public ControlManager(GameContext gameContext) {
         this.gameContext = gameContext;
@@ -21,12 +25,23 @@ public class ControlManager {
     public void processInput(String command) {
         if (command.isEmpty()) return;
 
+        String message = gameContext.username + " " + command;
         if (gameContext.isServer) {
-            processCommand(gameContext.username, command);
+            addCommand(message);
         }
         else {
-            String message = gameContext.username + " " + command;
             gameContext.networkManager.sendDataToServer(message.getBytes());
+        }
+    }
+
+    public void addCommand(String command) {
+        commandQueue.offer(command);
+    }
+
+    public void update(int dt) {
+        while (!commandQueue.isEmpty()) {
+            String[] tokens = commandQueue.poll().split(" ");
+            processCommand(tokens[0], tokens[1]);
         }
     }
 
@@ -37,7 +52,7 @@ public class ControlManager {
      * @param username: Username.
      * @param command:  Command to be processed for this user.
      */
-    public void processCommand(String username, String command) {
+    private void processCommand(String username, String command) {
         if (!gameContext.isServer) {
             throw new RuntimeException("ControlManager.processCommand method is only applicable for Server");
         }

@@ -20,6 +20,9 @@ public class App {
         GameContext gameContext = GameContext.build(platform, username, type, hostname, port);
         gameContext.setSpriteManager(new ConsoleSpriteManager());
 
+        // Does not render player if current instance is server
+        if (gameContext.isServer) Config.DISABLE_PLAYER = true;
+
         GameScreenInterface gameScreen = new ConsoleGameScreen();
         gameContext.setGameScreen(gameScreen);
 
@@ -27,9 +30,6 @@ public class App {
         Runnable task = gameContext::run;
         Thread thread = new Thread(task);
         thread.start();
-
-        // Does not render player if current instance is server
-        if (gameContext.isServer) Config.DISABLE_PLAYER = true;
 
         if (!Config.DISABLE_PLAYER) {
             Scanner scanner = new Scanner(System.in);

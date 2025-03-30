@@ -31,7 +31,7 @@ public class WorldModelGenerator {
 
     public void generateWorld() {
         if (!Config.DISABLE_PLAYER) {
-            gameContext.modelManager.addModel(new PlayerModel(gameContext.username, 0, 0, true));
+            gameContext.modelManager.spawnModel(new PlayerModel(gameContext.username, 0, 0, true));
         }
 
         // Generate world boundary
@@ -113,7 +113,7 @@ public class WorldModelGenerator {
             }
 
             if (gameContext.hitboxManager.isValid(treeModel, modelPosX, modelPosY)) {
-                gameContext.modelManager.addModel(treeModel);
+                gameContext.modelManager.spawnModel(treeModel);
             }
             else ++number;
         }
@@ -134,7 +134,7 @@ public class WorldModelGenerator {
                 cotMobModel = new CotLeftModel(modelPosX, modelPosY);
 
             if (gameContext.hitboxManager.isValid(cotMobModel, modelPosX, modelPosY)) {
-                gameContext.modelManager.addModel(cotMobModel);
+                gameContext.modelManager.spawnModel(cotMobModel);
             }
             else ++number;
         }
@@ -147,7 +147,7 @@ public class WorldModelGenerator {
 
             Model fenceModel = new FenceModel(modelPosX, modelPosY);
             if (gameContext.hitboxManager.isValid(fenceModel, modelPosX, modelPosY)) {
-                gameContext.modelManager.addModel(fenceModel);
+                gameContext.modelManager.spawnModel(fenceModel);
                 break;
             }
         }

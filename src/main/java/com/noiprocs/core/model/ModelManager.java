@@ -13,15 +13,17 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ModelManager {
     private static final Logger logger = LogManager.getLogger(ModelManager.class);
 
     private final GameContext gameContext;
-    private final Queue<Model> spawnModelList = new LinkedList<>();
-
-    public ServerModelManager serverModelManager;
+    private final Queue<Model> spawnModelQueue = new ConcurrentLinkedQueue<>();
+    private final Queue<String> destroyModelIdQueue = new ConcurrentLinkedQueue<>();
+    private ServerModelManager serverModelManager;
 
     public ModelManager(GameContext gameContext) {
         this.gameContext = gameContext;
@@ -40,9 +42,13 @@ public class ModelManager {
         return null;
     }
 
+    public void spawnModel(Model model) {
+        this.spawnModelQueue.offer(model);
+    }
+
     // Use this method with care because it could cause ConcurrentModificationException
-    // Use spawnModelList instead.
-    public void addModel(Model model) {
+    // Use spawnModelQueue instead.
+    private void addModel(Model model) {
         logger.debug("Adding Model: {} - {}", model.id, model.getClass());
 
         ModelChunk modelChunk = getChunkFromModelPosition(model.posX, model.posY);
@@ -53,14 +59,18 @@ public class ModelManager {
         gameContext.spriteManager.synchronizeModelData(true);
     }
 
-    public void removeModel(String id) {
+    public void destroyModelById(String id) {
+        this.destroyModelIdQueue.offer(id);
+    }
+
+    private void removeModel(String id) {
         ModelChunk modelChunk = serverModelManager.modelMap.get(id);
         if (modelChunk != null) modelChunk.remove(id);
 
         serverModelManager.modelMap.remove(id);
     }
 
-    public void switchChunkModel(Model model) {
+    private void switchChunkModel(Model model) {
         logger.debug("Switch chunk Model: {} - {}", model.id, model.getClass());
         removeModel(model.id);
         addModel(model);
@@ -125,19 +135,13 @@ public class ModelManager {
      * @param playerName: Client Player Username
      */
     public void addPlayerModel(String playerName) {
-        PlayerModel playerModel;
-        if (!serverModelManager.playerModelMap.containsKey(playerName)) {
-            playerModel = new PlayerModel(playerName, 0, 0, true);
-            serverModelManager.playerModelMap.put(playerName, playerModel);
-        }
-        else {
-            playerModel = serverModelManager.playerModelMap.get(playerName);
-        }
-
+        PlayerModel playerModel = serverModelManager.playerModelMap.computeIfAbsent(
+                playerName, key -> new PlayerModel(key, 0, 0, true)
+        );
         // Player initial state must be STOP mode
         playerModel.stop();
 
-        this.spawnModelList.offer(playerModel);
+        this.spawnModelQueue.offer(playerModel);
     }
 
     /**
@@ -158,7 +162,6 @@ public class ModelManager {
     }
 
     public void update(int dt) {
-        List<String> destroyModelId = new ArrayList<>();
         List<Model> switchChunkModelList = new ArrayList<>();
 
         // Get all distinct chunk surrounded players
@@ -166,7 +169,7 @@ public class ModelManager {
                 .flatMap(
                         playerName -> {
                             PlayerModel pm = serverModelManager.playerModelMap.get(playerName);
-                            return getSurroundedChunk(pm).stream();
+                            return pm == null ? Stream.empty() : getSurroundedChunk(pm).stream();
                         }
                 ).collect(Collectors.toSet());
 
@@ -183,7 +186,7 @@ public class ModelManager {
                         }
                         model.update(dt);
 
-                        if (model.isDestroyed) destroyModelId.add(model.id);
+                        if (model.isDestroyed) destroyModelIdQueue.offer(model.id);
 
                         String nextChunkId = getChunkIdFromModelPosition(model.posX, model.posY);
                         if (!nextChunkId.equals(currentChunkId)) switchChunkModelList.add(model);
@@ -192,7 +195,9 @@ public class ModelManager {
         MetricCollector.updateModelTimeNs.add(System.nanoTime() - statsTime);
 
         // Removed destroyed models
-        destroyModelId.forEach(this::removeModel);
+        while (!destroyModelIdQueue.isEmpty()) {
+            this.removeModel(destroyModelIdQueue.poll());
+        }
 
         // Switch chunks
         statsTime = System.nanoTime();
@@ -200,7 +205,7 @@ public class ModelManager {
         MetricCollector.switchChunkTimeNs.add(System.nanoTime() - statsTime);
 
         // Add spawn models
-        while (!spawnModelList.isEmpty()) this.addModel(spawnModelList.poll());
+        while (!spawnModelQueue.isEmpty()) this.addModel(spawnModelQueue.poll());
     }
 
     /**
@@ -230,7 +235,7 @@ public class ModelManager {
      * This method allows model to be spawned asynchronously.
      */
     public void addSpawnModel(Model model) {
-        this.spawnModelList.offer(model);
+        this.spawnModelQueue.offer(model);
     }
 
     private ModelChunk getChunkFromModelPosition(int posX, int posY) {

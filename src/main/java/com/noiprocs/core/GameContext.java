@@ -84,6 +84,8 @@ public class GameContext {
     public void progress(int dt) {
         worldCounter += 1;
 
+        controlManager.update(dt);
+
         long statsTime = System.nanoTime();
         modelManager.update(dt);
         MetricCollector.modelManagerProcessTimeNs.add(System.nanoTime() - statsTime);

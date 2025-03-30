@@ -28,7 +28,7 @@ public abstract class TimeManager {
                 lastTimestamp = System.currentTimeMillis();
             }
             catch (Exception e) {
-                e.printStackTrace();
+                logger.error("Error while processing frame", e);
             }
         }
     }

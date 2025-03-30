@@ -8,6 +8,8 @@ import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
 
@@ -16,8 +18,10 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class KryoPool implements Closeable {
+    private static final Logger logger = LogManager.getLogger(KryoPool.class);
     private final GenericObjectPool<Kryo> pool;
 
     public KryoPool() {
@@ -58,6 +62,7 @@ public class KryoPool implements Closeable {
         kryo.register(int[].class);
         kryo.register(int[][].class);
         kryo.register(HashMap.class);
+        kryo.register(ConcurrentHashMap.class);
         registerPackage(kryo, "com.noiprocs.core.model");
         kryo.register(Item[].class);
         kryo.setInstantiatorStrategy(new DefaultInstantiatorStrategy(
@@ -72,7 +77,7 @@ public class KryoPool implements Closeable {
         for (Class<?> clazz : classes) {
             if (!clazz.isInterface() && !java.lang.reflect.Modifier.isAbstract(clazz.getModifiers())) {
                 kryo.register(clazz);
-                System.out.println("Registered: " + clazz.getName());
+                logger.debug("Registered: {}", clazz.getName());
             }
         }
     }

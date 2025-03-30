@@ -11,14 +11,14 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Hashtable;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class NetworkManager implements ReceiverInterface {
     private static final Logger logger = LogManager.getLogger(NetworkManager.class);
 
     private final GameContext gameContext;
-    public final Map<Integer, String> clientIdMap = new Hashtable<>();
+    public final Map<Integer, String> clientIdMap = new ConcurrentHashMap<>();
     private CommunicationManager communicationManager;
 
     public ServerMessageQueue serverMessageQueue;
@@ -90,7 +90,7 @@ public class NetworkManager implements ReceiverInterface {
         String disconnectedClientUserName = clientIdMap.get(clientId);
         logger.info("Client {} - User {} disconnected!", clientId, disconnectedClientUserName);
 
-        gameContext.modelManager.removeModel(disconnectedClientUserName);
+        gameContext.modelManager.destroyModelById(disconnectedClientUserName);
         gameContext.modelManager.saveGameData();
 
         clientIdMap.remove(clientId);
@@ -106,8 +106,7 @@ public class NetworkManager implements ReceiverInterface {
 
             clientIdMap.put(clientId, clientUserName);
         } else {
-            String[] splitArr = command.split(" ");
-            gameContext.controlManager.processCommand(splitArr[0], splitArr[1]);
+            gameContext.controlManager.addCommand(command);
         }
     }
 
