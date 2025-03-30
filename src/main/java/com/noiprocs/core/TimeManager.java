@@ -16,19 +16,20 @@ public abstract class TimeManager {
         int deltaMs = 1000 / Config.MAX_FPS;
 
         while (true) {
-            update(deltaMs);
-            long waitTime = deltaMs - (System.currentTimeMillis() - lastTimestamp);
             try {
+                update(deltaMs);
+                long waitTime = deltaMs - (System.currentTimeMillis() - lastTimestamp);
                 TimeUnit.MILLISECONDS.sleep(waitTime);
-            } catch (InterruptedException e) {
+                MetricCollector.frameTimeMsStats.add(System.currentTimeMillis() - lastTimestamp);
+                if (Config.DEBUG_MODE && waitTime < 0) {
+                    logger.warn("Running longer expected time: {}", waitTime);
+                    MetricCollector.printMetrics();
+                }
+                lastTimestamp = System.currentTimeMillis();
+            }
+            catch (Exception e) {
                 e.printStackTrace();
             }
-            MetricCollector.frameTimeMsStats.add(System.currentTimeMillis() - lastTimestamp);
-            if (waitTime < 0) {
-                logger.warn("Running longer expected time: {}", waitTime);
-                MetricCollector.printMetrics();
-            }
-            lastTimestamp = System.currentTimeMillis();
         }
     }
 

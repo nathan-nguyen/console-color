@@ -18,6 +18,7 @@ public class Config {
     public static boolean CLEAR_SCREEN = true;
 
     public static int MONITOR_DEBUG_DELAY = 10 * MAX_FPS;
+    public static boolean DEBUG_MODE = false;
 
     // Whether to use a background thread to broadcast data
     public static boolean USE_BROADCAST_BG_THREAD = false;

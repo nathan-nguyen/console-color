@@ -111,7 +111,7 @@ public class GameContext {
         // Render graphics
         if (!Config.DISABLE_PLAYER) gameScreen.render(dt);
 
-        if (worldCounter % Config.MONITOR_DEBUG_DELAY == 0) {
+        if (Config.DEBUG_MODE && worldCounter % Config.MONITOR_DEBUG_DELAY == 0) {
             MetricCollector.printMetrics();
         }
     }

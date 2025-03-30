@@ -51,6 +51,7 @@ public class ServerMessageQueue implements Runnable {
             );
         } catch (ConcurrentModificationException e) {
             // Reason: clientIdSet was updated.
+            logger.error("Failed to broadcast message");
             e.printStackTrace();
         }
     }
