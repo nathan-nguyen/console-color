@@ -38,7 +38,7 @@ public class ServerMessageQueue implements Runnable {
                         if (queue == null || queue.isEmpty()) return;
 
                         try {
-                            byte[] packages = KryoSerializationUtils.serialize(queue.poll());
+                            byte[] packages = NetworkSerializationUtils.serialize(queue.poll());
                             communicationManager.sendMessage(clientId, packages);
                             logger.debug("Package sending to client size {} bytes", packages.length);
                         } catch (Exception e) {

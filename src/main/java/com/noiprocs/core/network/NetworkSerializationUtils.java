@@ -3,16 +3,19 @@ package com.noiprocs.core.network;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
+import com.noiprocs.core.config.Config;
+import org.apache.commons.lang3.SerializationUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
 
-public class KryoSerializationUtils {
+public class NetworkSerializationUtils {
     // Kryo is used in multiple threads in ServerMessageQueue (parallelStream)
     private static final KryoPool kryoPool = new KryoPool();
 
-    public static byte[] serialize(Object obj) {
+    private static byte[] kryoSerialize(Object obj) {
         try {
             Kryo kryo = kryoPool.borrowKryo();
             try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -31,7 +34,7 @@ public class KryoSerializationUtils {
         }
     }
 
-    public static <T> T deserialize(byte[] data) {
+    private static <T> T kryoDeserialize(byte[] data) {
         try {
             Kryo kryo = kryoPool.borrowKryo();
             try (ByteArrayInputStream bais = new ByteArrayInputStream(data);
@@ -47,5 +50,19 @@ public class KryoSerializationUtils {
         catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static byte[] serialize(Object obj) {
+        if (Config.USE_KRYO_SERIALIZATION) {
+            return kryoSerialize(obj);
+        }
+        return SerializationUtils.serialize((Serializable) obj);
+    }
+
+    public static <T> T deserialize(byte[] data) {
+        if (Config.USE_KRYO_SERIALIZATION) {
+            return kryoDeserialize(data);
+        }
+        return SerializationUtils.deserialize(data);
     }
 }

@@ -25,6 +25,13 @@
             <version>2.12.1</version>
         </dependency>
 
+        <!-- Utilities for Java Serialization -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.12.0</version>
+        </dependency>
+
         <!-- Use for object serialization to byte[] -->
         <dependency>
             <groupId>com.esotericsoftware</groupId>

@@ -17,9 +17,10 @@ public class Config {
     public static boolean DISABLE_PLAYER = false;
     public static boolean CLEAR_SCREEN = true;
 
-    public static int MONITOR_DEBUG_DELAY = 10 * MAX_FPS;
-    public static boolean DEBUG_MODE = false;
+    public static final int MONITOR_DEBUG_DELAY = 10 * MAX_FPS;
+    public static final boolean DEBUG_MODE = false;
 
+    public static final boolean USE_KRYO_SERIALIZATION = true;
     // Whether to use a background thread to broadcast data
-    public static boolean USE_BROADCAST_BG_THREAD = false;
+    public static final boolean USE_BROADCAST_BG_THREAD = false;
 }
