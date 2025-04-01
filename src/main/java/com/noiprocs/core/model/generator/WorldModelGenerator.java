@@ -4,7 +4,9 @@ import com.noiprocs.core.GameContext;
 import com.noiprocs.core.config.Config;
 import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.building.FenceModel;
+import com.noiprocs.core.model.environment.WorldBoundaryHorizontalModel;
 import com.noiprocs.core.model.environment.WorldBoundaryModel;
+import com.noiprocs.core.model.environment.WorldBoundaryVerticalModel;
 import com.noiprocs.core.model.mob.CotLeftModel;
 import com.noiprocs.core.model.mob.CotPsychoModel;
 import com.noiprocs.core.model.mob.CotRightModel;
@@ -52,39 +54,31 @@ public class WorldModelGenerator {
         List<Model> result = new ArrayList<>();
 
         for (int i = 0; i < heightPart; ++i) {
-            WorldBoundaryModel wbm = new WorldBoundaryModel(
+            Model wbm = new WorldBoundaryVerticalModel(
                     startX + i * WorldBoundaryModel.WORLD_BOUNDARY_PART_HEIGHT,
                     startY,
-                    true,
-                    WorldBoundaryModel.WORLD_BOUNDARY_PART_HEIGHT,
-                    1
+                    true
             );
             result.add(wbm);
-            wbm = new WorldBoundaryModel(
+            wbm = new WorldBoundaryVerticalModel(
                     startX + i * WorldBoundaryModel.WORLD_BOUNDARY_PART_HEIGHT,
                     startY + widthPart * WorldBoundaryModel.WORLD_BOUNDARY_PART_WIDTH,
-                    true,
-                    WorldBoundaryModel.WORLD_BOUNDARY_PART_HEIGHT,
-                    1
+                    true
             );
             result.add(wbm);
         }
 
         for (int i = 0; i < widthPart; ++i) {
-            WorldBoundaryModel wbm = new WorldBoundaryModel(
+            Model wbm = new WorldBoundaryHorizontalModel(
                     startX,
                     startY + i * WorldBoundaryModel.WORLD_BOUNDARY_PART_WIDTH,
-                    true,
-                    1,
-                    WorldBoundaryModel.WORLD_BOUNDARY_PART_WIDTH
+                    true
             );
             result.add(wbm);
-            wbm = new WorldBoundaryModel(
+            wbm = new WorldBoundaryHorizontalModel(
                     startX + heightPart * WorldBoundaryModel.WORLD_BOUNDARY_PART_HEIGHT,
                     startY + i * WorldBoundaryModel.WORLD_BOUNDARY_PART_WIDTH,
-                    true,
-                    1,
-                    WorldBoundaryModel.WORLD_BOUNDARY_PART_WIDTH
+                    true
             );
             result.add(wbm);
         }

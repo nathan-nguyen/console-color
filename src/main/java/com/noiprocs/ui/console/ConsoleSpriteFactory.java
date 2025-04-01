@@ -20,7 +20,7 @@ import org.apache.logging.log4j.Logger;
 public class ConsoleSpriteFactory {
     private static final Logger logger = LogManager.getLogger(ConsoleSpriteFactory.class);
 
-    public RenderableSprite generateRenderableSprite(Model model) {
+    public static RenderableSprite generateRenderableSprite(Model model) {
         if (model instanceof PlayerModel) {
             logger.info("Creating player {}", model.id);
             return new PlayerSprite(model.id);

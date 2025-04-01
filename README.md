@@ -98,6 +98,7 @@ Disabled background thread, broadcast step takes average of 2ms (Measured on 202
 ## Improvements
 ### Future improvements
 
+- Use text files for ConsoleSpriteFactory and ConsoleHitboxFactory instead of hardcoding.
 - Fix bugs and remove try / catch or move try / catch in proper positions.
 - Improve HitboxManager - isValid method with moving vector.
     - At the moment, we loop and check whether each step is valid.

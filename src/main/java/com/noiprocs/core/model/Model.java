@@ -9,7 +9,7 @@ public abstract class Model implements Serializable {
     public boolean isVisible;
     public boolean isDestroyed = false;
 
-    public int hitboxHeight, hitboxWidth;
+    public final int hitboxHeight, hitboxWidth;
 
     public Model(int x, int y, boolean isVisible, int hitboxHeight, int hitboxWidth) {
         this.posX = x;

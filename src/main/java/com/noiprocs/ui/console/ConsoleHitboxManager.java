@@ -4,11 +4,13 @@ import com.noiprocs.core.GameContext;
 import com.noiprocs.core.HitboxManagerInterface;
 import com.noiprocs.core.config.Config;
 import com.noiprocs.core.model.Model;
-import com.noiprocs.core.model.mob.character.PlayerModel;
+import com.noiprocs.ui.console.hitbox.Hitbox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import static com.noiprocs.ui.console.ConsoleUIConfig.HEIGHT;
@@ -18,9 +20,15 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
     private static final Logger logger = LogManager.getLogger(ConsoleHitboxManager.class);
 
     private GameContext gameContext;
+    private final Map<String, Hitbox> hitboxMap = new ConcurrentHashMap<>();
 
     public void setGameContext(GameContext gameContext) {
         this.gameContext = gameContext;
+    }
+
+    private Hitbox getHitbox(Model model) {
+        String className = model.getClass().getName();
+        return hitboxMap.computeIfAbsent(className, key -> ConsoleHitboxFactory.generateHitbox(className));
     }
 
     // Check whether 2 rectangles overlapped, providing top-left and bottom-right positions
@@ -45,18 +53,22 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
      */
     @Override
     public boolean isValid(Model model, int nextX, int nextY) {
-        boolean ignorePlayer = model instanceof PlayerModel;
+        Hitbox modelHitbox = getHitbox(model);
 
         return gameContext.modelManager.getSurroundedChunk(model)
                 .stream()
                 .flatMap(modelChunkManager -> modelChunkManager.map.values().stream())
                 .noneMatch(surroundedModel -> {
                     if (surroundedModel == model) return false;
-                    // Allow players to go through each other
-                    if (ignorePlayer && surroundedModel instanceof PlayerModel) return false;
+
+                    Hitbox surroundedHitbox = getHitbox(surroundedModel);
+                    if ((modelHitbox.maskBit & surroundedHitbox.categoryBit) == 0) return false;
+
                     return isOverlapped(
-                            nextX, nextY, nextX + model.hitboxHeight, nextY + model.hitboxWidth,
-                            surroundedModel.posX, surroundedModel.posY, surroundedModel.posX + surroundedModel.hitboxHeight, surroundedModel.posY + surroundedModel.hitboxWidth
+                            nextX, nextY,
+                            nextX + modelHitbox.height, nextY + modelHitbox.width,
+                            surroundedModel.posX, surroundedModel.posY,
+                            surroundedModel.posX + surroundedHitbox.height, surroundedModel.posY + surroundedHitbox.width
                     );
                 });
     }

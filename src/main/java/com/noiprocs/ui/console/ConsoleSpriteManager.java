@@ -11,11 +11,10 @@ import java.util.stream.Collectors;
 
 public class ConsoleSpriteManager extends SpriteManager {
     private static final Logger logger = LogManager.getLogger(ConsoleSpriteManager.class);
-    private final ConsoleSpriteFactory consoleSpriteFactory = new ConsoleSpriteFactory();
 
     @Override
     public RenderableSprite createRenderableObject(Model model) {
-        return consoleSpriteFactory.generateRenderableSprite(model);
+        return ConsoleSpriteFactory.generateRenderableSprite(model);
     }
 
     @Override
