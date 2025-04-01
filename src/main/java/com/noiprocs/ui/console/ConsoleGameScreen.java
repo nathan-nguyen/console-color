@@ -54,6 +54,8 @@ public class ConsoleGameScreen implements GameScreenInterface {
                 (u, v) -> {
                     Model uModel = u.getModel();
                     Model vModel = v.getModel();
+                    if (uModel == null) return 1;
+                    if (vModel == null) return -1;
                     return Integer.compare(uModel.posX, vModel.posX);
                 }
         );
