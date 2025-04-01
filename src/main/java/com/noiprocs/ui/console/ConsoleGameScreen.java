@@ -68,6 +68,7 @@ public class ConsoleGameScreen implements GameScreenInterface {
             char[][] texture = consoleSprite.getTexture();
 
             Model model = renderableSprite.getModel();
+            if (model == null) continue;
             int posX = model.posX - offsetX - consoleSprite.offsetX;
             int posY = model.posY - offsetY - consoleSprite.offsetY;
 

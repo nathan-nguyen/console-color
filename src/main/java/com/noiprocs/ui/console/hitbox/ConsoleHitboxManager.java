@@ -2,7 +2,6 @@ package com.noiprocs.ui.console.hitbox;
 
 import com.noiprocs.core.GameContext;
 import com.noiprocs.core.hitbox.HitboxManagerInterface;
-import com.noiprocs.core.config.Config;
 import com.noiprocs.core.model.Model;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,9 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
-
-import static com.noiprocs.ui.console.ConsoleUIConfig.HEIGHT;
-import static com.noiprocs.ui.console.ConsoleUIConfig.WIDTH;
 
 public class ConsoleHitboxManager implements HitboxManagerInterface {
     private static final Logger logger = LogManager.getLogger(ConsoleHitboxManager.class);
@@ -72,46 +68,35 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
                 });
     }
 
+    public List<Model> getCollidingModel(Model model) {
+        Hitbox targetHitbox = getHitbox(model);
+        return getCollidingModel(model, model.posX, model.posY, targetHitbox.height, targetHitbox.width);
+    }
+
     @Override
-    public Model getModel(Model targetModel, int directionX, int directionY) {
-        // Generate current hit box map
-        List<Model> surroundedModelList = gameContext.modelManager.getSurroundedChunk(targetModel).stream()
+    // Facing right: directionY >= 0
+    // Facing left: directionY < 0
+    public List<Model> getCollidingModel(Model model, int directionX, int directionY, int dx, int dy, int height, int width) {
+        Hitbox targetHitbox = getHitbox(model);
+        int nextX = model.posX + dx;
+        int nextY = model.posY + dy + (directionY >= 0 ? targetHitbox.width: -width);
+
+        return getCollidingModel(model, nextX, nextY, height, width);
+    }
+
+    private List<Model> getCollidingModel(Model model, int nextX, int nextY, int height, int width) {
+        return gameContext.modelManager.getSurroundedChunk(model).stream()
                 .flatMap(modelChunkManager -> modelChunkManager.map.values().stream())
-                .filter(surroundedModel -> surroundedModel.distanceTo(targetModel.posX, targetModel.posY) <= Config.RENDER_RANGE)
+                .filter(surroundedModel -> {
+                    if (surroundedModel == model) return false;
+
+                    Hitbox surroundedHitbox = getHitbox(surroundedModel);
+                    return isOverlapped(
+                            nextX, nextY, nextX + height, nextY + width,
+                            surroundedModel.posX, surroundedModel.posY,
+                            surroundedModel.posX + surroundedHitbox.height, surroundedModel.posY + surroundedHitbox.width
+                    );
+                })
                 .collect(Collectors.toList());
-
-        int offsetX = targetModel.posX - HEIGHT / 2;
-        int offsetY = targetModel.posY - WIDTH / 2;
-
-        Model[][] map = new Model[HEIGHT][WIDTH];
-
-        for (Model model : surroundedModelList) {
-            if (model == targetModel) continue;
-
-            int posX = model.posX, posY = model.posY;
-            Hitbox hitbox = getHitbox(model);
-
-            for (int i = 0; i < hitbox.height; ++i) {
-                for (int j = 0; j < hitbox.width; ++j) {
-                    int x = posX + i - offsetX;
-                    int y = posY + j - offsetY;
-                    if (x >= 0 && x < HEIGHT && y >= 0 && y < WIDTH) map[x][y] = model;
-                }
-            }
-        }
-
-        int intensityX = 1 - Math.abs(directionX), intensityY = 1 - Math.abs(directionY);
-        Hitbox targetHitbox = getHitbox(targetModel);
-        int count = intensityX * targetHitbox.height + intensityY * targetHitbox.width;
-
-        for (int i = 0; i < count; ++i) {
-            int pointX = intensityX * i + (directionX == -1 ? -1 : directionX * targetHitbox.height);
-            int pointY = intensityY * i + (directionY == -1 ? -1 : directionY * targetHitbox.width);
-
-            Model returnModel = map[pointX + HEIGHT / 2][pointY + WIDTH / 2];
-            if (returnModel != null) return returnModel;
-        }
-
-        return null;
     }
 }

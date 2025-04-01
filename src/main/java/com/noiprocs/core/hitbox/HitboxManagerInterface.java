@@ -3,6 +3,8 @@ package com.noiprocs.core.hitbox;
 import com.noiprocs.core.GameContext;
 import com.noiprocs.core.model.Model;
 
+import java.util.List;
+
 public interface HitboxManagerInterface {
     void setGameContext(GameContext gameContext);
 
@@ -16,5 +18,6 @@ public interface HitboxManagerInterface {
      */
     boolean isValid(Model model, int nextX, int nextY);
 
-    Model getModel(Model targetModel, int directionX, int directionY);
+    List<Model> getCollidingModel(Model model);
+    List<Model> getCollidingModel(Model model, int directionX, int directionY, int dx, int dy, int height, int width);
 }

@@ -1,11 +1,11 @@
 package com.noiprocs.core.model.plant;
 
-import com.noiprocs.core.model.InteractiveInterface;
+import com.noiprocs.core.model.ItemModelInterface;
 import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.item.SaplingItem;
 import com.noiprocs.core.model.mob.character.PlayerModel;
 
-public class SaplingModel extends Model implements InteractiveInterface {
+public class SaplingModel extends Model implements ItemModelInterface {
     public SaplingModel(int x, int y) {
         super(x, y, true);
     }

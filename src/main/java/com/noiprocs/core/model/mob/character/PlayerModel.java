@@ -2,10 +2,13 @@ package com.noiprocs.core.model.mob.character;
 
 import com.noiprocs.core.GameContext;
 import com.noiprocs.core.model.InteractiveInterface;
+import com.noiprocs.core.model.ItemModelInterface;
 import com.noiprocs.core.model.LowLatencyModelInterface;
 import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.item.Item;
 import com.noiprocs.core.model.mob.MobModel;
+
+import java.util.List;
 
 public class PlayerModel extends MobModel implements LowLatencyModelInterface {
     private static final int DEFAULT_SKIP_MOVEMENT_FRAME = 6;
@@ -59,6 +62,16 @@ public class PlayerModel extends MobModel implements LowLatencyModelInterface {
         actionCounter = 0;
     }
 
+    // Absorb items nearby
+    private void absorbItems() {
+        List<Model> collidingModels = GameContext.get().hitboxManager.getCollidingModel(this);
+        for (Model item: collidingModels) {
+            if (item instanceof ItemModelInterface) {
+                ((ItemModelInterface) item).interact(this);
+            }
+        }
+    }
+
     private void executeAction() {
         if (action != Action.RIGHT_ACTION && action != Action.LEFT_ACTION) return;
         ++actionCounter;
@@ -67,16 +80,19 @@ public class PlayerModel extends MobModel implements LowLatencyModelInterface {
     }
 
     private void interactAction() {
-        Model interactModel = null;
+        List<Model> collidingModels = null;
         if (action == Action.RIGHT_ACTION) {
-            interactModel = GameContext.get().hitboxManager.getModel(this, 0, 1);
+            collidingModels = GameContext.get().hitboxManager.getCollidingModel(this, 0, 1, 0, 0, 1, 1);
         }
         else if (action == Action.LEFT_ACTION) {
-            interactModel = GameContext.get().hitboxManager.getModel(this, 0, -1);
+            collidingModels = GameContext.get().hitboxManager.getCollidingModel(this, 0, -1, 0, 0, 1, 1);
         }
 
-        if (interactModel instanceof InteractiveInterface) {
-            ((InteractiveInterface) interactModel).interact(this);
+        if (collidingModels != null && !collidingModels.isEmpty()) {
+            Model interactModel = collidingModels.get(0);
+            if (interactModel instanceof InteractiveInterface) {
+                ((InteractiveInterface) interactModel).interact(this);
+            }
         }
     }
 
@@ -88,6 +104,9 @@ public class PlayerModel extends MobModel implements LowLatencyModelInterface {
     public void update(int dt) {
         super.update(dt);
         this.executeAction();
+        if (GameContext.get().worldCounter % skipMovementFrame == 0) {
+            this.absorbItems();
+        }
     }
 
     @Override
