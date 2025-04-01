@@ -1,5 +1,6 @@
-package com.noiprocs.core;
+package com.noiprocs.core.hitbox;
 
+import com.noiprocs.core.GameContext;
 import com.noiprocs.core.model.Model;
 
 public interface HitboxManagerInterface {

@@ -14,7 +14,7 @@ public class SaplingItem extends Item {
     @Override
     public void use(Model model) {
         System.out.println("Use " + this);
-        GameContext.get().modelManager.addSpawnModel(new TreeModel(model.posX, model.posY));
+        GameContext.get().modelManager.addSpawnModel(new TreeModel(model.posX, model.posY, 0));
         --amount;
     }
 }

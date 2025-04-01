@@ -3,6 +3,7 @@ package com.noiprocs.core;
 import com.noiprocs.core.config.Config;
 import com.noiprocs.core.graphics.GameScreenInterface;
 import com.noiprocs.core.graphics.SpriteManager;
+import com.noiprocs.core.hitbox.HitboxManagerInterface;
 import com.noiprocs.core.model.ModelManager;
 import com.noiprocs.core.network.NetworkManager;
 import com.noiprocs.core.util.MetricCollector;

@@ -6,7 +6,6 @@ import com.noiprocs.core.model.Model;
 import com.noiprocs.core.util.Helper;
 
 public class TreeModel extends Model implements InteractiveInterface {
-    private static final int HITBOX_HEIGHT = 1, HITBOX_WIDTH = 4;
     private static final int MAX_DURABILITY = 10;
 
     private static final int MATURE_AGE = 3600;
@@ -17,11 +16,12 @@ public class TreeModel extends Model implements InteractiveInterface {
     public int treeAge = 0;
 
     public TreeModel(int x, int y) {
-        super(x, y, true, HITBOX_HEIGHT, HITBOX_WIDTH);
+        this(x, y, MATURE_AGE);
     }
-    public TreeModel(int x, int y, int hitBoxHeight, int hitBoxWidth) {
-        super(x, y, true, hitBoxHeight, hitBoxWidth);
-        this.treeAge = MATURE_AGE;
+
+    public TreeModel(int x, int y, int treeAge) {
+        super(x, y, true);
+        this.treeAge = treeAge;
     }
 
     @Override

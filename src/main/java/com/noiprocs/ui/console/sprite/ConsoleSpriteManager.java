@@ -1,4 +1,4 @@
-package com.noiprocs.ui.console;
+package com.noiprocs.ui.console.sprite;
 
 import com.noiprocs.core.graphics.RenderableSprite;
 import com.noiprocs.core.graphics.SpriteManager;

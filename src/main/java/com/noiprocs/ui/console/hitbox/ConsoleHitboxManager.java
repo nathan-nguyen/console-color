@@ -1,10 +1,9 @@
-package com.noiprocs.ui.console;
+package com.noiprocs.ui.console.hitbox;
 
 import com.noiprocs.core.GameContext;
-import com.noiprocs.core.HitboxManagerInterface;
+import com.noiprocs.core.hitbox.HitboxManagerInterface;
 import com.noiprocs.core.config.Config;
 import com.noiprocs.core.model.Model;
-import com.noiprocs.ui.console.hitbox.Hitbox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -89,11 +88,11 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
         for (Model model : surroundedModelList) {
             if (model == targetModel) continue;
 
-            int posX = model.posX;
-            int posY = model.posY;
+            int posX = model.posX, posY = model.posY;
+            Hitbox hitbox = getHitbox(model);
 
-            for (int i = 0; i < model.hitboxHeight; ++i) {
-                for (int j = 0; j < model.hitboxWidth; ++j) {
+            for (int i = 0; i < hitbox.height; ++i) {
+                for (int j = 0; j < hitbox.width; ++j) {
                     int x = posX + i - offsetX;
                     int y = posY + j - offsetY;
                     if (x >= 0 && x < HEIGHT && y >= 0 && y < WIDTH) map[x][y] = model;
@@ -101,13 +100,13 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
             }
         }
 
-        int intensityX = 1 - Math.abs(directionX);
-        int intensityY = 1 - Math.abs(directionY);
-        int count = intensityX * targetModel.hitboxHeight + intensityY * targetModel.hitboxWidth;
+        int intensityX = 1 - Math.abs(directionX), intensityY = 1 - Math.abs(directionY);
+        Hitbox targetHitbox = getHitbox(targetModel);
+        int count = intensityX * targetHitbox.height + intensityY * targetHitbox.width;
 
         for (int i = 0; i < count; ++i) {
-            int pointX = intensityX * i + (directionX == -1 ? -1 : directionX * targetModel.hitboxHeight);
-            int pointY = intensityY * i + (directionY == -1 ? -1 : directionY * targetModel.hitboxWidth);
+            int pointX = intensityX * i + (directionX == -1 ? -1 : directionX * targetHitbox.height);
+            int pointY = intensityY * i + (directionY == -1 ? -1 : directionY * targetHitbox.width);
 
             Model returnModel = map[pointX + HEIGHT / 2][pointY + WIDTH / 2];
             if (returnModel != null) return returnModel;

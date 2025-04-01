@@ -17,11 +17,9 @@ public abstract class MobModel extends Model {
     public MobModel(int x,
                     int y,
                     boolean isVisible,
-                    int hitboxHeight,
-                    int hitboxWidth,
                     int horizontalSpeed,
                     int verticalSpeed) {
-        super(x, y, isVisible, hitboxHeight, hitboxWidth);
+        super(x, y, isVisible);
         this.horizontalSpeed = horizontalSpeed;
         this.verticalSpeed = verticalSpeed;
     }
@@ -53,12 +51,11 @@ public abstract class MobModel extends Model {
 
     /**
      * Default logic for Mob movement.
+     * Before updating position, check whether next position is valid.
+     * If next position is not valid, stop.
      *
      * @param x: Distance to move in horizontal direction.
      * @param y: Distance to move in vertical direction.
-     *
-     * Before updating position, check whether next position is valid.
-     * If next position is not valid, stop.
      */
     protected void move(int x, int y) {
         if (movingDirection == MovingDirection.STOP) return;

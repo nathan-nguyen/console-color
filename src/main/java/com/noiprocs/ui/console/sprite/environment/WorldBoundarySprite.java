@@ -1,17 +1,12 @@
 package com.noiprocs.ui.console.sprite.environment;
 
-import com.noiprocs.core.model.environment.WorldBoundaryModel;
 import com.noiprocs.ui.console.sprite.ConsoleSprite;
 
 public class WorldBoundarySprite extends ConsoleSprite {
     private static final int OFFSET_X = 0, OFFSET_Y = 0;
 
-    public WorldBoundarySprite(String id) {
+    public WorldBoundarySprite(String id, int height, int width) {
         super(EMPTY_TEXTURE, id, OFFSET_X, OFFSET_Y);
-
-        WorldBoundaryModel wbm = (WorldBoundaryModel) getModel();
-        int height = wbm.hitboxHeight;
-        int width = wbm.hitboxWidth;
 
         char[][] worldBoundaryTexture = new char[height][width];
 

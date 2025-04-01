@@ -1,6 +1,4 @@
-package com.noiprocs.ui.console;
-
-import com.noiprocs.ui.console.hitbox.Hitbox;
+package com.noiprocs.ui.console.hitbox;
 
 import static com.noiprocs.ui.console.hitbox.HitboxCategory.*;
 

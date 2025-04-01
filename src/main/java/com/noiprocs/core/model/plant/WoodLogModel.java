@@ -6,9 +6,8 @@ import com.noiprocs.core.model.item.WoodLogItem;
 import com.noiprocs.core.model.mob.character.PlayerModel;
 
 public class WoodLogModel extends Model implements InteractiveInterface {
-    private static final int HITBOX_WIDTH = 1, HITBOX_HEIGHT = 1;
     public WoodLogModel(int x, int y) {
-        super(x, y, true, HITBOX_HEIGHT, HITBOX_WIDTH);
+        super(x, y, true);
     }
 
     @Override

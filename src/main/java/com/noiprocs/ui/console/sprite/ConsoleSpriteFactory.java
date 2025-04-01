@@ -1,9 +1,10 @@
-package com.noiprocs.ui.console;
+package com.noiprocs.ui.console.sprite;
 
 import com.noiprocs.core.graphics.RenderableSprite;
 import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.building.FenceModel;
-import com.noiprocs.core.model.environment.WorldBoundaryModel;
+import com.noiprocs.core.model.environment.WorldBoundaryHorizontalModel;
+import com.noiprocs.core.model.environment.WorldBoundaryVerticalModel;
 import com.noiprocs.core.model.mob.CotMobModel;
 import com.noiprocs.core.model.plant.*;
 import com.noiprocs.core.model.environment.MazePartModel;
@@ -35,7 +36,8 @@ public class ConsoleSpriteFactory {
         if (model instanceof SaplingModel) return new SaplingSprite(model.id);
 
         if (model instanceof MazePartModel) return new MazePartSprite(model.id);
-        if (model instanceof WorldBoundaryModel) return new WorldBoundarySprite(model.id);
+        if (model instanceof WorldBoundaryVerticalModel) return new WorldBoundarySprite(model.id, 40, 1);
+        if (model instanceof WorldBoundaryHorizontalModel) return new WorldBoundarySprite(model.id, 1, 60);
 
         if (model instanceof CotMobModel) return new CotMobSprite(model.id);
 

@@ -9,7 +9,6 @@ import com.noiprocs.core.model.mob.MobModel;
 
 public class PlayerModel extends MobModel implements LowLatencyModelInterface {
     private static final int DEFAULT_SKIP_MOVEMENT_FRAME = 6;
-    private static final int HITBOX_HEIGHT = 1, HITBOX_WIDTH = 3;
     private static final int HORIZONTAL_SPEED = 2, VERTICAL_SPEED = 1;
     private static final int MAX_INVENTORY_SIZE = 4;
 
@@ -24,7 +23,7 @@ public class PlayerModel extends MobModel implements LowLatencyModelInterface {
 
 
     public PlayerModel(String id, int x, int y, boolean isVisible) {
-        super(x, y, isVisible, HITBOX_HEIGHT, HITBOX_WIDTH, HORIZONTAL_SPEED, VERTICAL_SPEED);
+        super(x, y, isVisible, HORIZONTAL_SPEED, VERTICAL_SPEED);
         this.id = id;
         this.skipMovementFrame = DEFAULT_SKIP_MOVEMENT_FRAME;
     }

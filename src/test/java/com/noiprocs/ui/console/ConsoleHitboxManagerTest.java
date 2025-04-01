@@ -1,5 +1,6 @@
 package com.noiprocs.ui.console;
 
+import com.noiprocs.ui.console.hitbox.ConsoleHitboxManager;
 import junit.framework.TestCase;
 
 public class ConsoleHitboxManagerTest extends TestCase {
