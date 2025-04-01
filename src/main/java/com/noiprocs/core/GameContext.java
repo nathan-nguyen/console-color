@@ -109,12 +109,12 @@ public class GameContext {
 
         // Server: Broadcast data to all clients
         if (isServer && worldCounter % Config.BROADCAST_DELAY == 0) {
-            statsTime = System.currentTimeMillis();
+            statsTime = System.nanoTime();
             modelManager.broadcastToClient();
             if (!Config.USE_BROADCAST_BG_THREAD) {
                 networkManager.serverMessageQueue.broadcastMessage();
             }
-            MetricCollector.broadcastTimeMs.add(System.currentTimeMillis() - statsTime);
+            MetricCollector.broadcastTimeNs.add(System.nanoTime() - statsTime);
         }
 
         // Server: Periodically save data to disk.

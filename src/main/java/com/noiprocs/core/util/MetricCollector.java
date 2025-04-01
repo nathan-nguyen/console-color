@@ -9,7 +9,7 @@ public class MetricCollector {
     public static final RollingWindowStatistics frameTimeMsStats = new RollingWindowStatistics(500);
 
     public static final RollingWindowStatistics modelManagerProcessTimeNs = new RollingWindowStatistics(500);
-    public static final RollingWindowStatistics broadcastTimeMs = new RollingWindowStatistics(500);
+    public static final RollingWindowStatistics broadcastTimeNs = new RollingWindowStatistics(500);
     public static final RollingWindowStatistics spriteManagerRenderMs = new RollingWindowStatistics(500);
 
     public static final RollingWindowStatistics updateModelTimeNs = new RollingWindowStatistics(500);
@@ -22,7 +22,10 @@ public class MetricCollector {
                 String.format("%,d", modelManagerProcessTimeNs.getLast()),
                 String.format("%,d", modelManagerProcessTimeNs.getAvg())
         );
-        logger.info("Broadcast process time (ms): {}", broadcastTimeMs.getLast());
+        logger.info("Broadcast process time (ns): Last {} - Average {}",
+                String.format("%,d", broadcastTimeNs.getLast()),
+                String.format("%,d", broadcastTimeNs.getAvg())
+        );
         logger.info("SpriteManager process time (ms): {}", spriteManagerRenderMs.getLast());
 
         logger.info("ModelManager: Update Models process time (ns): Last {} - Average {}",
