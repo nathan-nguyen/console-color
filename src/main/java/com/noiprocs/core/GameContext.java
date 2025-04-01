@@ -23,22 +23,49 @@ public class GameContext {
     public final String hostname;
     public final int port;
 
-    public SpriteManager spriteManager;
-    public HitboxManager hitboxManager = new HitboxManager(this);
+    public final SpriteManager spriteManager;
+    private final GameScreenInterface gameScreen;
+    public final HitboxManagerInterface hitboxManager;
+
     public int worldCounter = 0;
 
-    private GameScreenInterface gameScreen;
-
-    private GameContext(String platform, String username, String type, String hostname, int port) {
+    private GameContext(
+            String platform, String username, String type, String hostname, int port,
+            HitboxManagerInterface hitboxManager,
+            SpriteManager spritemanager,
+            GameScreenInterface gameScreen
+    ) {
         this.platform = platform;
         this.username = username;
         this.isServer = type.equals("server");
         this.hostname = hostname;
         this.port = port;
+
+        // Does not render player if current instance is server
+        if (this.isServer) Config.DISABLE_PLAYER = true;
+
+        this.hitboxManager = hitboxManager;
+        this.hitboxManager.setGameContext(this);
+
+        this.spriteManager = spritemanager;
+        this.spriteManager.setGameContext(this);
+
+        this.gameScreen = gameScreen;
+        this.gameScreen.setGameContext(this);
     }
 
-    public static GameContext build(String platform, String username, String type, String hostname, int port) {
-        instance = new GameContext(platform, username, type, hostname, port);
+    public static GameContext build(
+            String platform, String username, String type, String hostname, int port,
+            HitboxManagerInterface hitboxManager,
+            SpriteManager spriteManager,
+            GameScreenInterface gameScreen
+    ) {
+        instance = new GameContext(
+                platform, username, type, hostname, port,
+                hitboxManager,
+                spriteManager,
+                gameScreen
+        );
         return instance;
     }
 
@@ -68,16 +95,6 @@ public class GameContext {
             }
         };
         timeManager.run();
-    }
-
-    public void setSpriteManager(SpriteManager spriteManager) {
-        this.spriteManager = spriteManager;
-        this.spriteManager.setGameContext(this);
-    }
-
-    public void setGameScreen(GameScreenInterface gameScreen) {
-        this.gameScreen = gameScreen;
-        this.gameScreen.setGameContext(this);
     }
 
     public void progress(int dt) {

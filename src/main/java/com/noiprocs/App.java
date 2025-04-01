@@ -2,8 +2,8 @@ package com.noiprocs;
 
 import com.noiprocs.core.GameContext;
 import com.noiprocs.core.config.Config;
-import com.noiprocs.core.graphics.GameScreenInterface;
 import com.noiprocs.ui.console.ConsoleGameScreen;
+import com.noiprocs.ui.console.ConsoleHitboxManager;
 import com.noiprocs.ui.console.ConsoleSpriteManager;
 
 import java.util.Scanner;
@@ -17,18 +17,15 @@ public class App {
         int port = Integer.parseInt(args[4]);
 
         // Initialize gameContext
-        GameContext gameContext = GameContext.build(platform, username, type, hostname, port);
-        gameContext.setSpriteManager(new ConsoleSpriteManager());
-
-        // Does not render player if current instance is server
-        if (gameContext.isServer) Config.DISABLE_PLAYER = true;
-
-        GameScreenInterface gameScreen = new ConsoleGameScreen();
-        gameContext.setGameScreen(gameScreen);
+        GameContext gameContext = GameContext.build(
+                platform, username, type, hostname, port,
+                new ConsoleHitboxManager(),
+                new ConsoleSpriteManager(),
+                new ConsoleGameScreen()
+        );
 
         // Start a separate thread for game, main thread is for control
-        Runnable task = gameContext::run;
-        Thread thread = new Thread(task);
+        Thread thread = new Thread(gameContext::run);
         thread.start();
 
         if (!Config.DISABLE_PLAYER) {

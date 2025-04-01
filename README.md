@@ -26,6 +26,10 @@ graph LR
       NetworkManager
     end
 
+    subgraph hitbox
+      HitboxManager
+    end
+
     subgraph graphics
       GameScreen -.-> SpriteManager;
     end
@@ -35,7 +39,7 @@ graph LR
     ControlManager -.-> ModelManager;
     NetworkManager -.-> ModelManager;
 
-    HitboxManager -.-> ModelManager
+    ModelManager -.-> |Check collision| HitboxManager
 
     SpriteManager -.-> ModelManager;
   end
