@@ -6,7 +6,7 @@ public class CotMobModel extends MobModel {
 
     public CotMobModel(int x, int y) {
         super(x, y, true, HORIZONTAL_SPEED, VERTICAL_SPEED);
-        this.movingDirection = MovingDirection.LEFT;
+        this.setMovingDirection(MovingDirection.LEFT);
     }
 
     @Override

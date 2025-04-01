@@ -3,6 +3,9 @@ package com.noiprocs.core.model.plant;
 import com.noiprocs.core.GameContext;
 import com.noiprocs.core.model.InteractiveInterface;
 import com.noiprocs.core.model.Model;
+import com.noiprocs.core.model.item.SaplingItemModel;
+import com.noiprocs.core.model.item.WoodLogItemModel;
+import com.noiprocs.core.model.mob.character.PlayerModel;
 import com.noiprocs.core.util.Helper;
 
 public class TreeModel extends Model implements InteractiveInterface {
@@ -32,31 +35,30 @@ public class TreeModel extends Model implements InteractiveInterface {
     @Override
     public void interact(Model model) {
         --durability;
-        if (durability == 0 || !this.isOldAge()) this.destroy();
+        if (durability == 0 || !this.isOldAge()) this.destroy(model);
     }
 
-    @Override
-    protected void destroy() {
-        super.destroy();
+    private void destroy(Model destroyer) {
+        this.destroy();
+
+        if (!(destroyer instanceof PlayerModel)) return;
 
         if (this.isOldAge()) {
-            GameContext.get().modelManager.addSpawnModel(new WoodLogModel(posX, posY));
-            GameContext.get().modelManager.addSpawnModel(new WoodLogModel(posX + 1, posY + 1));
+            GameContext.get().modelManager.addSpawnModel(new WoodLogItemModel(posX, posY));
+            GameContext.get().modelManager.addSpawnModel(new WoodLogItemModel(posX + 1, posY + 1));
 
             int seedDrop = Helper.random.nextInt(10);
-            // 0 drop: 20%
-            // 1 drop: 50%
-            // 2 drop: 30%
+            // 0 drop: 20% - 1 drop: 50% - 2 drop: 30%
             if (seedDrop >= 2) {
-                GameContext.get().modelManager.addSpawnModel(new SaplingModel(posX, posY + 2));
+                GameContext.get().modelManager.addSpawnModel(new SaplingItemModel(posX, posY + 2));
             }
             if (seedDrop >= 7)
                 GameContext.get().modelManager.addSpawnModel(
-                        new SaplingModel(posX + 1, posY + 2)
+                        new SaplingItemModel(posX + 1, posY + 2)
                 );
         }
         else if (this.isMiddleAge()) {
-            GameContext.get().modelManager.addSpawnModel(new WoodLogModel(posX, posY));
+            GameContext.get().modelManager.addSpawnModel(new WoodLogItemModel(posX, posY));
         }
     }
 

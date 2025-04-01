@@ -20,10 +20,19 @@ public class CotLeftModel extends CotMobModel {
             posY += y;
         }
         else {
-            if (movingDirection == MovingDirection.UP) movingDirection = MovingDirection.LEFT;
-            else if (movingDirection == MovingDirection.LEFT) movingDirection = MovingDirection.DOWN;
-            else if (movingDirection == MovingDirection.DOWN) movingDirection = MovingDirection.RIGHT;
-            else movingDirection = MovingDirection.UP;
+            MovingDirection movingDirection = getMovingDirection();
+            if (movingDirection == MovingDirection.UP) {
+                setMovingDirection(MovingDirection.LEFT);
+            }
+            else if (movingDirection == MovingDirection.LEFT) {
+                setMovingDirection(MovingDirection.DOWN);
+            }
+            else if (movingDirection == MovingDirection.DOWN) {
+                setMovingDirection(MovingDirection.RIGHT);
+            }
+            else {
+                setMovingDirection(MovingDirection.UP);
+            }
         }
     }
 }

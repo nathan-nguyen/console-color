@@ -29,8 +29,9 @@ public class CotMobSprite extends ConsoleSprite {
 
         if (mm == null) return TEXTURE;
 
-        if (mm.movingDirection == MobModel.MovingDirection.DOWN
-                || mm.movingDirection == MobModel.MovingDirection.LEFT) {
+        MobModel.MovingDirection movingDirection = mm.getMovingDirection();
+        if (movingDirection == MobModel.MovingDirection.DOWN
+                || movingDirection == MobModel.MovingDirection.LEFT) {
             return FLIPPED_TEXTURE;
         }
         else return TEXTURE;

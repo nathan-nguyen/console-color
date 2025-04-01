@@ -9,7 +9,9 @@ public abstract class MobModel extends Model {
         STOP, UP, DOWN, LEFT, RIGHT
     }
 
-    public MovingDirection movingDirection = MovingDirection.STOP;
+    private MovingDirection movingDirection = MovingDirection.STOP;
+    protected MovingDirection facingDirection = MovingDirection.RIGHT;
+
     protected int skipMovementFrame = DEFAULT_SKIP_MOVEMENT_FRAME;
     private final int horizontalSpeed;
     private final int verticalSpeed;
@@ -31,7 +33,7 @@ public abstract class MobModel extends Model {
         }
     }
 
-    private void move() {
+    protected void move() {
         switch (movingDirection) {
             case STOP: return;
             case UP:
@@ -60,12 +62,31 @@ public abstract class MobModel extends Model {
     protected void move(int x, int y) {
         if (movingDirection == MovingDirection.STOP) return;
 
-        if (GameContext.get().hitboxManager.isValid(this, posX + x, posY + y)) {
+        if (this.isNextMoveValid(posX + x, posY + y)) {
             posX += x;
             posY += y;
         }
         else {
             movingDirection = MovingDirection.STOP;
         }
+    }
+
+    protected boolean isNextMoveValid(int x, int y) {
+        return GameContext.get().hitboxManager.isValid(this, x, y);
+    }
+
+    public MovingDirection getMovingDirection() {
+        return this.movingDirection;
+    }
+
+    protected void setMovingDirection(MovingDirection movingDirection) {
+        this.movingDirection = movingDirection;
+        if (movingDirection != MovingDirection.STOP) {
+            this.facingDirection = movingDirection;
+        }
+    }
+
+    public MovingDirection getFacingDirection() {
+        return this.facingDirection;
     }
 }

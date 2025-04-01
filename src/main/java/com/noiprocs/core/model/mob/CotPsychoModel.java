@@ -21,10 +21,18 @@ public class CotPsychoModel extends CotMobModel {
         }
         else {
             int nextDirection = Helper.random.nextInt(4);
-            if (nextDirection == 0) movingDirection = MovingDirection.UP;
-            else if (nextDirection == 1) movingDirection = MovingDirection.DOWN;
-            else if (nextDirection == 2) movingDirection = MovingDirection.LEFT;
-            else movingDirection = MovingDirection.RIGHT;
+            if (nextDirection == 0) {
+                this.setMovingDirection(MovingDirection.UP);
+            }
+            else if (nextDirection == 1) {
+                this.setMovingDirection(MovingDirection.DOWN);
+            }
+            else if (nextDirection == 2) {
+                this.setMovingDirection(MovingDirection.LEFT);
+            }
+            else {
+                this.setMovingDirection(MovingDirection.RIGHT);
+            }
         }
     }
 }

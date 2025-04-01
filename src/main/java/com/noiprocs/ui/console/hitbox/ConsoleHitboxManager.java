@@ -3,6 +3,7 @@ package com.noiprocs.ui.console.hitbox;
 import com.noiprocs.core.GameContext;
 import com.noiprocs.core.hitbox.HitboxManagerInterface;
 import com.noiprocs.core.model.Model;
+import com.noiprocs.core.model.mob.projectile.ProjectileModel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -49,12 +50,13 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
     @Override
     public boolean isValid(Model model, int nextX, int nextY) {
         Hitbox modelHitbox = getHitbox(model);
+        Model projectileSpawner = model instanceof ProjectileModel ? ((ProjectileModel) model).getSpawner() : null;
 
         return gameContext.modelManager.getSurroundedChunk(model)
                 .stream()
                 .flatMap(modelChunkManager -> modelChunkManager.map.values().stream())
                 .noneMatch(surroundedModel -> {
-                    if (surroundedModel == model) return false;
+                    if (surroundedModel == model || surroundedModel == projectileSpawner) return false;
 
                     Hitbox surroundedHitbox = getHitbox(surroundedModel);
                     if ((modelHitbox.maskBit & surroundedHitbox.categoryBit) == 0) return false;
@@ -68,9 +70,9 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
                 });
     }
 
-    public List<Model> getCollidingModel(Model model) {
+    public List<Model> getCollidingModel(Model model, int nextX, int nextY) {
         Hitbox targetHitbox = getHitbox(model);
-        return getCollidingModel(model, model.posX, model.posY, targetHitbox.height, targetHitbox.width);
+        return getCollidingModel(model, nextX, nextY, targetHitbox.height, targetHitbox.width);
     }
 
     @Override

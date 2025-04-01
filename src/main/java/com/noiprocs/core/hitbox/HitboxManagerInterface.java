@@ -18,6 +18,6 @@ public interface HitboxManagerInterface {
      */
     boolean isValid(Model model, int nextX, int nextY);
 
-    List<Model> getCollidingModel(Model model);
+    List<Model> getCollidingModel(Model model, int nextX, int nextY);
     List<Model> getCollidingModel(Model model, int directionX, int directionY, int dx, int dy, int height, int width);
 }

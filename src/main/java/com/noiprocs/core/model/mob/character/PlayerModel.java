@@ -32,22 +32,22 @@ public class PlayerModel extends MobModel implements LowLatencyModelInterface {
     }
 
     public void moveUp() {
-        this.movingDirection = MovingDirection.UP;
+        this.setMovingDirection(MovingDirection.UP);
         this.action = Action.RIGHT_NA;
     }
 
     public void moveDown() {
-        this.movingDirection = MovingDirection.DOWN;
+        this.setMovingDirection(MovingDirection.DOWN);
         this.action = Action.LEFT_NA;
     }
 
     public void moveLeft() {
-        this.movingDirection = MovingDirection.LEFT;
+        this.setMovingDirection(MovingDirection.LEFT);
         this.action = Action.LEFT_NA;
     }
 
     public void moveRight() {
-        this.movingDirection = MovingDirection.RIGHT;
+        this.setMovingDirection(MovingDirection.RIGHT);
         this.action = Action.RIGHT_NA;
     }
 
@@ -64,7 +64,7 @@ public class PlayerModel extends MobModel implements LowLatencyModelInterface {
 
     // Absorb items nearby
     private void absorbItems() {
-        List<Model> collidingModels = GameContext.get().hitboxManager.getCollidingModel(this);
+        List<Model> collidingModels = GameContext.get().hitboxManager.getCollidingModel(this, this.posX, this.posY);
         for (Model item: collidingModels) {
             if (item instanceof ItemModelInterface) {
                 ((ItemModelInterface) item).interact(this);
@@ -97,14 +97,19 @@ public class PlayerModel extends MobModel implements LowLatencyModelInterface {
     }
 
     public void stop() {
-        this.movingDirection = MovingDirection.STOP;
+        this.setMovingDirection(MovingDirection.STOP);
     }
 
     @Override
     public void update(int dt) {
         super.update(dt);
         this.executeAction();
-        if (GameContext.get().worldCounter % skipMovementFrame == 0) {
+    }
+
+    @Override
+    protected void move() {
+        super.move();
+        if (GameContext.get().worldCounter % this.skipMovementFrame == 0) {
             this.absorbItems();
         }
     }
