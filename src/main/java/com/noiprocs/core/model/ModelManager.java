@@ -111,21 +111,19 @@ public class ModelManager {
      */
     public void broadcastToClient() {
         try {
-            gameContext.networkManager.clientIdMap.forEach((key, playerName) -> {
-                int clientId = key;
+            gameContext.networkManager.clientIdMap.forEach((clientId, playerName) -> {
                 PlayerModel pm = serverModelManager.playerModelMap.get(playerName);
 
                 Map<String, ModelChunk> chunkMap = new HashMap<>();
                 getSurroundedChunk(pm).forEach(
                         modelChunk -> chunkMap.put(modelChunk.getChunkId(), modelChunk)
                 );
-                gameContext.networkManager.sentClientData(clientId, (Serializable) chunkMap);
+                gameContext.networkManager.sendClientData(clientId, (Serializable) chunkMap);
             });
         }
         catch (Exception e) {
             // Reason: clientIdMap is updated.
-            logger.error("Failed to broadcast data!");
-            e.printStackTrace();
+            logger.error("Failed to broadcast data!", e);
         }
     }
 
@@ -278,7 +276,7 @@ public class ModelManager {
         return chunkX + "_" + chunkY;
     }
 
-    public Iterable<ModelChunk> getLocalChunk() {
-        return serverModelManager.chunkMap.values();
+    public Stream<ModelChunk> getLocalChunk() {
+        return serverModelManager != null ? serverModelManager.chunkMap.values().stream() : Stream.empty();
     }
 }

@@ -60,6 +60,13 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
+        <!-- For network communication -->
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>4.1.107.Final</version>
+        </dependency>
+
         <!-- Testing dependencies -->
         <dependency>
             <groupId>junit</groupId>

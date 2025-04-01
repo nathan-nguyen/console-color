@@ -18,7 +18,7 @@ public class NetworkManager implements ReceiverInterface {
     private static final Logger logger = LogManager.getLogger(NetworkManager.class);
 
     private final GameContext gameContext;
-    public final Map<Integer, String> clientIdMap = new ConcurrentHashMap<>();
+    public final Map<String, String> clientIdMap = new ConcurrentHashMap<>();
     private CommunicationManager communicationManager;
 
     public ServerMessageQueue serverMessageQueue;
@@ -28,11 +28,9 @@ public class NetworkManager implements ReceiverInterface {
     }
 
     public void startServerNetworkService(int port) {
-        Server server = new Server(port);
+        Server server = new Server(this, port);
         this.communicationManager = server.getCommunicationManager();
         server.startService();
-
-        communicationManager.setReceiver(this);
 
         serverMessageQueue = new ServerMessageQueue(communicationManager, clientIdMap.keySet());
         if (gameContext.isServer && Config.USE_BROADCAST_BG_THREAD) {
@@ -41,29 +39,27 @@ public class NetworkManager implements ReceiverInterface {
     }
 
     public void startClientNetworkService(String hostname, int port) {
-        Client client = new Client(hostname, port);
+        Client client = new Client(this, hostname, port);
         this.communicationManager = client.getCommunicationManager();
-
         client.startService();
-        communicationManager.setReceiver(this);
     }
 
     /**
      * This method is used only for Client.
      */
     public void sendDataToServer(byte[] bytes) {
-        communicationManager.sendMessage(bytes);
+        communicationManager.broadcastMessage(bytes);
     }
 
     /**
      * This method is used only for Server.
      */
-    public void sentClientData(int clientId, Serializable object) {
+    public void sendClientData(String clientId, Serializable object) {
         serverMessageQueue.addMessage(clientId, object);
     }
 
     @Override
-    public void receiveMessage(int clientId, byte[] bytes) {
+    public void receiveMessage(String clientId, byte[] bytes) {
         logger.debug("Received byte[] size {} from clientId {}", bytes.length, clientId);
 
         if (!gameContext.isServer) {
@@ -75,18 +71,24 @@ public class NetworkManager implements ReceiverInterface {
     }
 
     @Override
+    public void serverConnect() {
+        logger.info("Connected to server!");
+        gameContext.modelManager.startClient();
+    }
+
+    @Override
     public void serverDisconnect() {
         logger.info("Disconnected from server! Exit with status 1!");
         System.exit(1);
     }
 
     @Override
-    public void clientConnect(int clientId) {
+    public void clientConnect(String clientId) {
         logger.info("Client {} connected!", clientId);
     }
 
     @Override
-    public void clientDisconnect(int clientId) {
+    public void clientDisconnect(String clientId) {
         String disconnectedClientUserName = clientIdMap.get(clientId);
         logger.info("Client {} - User {} disconnected!", clientId, disconnectedClientUserName);
 
@@ -96,7 +98,7 @@ public class NetworkManager implements ReceiverInterface {
         clientIdMap.remove(clientId);
     }
 
-    private void processClientCommand(int clientId, byte[] bytes) {
+    private void processClientCommand(String clientId, byte[] bytes) {
         String command = new String(bytes);
         logger.debug("[Server] Receiving message from client: {} - Content: {}", clientId, command);
 

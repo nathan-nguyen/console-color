@@ -99,7 +99,6 @@ Disabled background thread, broadcast step takes average of 2ms (Measured on 202
     - At the moment, we loop and check whether each step is valid.
     - The better way is to check for the moving vector and get the position which model could move to.
 - Make ModelManager abstract, separate into ClientModelManager and ServerModelManager.
-- Use netty for network.
 - Review the use of `parallelStream`, measure the performance.
 
 ### Past Improvements
@@ -107,3 +106,4 @@ Disabled background thread, broadcast step takes average of 2ms (Measured on 202
 - Divided ModelManager into chunks.
 - Broadcast data to client asynchronously.
 - Use better serializer (i.e Kryo, ...). Issue with Java serializer: When object's attributes are updated while object is serialized, this caused serialized data to be corrupted.
+- Use netty for communication via network.

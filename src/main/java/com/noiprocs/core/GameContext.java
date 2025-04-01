@@ -58,7 +58,6 @@ public class GameContext {
             // Start network services
             // Client: Send join command to server.
             networkManager.startClientNetworkService(hostname, port);
-            modelManager.startClient();
         }
 
         // Initialize timeManager

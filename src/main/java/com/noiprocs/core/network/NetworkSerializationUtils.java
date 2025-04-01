@@ -52,11 +52,11 @@ public class NetworkSerializationUtils {
         }
     }
 
-    public static byte[] serialize(Object obj) {
+    public static byte[] serialize(Serializable obj) {
         if (Config.USE_KRYO_SERIALIZATION) {
             return kryoSerialize(obj);
         }
-        return SerializationUtils.serialize((Serializable) obj);
+        return SerializationUtils.serialize(obj);
     }
 
     public static <T> T deserialize(byte[] data) {

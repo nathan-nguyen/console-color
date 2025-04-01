@@ -13,14 +13,14 @@ public class ServerMessageQueue implements Runnable {
 
     public static final int MAX_QUEUE_SIZE = 3;
     private final CommunicationManager communicationManager;
-    private final Set<Integer> clientIdSet;
+    private final Set<String> clientIdSet;
 
-    public ServerMessageQueue(CommunicationManager communicationManager, Set<Integer> clientIdSet) {
+    public ServerMessageQueue(CommunicationManager communicationManager, Set<String> clientIdSet) {
         this.communicationManager = communicationManager;
         this.clientIdSet = clientIdSet;
     }
 
-    private final Map<Integer, Queue<Serializable>> clientQueueMap = new HashMap<>();
+    private final Map<String, Queue<Serializable>> clientQueueMap = new HashMap<>();
 
     public void run() {
         while (true) {
@@ -56,7 +56,7 @@ public class ServerMessageQueue implements Runnable {
         }
     }
 
-    public void addMessage(int clientId, Serializable object) {
+    public void addMessage(String clientId, Serializable object) {
         Queue<Serializable> queue;
         if (!clientQueueMap.containsKey(clientId)) {
             queue = new ConcurrentLinkedQueue<>();
