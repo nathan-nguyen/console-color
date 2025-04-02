@@ -29,4 +29,9 @@ public abstract class Model implements Serializable {
     protected void destroy() {
         this.isDestroyed = true;
     }
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + "(" + posX + ", " + posY + ")";
+    }
 }

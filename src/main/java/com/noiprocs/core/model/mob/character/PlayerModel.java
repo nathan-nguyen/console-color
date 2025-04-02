@@ -7,10 +7,13 @@ import com.noiprocs.core.model.LowLatencyModelInterface;
 import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.item.Item;
 import com.noiprocs.core.model.mob.MobModel;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
 public class PlayerModel extends MobModel implements LowLatencyModelInterface {
+    private static final Logger logger = LogManager.getLogger(PlayerModel.class);
     private static final int DEFAULT_SKIP_MOVEMENT_FRAME = 6;
     private static final int HORIZONTAL_SPEED = 2, VERTICAL_SPEED = 1;
     private static final int MAX_INVENTORY_SIZE = 4;
@@ -67,6 +70,7 @@ public class PlayerModel extends MobModel implements LowLatencyModelInterface {
         List<Model> collidingModels = GameContext.get().hitboxManager.getCollidingModel(this, this.posX, this.posY);
         for (Model item: collidingModels) {
             if (item instanceof ItemModelInterface) {
+                logger.info("Absorbed item {}", item);
                 ((ItemModelInterface) item).interact(this);
             }
         }
@@ -91,6 +95,7 @@ public class PlayerModel extends MobModel implements LowLatencyModelInterface {
         if (collidingModels != null && !collidingModels.isEmpty()) {
             Model interactModel = collidingModels.get(0);
             if (interactModel instanceof InteractiveInterface) {
+                logger.info("Interact with model {}", interactModel);
                 ((InteractiveInterface) interactModel).interact(this);
             }
         }
@@ -116,7 +121,7 @@ public class PlayerModel extends MobModel implements LowLatencyModelInterface {
 
     @Override
     public String toString() {
-        return "Player: " + id + " - posX: " + posX + " - posY: " + posY;
+        return "Player: (" + id + ", " + posX + ", " + posY + ")";
     }
 
     public boolean addInventoryItem(Item item) {

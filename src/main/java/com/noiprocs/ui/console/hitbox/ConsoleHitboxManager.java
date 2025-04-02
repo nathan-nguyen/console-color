@@ -87,10 +87,12 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
     }
 
     private List<Model> getCollidingModel(Model model, int nextX, int nextY, int height, int width) {
+        Model projectileSpawner = model instanceof ProjectileModel ? ((ProjectileModel) model).getSpawner() : null;
+
         return gameContext.modelManager.getSurroundedChunk(model).stream()
                 .flatMap(modelChunkManager -> modelChunkManager.map.values().stream())
                 .filter(surroundedModel -> {
-                    if (surroundedModel == model) return false;
+                    if (surroundedModel == model || surroundedModel == projectileSpawner) return false;
 
                     Hitbox surroundedHitbox = getHitbox(surroundedModel);
                     return isOverlapped(

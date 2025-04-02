@@ -19,6 +19,10 @@ public class ProjectileModel extends MobModel implements LowLatencyModelInterfac
         this.setMovingDirection(movingDirection);
     }
 
+    public int getTtl() {
+        return this.ttl;
+    }
+
     @Override
     protected void move() {
         super.move();
