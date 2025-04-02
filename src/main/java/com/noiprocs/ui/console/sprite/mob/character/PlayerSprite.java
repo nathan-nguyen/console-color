@@ -1,5 +1,6 @@
 package com.noiprocs.ui.console.sprite.mob.character;
 
+import com.noiprocs.core.model.mob.MobModel;
 import com.noiprocs.core.model.mob.character.PlayerModel;
 import com.noiprocs.ui.console.sprite.ConsoleSprite;
 
@@ -57,12 +58,14 @@ public class PlayerSprite extends ConsoleSprite {
 
     @Override
     public char[][] getTexture() {
-        PlayerModel pm = (PlayerModel) getModel();
-        if (pm.action == PlayerModel.Action.RIGHT_ACTION) {
-            return RIGHT_ACTION_PERFORMANCE[(pm.actionCounter / 2) % RIGHT_ACTION_PERFORMANCE.length];
-        } else if (pm.action == PlayerModel.Action.LEFT_ACTION) {
-            return LEFT_ACTION_PERFORMANCE[(pm.actionCounter / 2) % LEFT_ACTION_PERFORMANCE.length];
+        PlayerModel model = (PlayerModel) getModel();
+        MobModel.MovingDirection facingDirection = model.getFacingDirection();
+        if (model.actionCounter == 0) return TEXTURE;
+
+        if (facingDirection == MobModel.MovingDirection.UP
+                || facingDirection == MobModel.MovingDirection.RIGHT) {
+            return RIGHT_ACTION_PERFORMANCE[(model.actionCounter / 2) % RIGHT_ACTION_PERFORMANCE.length];
         }
-        return TEXTURE;
+        return LEFT_ACTION_PERFORMANCE[(model.actionCounter / 2) % LEFT_ACTION_PERFORMANCE.length];
     }
 }

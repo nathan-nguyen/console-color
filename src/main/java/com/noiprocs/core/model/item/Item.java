@@ -14,4 +14,9 @@ public abstract class Item implements Serializable {
     }
 
     public abstract void use(Model model);
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

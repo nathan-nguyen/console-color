@@ -18,15 +18,9 @@ public class PlayerModel extends MobModel implements LowLatencyModelInterface {
     private static final int HORIZONTAL_SPEED = 2, VERTICAL_SPEED = 1;
     private static final int MAX_INVENTORY_SIZE = 4;
 
-    public enum Action {
-        RIGHT_NA, LEFT_NA, RIGHT_ACTION, LEFT_ACTION
-    }
-
-    public Action action = Action.RIGHT_NA;
     public int actionCounter = 0;
     public Item[] inventory = new Item[MAX_INVENTORY_SIZE];
     public int currentInventorySlot = 0;
-
 
     public PlayerModel(String id, int x, int y, boolean isVisible) {
         super(x, y, isVisible, HORIZONTAL_SPEED, VERTICAL_SPEED);
@@ -36,36 +30,26 @@ public class PlayerModel extends MobModel implements LowLatencyModelInterface {
 
     public void moveUp() {
         this.setMovingDirection(MovingDirection.UP);
-        this.action = Action.RIGHT_NA;
     }
 
     public void moveDown() {
         this.setMovingDirection(MovingDirection.DOWN);
-        this.action = Action.LEFT_NA;
     }
 
     public void moveLeft() {
         this.setMovingDirection(MovingDirection.LEFT);
-        this.action = Action.LEFT_NA;
     }
 
     public void moveRight() {
         this.setMovingDirection(MovingDirection.RIGHT);
-        this.action = Action.RIGHT_NA;
     }
 
     public void triggerAction() {
-        if (action == Action.RIGHT_NA) action = Action.RIGHT_ACTION;
-        else if (action == Action.LEFT_NA) action = Action.LEFT_ACTION;
+        if (actionCounter > 0) return;
+        actionCounter = 6;
     }
 
-    private void stopAction() {
-        if (action == Action.RIGHT_ACTION) action = Action.RIGHT_NA;
-        else if (action == Action.LEFT_ACTION) action = Action.LEFT_NA;
-        actionCounter = 0;
-    }
-
-    // Absorb items nearby
+    // Absorb nearby items
     private void absorbItems() {
         List<Model> collidingModels = GameContext.get().hitboxManager.getCollidingModel(this, this.posX, this.posY);
         for (Model item: collidingModels) {
@@ -76,19 +60,19 @@ public class PlayerModel extends MobModel implements LowLatencyModelInterface {
         }
     }
 
-    private void executeAction() {
-        if (action != Action.RIGHT_ACTION && action != Action.LEFT_ACTION) return;
-        ++actionCounter;
-        if (actionCounter == 4) interactAction();
-        if (actionCounter == 6) stopAction();
+    private void updateAction() {
+        if (actionCounter == 0) return;
+
+        --actionCounter;
+        if (actionCounter == 2) interactAction();
     }
 
     private void interactAction() {
         List<Model> collidingModels = null;
-        if (action == Action.RIGHT_ACTION) {
+        if (facingDirection == MovingDirection.RIGHT) {
             collidingModels = GameContext.get().hitboxManager.getCollidingModel(this, 0, 1, 0, 0, 1, 1);
         }
-        else if (action == Action.LEFT_ACTION) {
+        else if (facingDirection == MovingDirection.LEFT) {
             collidingModels = GameContext.get().hitboxManager.getCollidingModel(this, 0, -1, 0, 0, 1, 1);
         }
 
@@ -108,7 +92,7 @@ public class PlayerModel extends MobModel implements LowLatencyModelInterface {
     @Override
     public void update(int dt) {
         super.update(dt);
-        this.executeAction();
+        this.updateAction();
     }
 
     @Override

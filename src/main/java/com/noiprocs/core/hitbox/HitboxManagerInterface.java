@@ -19,14 +19,25 @@ public interface HitboxManagerInterface {
     boolean isValid(Model model, int nextX, int nextY);
 
     /**
-     * Get list of colliding models if providing model is move to position (nextX, nextY)
+     * Get list of colliding models if providing model is moved to position (nextX, nextY)
      *
      * @param model: Checking model
      * @param nextX: Destination posX
      * @param nextY: Destination posX
-     * @return: List of colliding models
+     * @return List of colliding models.
      */
     List<Model> getCollidingModel(Model model, int nextX, int nextY);
 
+    /**
+     * Get list of colliding models, providing direction, distance to original hitbox, and size of checking hitbox
+     * @param model: Checking model
+     * @param directionX: DirectionX to checking hitbox
+     * @param directionY: DirectionY to checking hitbox
+     * @param dx: DistanceX to from original hitbox to checking hitbox
+     * @param dy: DistanceY to from original hitbox to checking hitbox
+     * @param height: Checking hitbox height
+     * @param width: Checking hitbox width
+     * @return List of colliding models.
+     */
     List<Model> getCollidingModel(Model model, int directionX, int directionY, int dx, int dy, int height, int width);
 }
