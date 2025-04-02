@@ -16,7 +16,7 @@ import static com.noiprocs.ui.console.ConsoleUIConfig.HEIGHT;
 import static com.noiprocs.ui.console.ConsoleUIConfig.WIDTH;
 
 public class ConsoleGameScreen implements GameScreenInterface {
-    private final char[][] map = new char[HEIGHT][WIDTH];
+    private final long[][] map = new long[HEIGHT][WIDTH];
     protected GameContext gameContext;
 
     @Override
@@ -67,7 +67,7 @@ public class ConsoleGameScreen implements GameScreenInterface {
 
         for (RenderableSprite renderableSprite : renderableSpriteList) {
             ConsoleSprite consoleSprite = (ConsoleSprite) renderableSprite;
-            char[][] texture = consoleSprite.getTexture();
+            long[][] texture = consoleSprite.getTexture();
 
             Model model = renderableSprite.getModel();
             if (model == null) continue;
@@ -95,7 +95,7 @@ public class ConsoleGameScreen implements GameScreenInterface {
         }
     }
 
-    private void updateMap(int posX, int posY, char[][] texture) {
+    private void updateMap(int posX, int posY, long[][] texture) {
         for (int i = 0; i < texture.length; ++i) {
             for (int j = 0; j < texture[0].length; ++j) {
                 if (texture[i][j] == 0) continue;
@@ -137,7 +137,7 @@ public class ConsoleGameScreen implements GameScreenInterface {
                 // Add left border
                 if (j == 0) sb.append('|');
 
-                sb.append(map[i][j] == 0 ? ' ' : map[i][j]);
+                sb.append(map[i][j] == 0 ? ' ' : ConsoleSprite.decode(map[i][j]));
 
                 // Add right border
                 if (j == map[0].length - 1) sb.append('|');

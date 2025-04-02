@@ -23,4 +23,6 @@ public class Config {
     public static final boolean USE_KRYO_SERIALIZATION = true;
     // Whether to use a background thread to broadcast data
     public static final boolean USE_BROADCAST_BG_THREAD = false;
+
+    public static final boolean USE_EMOJI_TEXTURE = true;
 }

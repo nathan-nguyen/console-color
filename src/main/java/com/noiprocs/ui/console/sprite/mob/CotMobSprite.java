@@ -5,18 +5,18 @@ import com.noiprocs.ui.console.sprite.ConsoleSprite;
 
 public class CotMobSprite extends ConsoleSprite {
     private static final int OFFSET_X = 1, OFFSET_Y = 0;
-    private static final char[][] TEXTURE = {
+    private static final long[][] TEXTURE = convertCharTexture(new char[][]{
             {'=', '=', '=', '0'},
             {'/', '\\', '/', '\\'}
-    };
+    });
 
-    private static final char[][] FLIPPED_TEXTURE = {
+    private static final long[][] FLIPPED_TEXTURE = convertCharTexture(new char[][]{
             {'0', '=', '=', '='},
             {'/', '\\', '/', '\\'}
-    };
+    });
 
     public CotMobSprite(String id) {
-        super(TEXTURE, id, OFFSET_X, OFFSET_Y);
+        super(id, OFFSET_X, OFFSET_Y);
     }
 
     @Override
@@ -24,7 +24,7 @@ public class CotMobSprite extends ConsoleSprite {
     }
 
     @Override
-    public char[][] getTexture() {
+    public long[][] getTexture() {
         MobModel mm = (MobModel) getModel();
 
         if (mm == null) return TEXTURE;

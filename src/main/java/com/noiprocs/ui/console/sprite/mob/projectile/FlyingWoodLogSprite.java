@@ -5,13 +5,13 @@ import com.noiprocs.ui.console.sprite.ConsoleSprite;
 
 public class FlyingWoodLogSprite extends ConsoleSprite {
     private static final int OFFSET_X = 0, OFFSET_Y = 0;
-    private static final char[][][] TEXTURES = {
+    private static final long[][][] TEXTURES = convertCharTexture(new char[][][]{
             {{'='}},
             {{'|'}}
-    };
+    });
 
     public FlyingWoodLogSprite(String id) {
-        super(TEXTURES[0], id, OFFSET_X, OFFSET_Y);
+        super(id, OFFSET_X, OFFSET_Y);
     }
 
     @Override
@@ -19,7 +19,7 @@ public class FlyingWoodLogSprite extends ConsoleSprite {
     }
 
     @Override
-    public char[][] getTexture() {
+    public long[][] getTexture() {
         ProjectileModel model = (ProjectileModel) getModel();
         return TEXTURES[model.getTtl() % TEXTURES.length];
     }

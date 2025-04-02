@@ -5,32 +5,32 @@ import com.noiprocs.ui.console.sprite.ConsoleSprite;
 
 public class TreeSprite extends ConsoleSprite {
     private static final int OFFSET_X = 4, OFFSET_Y = 3;
-    private static final char[][] TEXTURE = {
+    private static final long[][] TEXTURE = convertCharTexture(new char[][]{
             {0, '▒', '▒', '▒', '▒', '▒', '▒', '▒', '▒', 0},
             {'▒','▐','▒','▐','▒','▒','▒','▒','▌','▒'},
             {0,'▒','▀','▄','█','▒','▄','▀','▒', 0},
             {0, 0, 0, 0, '█', '█', 0, 0, 0, 0},
             {0, 0, 0, '▄', '█', '█', '▄', 0, 0, 0}
-    };
+    });
 
-    private static final char[][] YOUNG_TEXTURE = {
+    private static final long[][] YOUNG_TEXTURE = convertCharTexture(new char[][]{
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, '|', '|', 0, 0, 0, 0}
-    };
+    });
 
-    private static final char[][] MIDDLE_TEXTURE = {
+    private static final long[][] MIDDLE_TEXTURE = convertCharTexture(new char[][]{
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, '|', '|', 0, 0, 0, 0},
             {0, 0, 0, 0, '|', '|', 0, 0, 0, 0}
-    };
+    });
 
     public TreeSprite(String id) {
-        super(TEXTURE, id, OFFSET_X, OFFSET_Y);
+        super(id, OFFSET_X, OFFSET_Y);
     }
 
     public TreeSprite(char[][] texture, String id, int offsetX, int offsetY) {
@@ -38,7 +38,7 @@ public class TreeSprite extends ConsoleSprite {
     }
 
     @Override
-    public char[][] getTexture() {
+    public long[][] getTexture() {
         TreeModel model = (TreeModel) getModel();
         if (model == null || model.isOldAge()) return super.getTexture();
 

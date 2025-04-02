@@ -6,13 +6,13 @@ import com.noiprocs.ui.console.sprite.ConsoleSprite;
 
 public class PlayerSprite extends ConsoleSprite {
     private static final int OFFSET_X = 2, OFFSET_Y = 2;
-    private static final char[][] TEXTURE = {
+    private static final long[][] TEXTURE = convertCharTexture(new char[][]{
             {0, 0, 0, 'o', 0},
             {0, 0, '(', '|', ')'},
             {0, 0, '/', 0, '\\'},
-    };
+    });
 
-    private static final char[][][] RIGHT_ACTION_PERFORMANCE = {
+    private static final long[][][] RIGHT_ACTION_PERFORMANCE = convertCharTexture(new char[][][]{
             {
                     {0, 0, 0, 'o', 0, '_'},
                     {0, 0, '/', '|', '\\', '|'},
@@ -28,9 +28,9 @@ public class PlayerSprite extends ConsoleSprite {
                     {0, 0, '/', '|', '\\', '_', '_'},
                     {0, 0, '/', 0, '\\', 0, '\''}
             }
-    };
+    });
 
-    private static final char[][][] LEFT_ACTION_PERFORMANCE = {
+    private static final long[][][] LEFT_ACTION_PERFORMANCE = convertCharTexture(new char[][][]{
             {
                     {0, '_', 0, 'o', 0},
                     {0, '|', '/', '|', '\\'},
@@ -46,10 +46,10 @@ public class PlayerSprite extends ConsoleSprite {
                     {'_', '_', '/', '|', '\\'},
                     {'\'', 0, '/', 0, '\\'}
             }
-    };
+    });
 
     public PlayerSprite(String id) {
-        super(TEXTURE, id, OFFSET_X, OFFSET_Y);
+        super(id, OFFSET_X, OFFSET_Y);
     }
 
     @Override
@@ -57,7 +57,7 @@ public class PlayerSprite extends ConsoleSprite {
     }
 
     @Override
-    public char[][] getTexture() {
+    public long[][] getTexture() {
         PlayerModel model = (PlayerModel) getModel();
         MobModel.MovingDirection facingDirection = model.getFacingDirection();
         if (model.actionCounter == 0) return TEXTURE;
