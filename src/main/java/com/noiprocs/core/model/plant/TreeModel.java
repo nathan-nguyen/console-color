@@ -3,20 +3,19 @@ package com.noiprocs.core.model.plant;
 import com.noiprocs.core.GameContext;
 import com.noiprocs.core.model.InteractiveInterface;
 import com.noiprocs.core.model.Model;
-import com.noiprocs.core.model.item.SaplingItemModel;
-import com.noiprocs.core.model.item.WoodLogItemModel;
+import com.noiprocs.core.model.item.*;
 import com.noiprocs.core.model.mob.character.PlayerModel;
 import com.noiprocs.core.util.Helper;
 
 public class TreeModel extends Model implements InteractiveInterface {
-    private static final int MAX_DURABILITY = 10;
+    private static final int MAX_DURABILITY = 20;
 
     private static final int MATURE_AGE = 3600;
     private static final int MIDDLE_AGE = 1800;
 
     private int durability = MAX_DURABILITY;
 
-    public int treeAge = 0;
+    public int treeAge;
 
     public TreeModel(int x, int y) {
         this(x, y, MATURE_AGE);
@@ -33,8 +32,11 @@ public class TreeModel extends Model implements InteractiveInterface {
     }
 
     @Override
-    public void interact(Model model) {
-        --durability;
+    public void interact(Model model, Item item) {
+        if (item instanceof AxeItem) {
+            durability -= 4;
+        }
+        else --durability;
         if (durability == 0 || !this.isOldAge()) this.destroy(model);
     }
 

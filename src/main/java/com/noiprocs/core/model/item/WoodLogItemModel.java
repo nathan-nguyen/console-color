@@ -13,7 +13,7 @@ public class WoodLogItemModel extends Model implements ItemModelInterface {
     public void update(int delta) {}
 
     @Override
-    public void interact(Model model) {
+    public void interact(Model model, Item item) {
         if (model instanceof PlayerModel) {
             if (((PlayerModel) model).addInventoryItem(new WoodLogItem(1))) {
                 this.destroy();

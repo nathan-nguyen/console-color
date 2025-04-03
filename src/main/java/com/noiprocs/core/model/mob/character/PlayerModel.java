@@ -55,7 +55,7 @@ public class PlayerModel extends MobModel implements LowLatencyModelInterface {
         for (Model item: collidingModels) {
             if (item instanceof ItemModelInterface) {
                 logger.info("Absorbed item {}", item);
-                ((ItemModelInterface) item).interact(this);
+                ((ItemModelInterface) item).interact(this, inventory[currentInventorySlot]);
             }
         }
     }
@@ -80,7 +80,7 @@ public class PlayerModel extends MobModel implements LowLatencyModelInterface {
             Model interactModel = collidingModels.get(0);
             if (interactModel instanceof InteractiveInterface) {
                 logger.info("Interact with model {}", interactModel);
-                ((InteractiveInterface) interactModel).interact(this);
+                ((InteractiveInterface) interactModel).interact(this, inventory[currentInventorySlot]);
             }
         }
     }

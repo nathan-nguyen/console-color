@@ -28,7 +28,7 @@ public class FlyingWoodLogModel extends ProjectileModel {
         Model model = collidingModels.get(0);
         logger.info("Hit {}", model);
         if (model instanceof InteractiveInterface) {
-            ((InteractiveInterface) model).interact(this);
+            ((InteractiveInterface) model).interact(this, null);
         }
         this.destroy();
         return false;

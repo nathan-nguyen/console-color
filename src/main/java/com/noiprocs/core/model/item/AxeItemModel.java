@@ -10,7 +10,7 @@ public class AxeItemModel extends Model implements ItemModelInterface {
     }
 
     @Override
-    public void interact(Model model) {
+    public void interact(Model model, Item item) {
         if (model instanceof PlayerModel) {
             if (((PlayerModel) model).addInventoryItem(new AxeItem())) {
                 this.destroy();

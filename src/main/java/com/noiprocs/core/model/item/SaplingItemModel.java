@@ -13,7 +13,7 @@ public class SaplingItemModel extends Model implements ItemModelInterface {
     public void update(int delta) {}
 
     @Override
-    public void interact(Model model) {
+    public void interact(Model model, Item item) {
         if (model instanceof PlayerModel) {
             if (((PlayerModel) model).addInventoryItem(new SaplingItem(1))) {
                 this.destroy();
