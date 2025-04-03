@@ -14,6 +14,7 @@ import com.noiprocs.core.model.mob.character.PlayerModel;
 import com.noiprocs.core.model.plant.BirchTreeModel;
 import com.noiprocs.core.model.plant.PineTreeModel;
 import com.noiprocs.core.model.plant.TreeModel;
+import com.noiprocs.core.util.Helper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -41,14 +42,15 @@ public class WorldModelGenerator {
         this.generateWorldBoundary(-80, -40, 10, 10);
 
         // Generate maze
-//        this.generateMaze(10, 10, 40);
+        // this.generateMaze(10, 10, 40);
 
         // Generate trees
         this.generateTree(1000, -80, -40, 316, 554);
 
         this.generateCotMob(1000, -80, -40, 316, 554);
 
-        this.generateSupportingObject(0, 0, 10, 10);
+        this.generateSupportingObject(AxeItemModel.class, 1, 0, 0, 10, 10);
+        this.generateSupportingObject(FenceModel.class, 2, 10, 10, 60, 60);
     }
 
     private void generateWorldBoundary(int startX, int startY, int heightPart, int widthPart) {
@@ -135,26 +137,17 @@ public class WorldModelGenerator {
         }
     }
 
-    private void generateSupportingObject(int startX, int startY, int endX, int endY) {
+    private void generateSupportingObject(Class<?> clazz, int amount, int startX, int startY, int endX, int endY) {
+        int count = 0;
         for (int i = 0; i < MAX_TRIES; ++i) {
             int modelPosX = random.nextInt(endX - startX) + startX;
             int modelPosY = random.nextInt(endY - startY) + startY;
 
-            Model model = new FenceModel(modelPosX, modelPosY);
+            Model model = (Model) Helper.createObject(clazz, modelPosX, modelPosY);
             if (gameContext.hitboxManager.isValid(model, modelPosX, modelPosY)) {
                 gameContext.modelManager.spawnModel(model);
-                break;
-            }
-        }
-
-        for (int i = 0; i < MAX_TRIES; ++i) {
-            int modelPosX = random.nextInt(endX - startX) + startX;
-            int modelPosY = random.nextInt(endY - startY) + startY;
-
-            Model model = new AxeItemModel(modelPosX, modelPosY);
-            if (gameContext.hitboxManager.isValid(model, modelPosX, modelPosY)) {
-                gameContext.modelManager.spawnModel(model);
-                break;
+                ++count;
+                if (count >= amount) break;
             }
         }
     }
