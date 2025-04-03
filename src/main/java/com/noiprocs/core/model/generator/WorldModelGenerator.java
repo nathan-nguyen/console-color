@@ -8,9 +8,7 @@ import com.noiprocs.core.model.environment.WorldBoundaryHorizontalModel;
 import com.noiprocs.core.model.environment.WorldBoundaryVerticalModel;
 import com.noiprocs.core.model.item.AxeItem;
 import com.noiprocs.core.model.item.ItemModel;
-import com.noiprocs.core.model.mob.CotLeftModel;
 import com.noiprocs.core.model.mob.CotPsychoModel;
-import com.noiprocs.core.model.mob.CotRightModel;
 import com.noiprocs.core.model.mob.character.PlayerModel;
 import com.noiprocs.core.model.plant.BirchTreeModel;
 import com.noiprocs.core.model.plant.PineTreeModel;
@@ -119,17 +117,9 @@ public class WorldModelGenerator {
 
     private void generateCotMob(int number, int startX, int startY, int endX, int endY) {
         while (number-- > 0) {
-            int cotType = random.nextInt(3);
             int modelPosX = random.nextInt(endX - startX) + startX;
             int modelPosY = random.nextInt(endY - startY) + startY;
-
-            Model cotMobModel;
-            if (cotType == 0)
-                cotMobModel = new CotPsychoModel(modelPosX, modelPosY);
-            else if (cotType == 1)
-                cotMobModel = new CotRightModel(modelPosX, modelPosY);
-            else
-                cotMobModel = new CotLeftModel(modelPosX, modelPosY);
+            Model cotMobModel = new CotPsychoModel(modelPosX, modelPosY);
 
             if (gameContext.hitboxManager.isValid(cotMobModel, modelPosX, modelPosY)) {
                 gameContext.modelManager.spawnModel(cotMobModel);

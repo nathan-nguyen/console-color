@@ -61,7 +61,7 @@ public class TreeModel extends Model implements InteractiveInterface {
                         new ItemModel(posX + 1, posY + 2, SaplingItem.class)
                 );
                 GameContext.get().modelManager.addSpawnModel(
-                        new ItemModel(posX + 2, posY + 3, AppleItem.class)
+                        new AppleItemModel(posX + 2, posY + 3)
                 );
             }
         }

@@ -73,6 +73,18 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
                 });
     }
 
+    @Override
+    public boolean isColliding(Model m1, Model m2) {
+        Hitbox hb1 = getHitbox(m1), hb2 = getHitbox(m2);
+        System.out.println(m1 + " " + m2 + " " + hb1.height + " " + hb1.width + " " + hb2.height + " " + hb2.width);
+        return isOverlapped(
+                m1.posX, m1.posY,
+                m1.posX + hb1.height, m1.posY + hb1.width,
+                m2.posX, m2.posY,
+                m2.posX + hb2.height, m2.posY + hb2.width
+        );
+    }
+
     public List<Model> getCollidingModel(Model model, int nextX, int nextY) {
         Hitbox targetHitbox = getHitbox(model);
         return getCollidingModel(model, nextX, nextY, targetHitbox.height, targetHitbox.width);

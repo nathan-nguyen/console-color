@@ -18,6 +18,8 @@ public interface HitboxManagerInterface {
      */
     boolean isValid(Model model, int nextX, int nextY);
 
+    boolean isColliding(Model m1, Model m2);
+
     /**
      * Get list of colliding models if providing model is moved to position (nextX, nextY)
      *

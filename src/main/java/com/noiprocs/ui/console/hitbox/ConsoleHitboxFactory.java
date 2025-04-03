@@ -4,9 +4,7 @@ import com.noiprocs.core.model.building.FenceModel;
 import com.noiprocs.core.model.environment.WorldBoundaryHorizontalModel;
 import com.noiprocs.core.model.environment.WorldBoundaryVerticalModel;
 import com.noiprocs.core.model.item.*;
-import com.noiprocs.core.model.mob.CotLeftModel;
 import com.noiprocs.core.model.mob.CotPsychoModel;
-import com.noiprocs.core.model.mob.CotRightModel;
 import com.noiprocs.core.model.mob.character.PlayerModel;
 import com.noiprocs.core.model.mob.projectile.FlyingWoodLogModel;
 import com.noiprocs.core.model.plant.BirchTreeModel;
@@ -26,9 +24,7 @@ public class ConsoleHitboxFactory {
             };
         }
 
-        if (modelClassName.equals(CotPsychoModel.class.getName())
-                || modelClassName.equals(CotRightModel.class.getName())
-                || modelClassName.equals(CotLeftModel.class.getName())) {
+        if (modelClassName.equals(CotPsychoModel.class.getName())) {
             return new Hitbox(1, 4, MOB, WALL | PLAYER | MOB);
         }
         if (modelClassName.equals(TreeModel.class.getName())) {
