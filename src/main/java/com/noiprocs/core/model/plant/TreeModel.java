@@ -56,10 +56,14 @@ public class TreeModel extends Model implements InteractiveInterface {
                         new ItemModel(posX, posY + 2, SaplingItem.class)
                 );
             }
-            if (seedDrop >= 7)
+            if (seedDrop >= 7) {
                 GameContext.get().modelManager.addSpawnModel(
                         new ItemModel(posX + 1, posY + 2, SaplingItem.class)
                 );
+                GameContext.get().modelManager.addSpawnModel(
+                        new ItemModel(posX + 2, posY + 3, AppleItem.class)
+                );
+            }
         }
         else if (this.isMiddleAge()) {
             GameContext.get().modelManager.addSpawnModel(

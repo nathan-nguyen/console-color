@@ -48,7 +48,9 @@ public class ConsoleHitboxFactory {
             return new Hitbox(2, 2, WALL, WALL);
         }
         if (modelClassName.equals(WoodLogItem.class.getName())
-                || modelClassName.equals(SaplingItem.class.getName())) {
+                || modelClassName.equals(SaplingItem.class.getName())
+                || modelClassName.equals(AppleItem.class.getName())
+        ) {
             return new Hitbox(1, 1, ITEM, WALL);
         }
         if (modelClassName.equals(AxeItem.class.getName())) {

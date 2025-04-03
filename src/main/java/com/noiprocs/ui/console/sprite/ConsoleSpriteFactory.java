@@ -46,6 +46,9 @@ public class ConsoleSpriteFactory {
             if (itemClass == AxeItem.class) {
                 return new AxeItemSprite(model.id);
             }
+            if (itemClass == AppleItem.class) {
+                return new ConsoleSprite(new char[][]{{'o'}}, model.id);
+            }
         }
 
         if (model instanceof MazePartModel) return new MazePartSprite(model.id);
