@@ -3,6 +3,7 @@ package com.noiprocs.core.model.plant;
 import com.noiprocs.core.GameContext;
 import com.noiprocs.core.model.InteractiveInterface;
 import com.noiprocs.core.model.Model;
+import com.noiprocs.core.model.ModelManager;
 import com.noiprocs.core.model.item.*;
 import com.noiprocs.core.model.mob.character.PlayerModel;
 import com.noiprocs.core.util.Helper;
@@ -45,28 +46,29 @@ public class TreeModel extends Model implements InteractiveInterface {
 
         if (!(destroyer instanceof PlayerModel)) return;
 
+        ModelManager modelManager = GameContext.get().modelManager;
         if (this.isOldAge()) {
-            GameContext.get().modelManager.addSpawnModel(new ItemModel(posX, posY, WoodLogItem.class));
-            GameContext.get().modelManager.addSpawnModel(new ItemModel(posX + 1, posY + 1, WoodLogItem.class));
+            modelManager.addSpawnModel(
+                    new ItemModel(posX, posY, WoodLogItem.class),
+                    new ItemModel(posX + 1, posY + 1, WoodLogItem.class),
+                    new AppleItemModel(posX + 2, posY + 3)
+            );
 
             int seedDrop = Helper.random.nextInt(10);
             // 0 drop: 20% - 1 drop: 50% - 2 drop: 30%
             if (seedDrop >= 2) {
-                GameContext.get().modelManager.addSpawnModel(
+                modelManager.addSpawnModel(
                         new ItemModel(posX, posY + 2, SaplingItem.class)
                 );
             }
             if (seedDrop >= 7) {
-                GameContext.get().modelManager.addSpawnModel(
+                modelManager.addSpawnModel(
                         new ItemModel(posX + 1, posY + 2, SaplingItem.class)
-                );
-                GameContext.get().modelManager.addSpawnModel(
-                        new AppleItemModel(posX + 2, posY + 3)
                 );
             }
         }
         else if (this.isMiddleAge()) {
-            GameContext.get().modelManager.addSpawnModel(
+            modelManager.addSpawnModel(
                     new ItemModel(posX, posY, WoodLogItem.class)
             );
         }

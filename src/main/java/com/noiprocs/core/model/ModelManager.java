@@ -89,7 +89,7 @@ public class ModelManager {
 
             logger.debug("serverModelManager.modelMap: {}", serverModelManager.modelMap);
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            logger.error("Failed to load save file!", e);
 
             // Initialize a new Game
             serverModelManager = new ServerModelManager();
@@ -154,8 +154,7 @@ public class ModelManager {
         }
         catch (Exception e) {
             // Reason: Due to serialization object under synchronization, server could send corrupted data.
-            logger.error("Failed to deserialized data from Server!");
-            e.printStackTrace();
+            logger.error("Failed to deserialized data from Server!", e);
         }
     }
 
@@ -232,8 +231,8 @@ public class ModelManager {
     /**
      * This method allows model to be spawned asynchronously.
      */
-    public void addSpawnModel(Model model) {
-        this.spawnModelQueue.offer(model);
+    public void addSpawnModel(Model... models) {
+        this.spawnModelQueue.addAll(Arrays.asList(models));
     }
 
     private ModelChunk getChunkFromModelPosition(int posX, int posY) {

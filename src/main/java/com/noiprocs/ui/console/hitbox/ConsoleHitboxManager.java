@@ -76,7 +76,6 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
     @Override
     public boolean isColliding(Model m1, Model m2) {
         Hitbox hb1 = getHitbox(m1), hb2 = getHitbox(m2);
-        System.out.println(m1 + " " + m2 + " " + hb1.height + " " + hb1.width + " " + hb2.height + " " + hb2.width);
         return isOverlapped(
                 m1.posX, m1.posY,
                 m1.posX + hb1.height, m1.posY + hb1.width,

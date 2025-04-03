@@ -42,10 +42,9 @@ public class CotMobModel extends MobModel {
                 appleItemModel.interact(this, null);
             }
             else {
-                if (posX < appleItemModel.posX) this.setMovingDirection(MovingDirection.DOWN);
-                else if (posX > appleItemModel.posX) this.setMovingDirection(MovingDirection.UP);
-                else if (posY > appleItemModel.posY) this.setMovingDirection(MovingDirection.LEFT);
-                else this.setMovingDirection(MovingDirection.RIGHT);
+                this.setMovingDirection(
+                        getFollowDirection(appleItemModel.posX, appleItemModel.posY)
+                );
             }
         }
     }

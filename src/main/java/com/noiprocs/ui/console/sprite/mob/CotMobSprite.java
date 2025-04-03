@@ -20,18 +20,11 @@ public class CotMobSprite extends ConsoleSprite {
     }
 
     @Override
-    public void render() {
-    }
-
-    @Override
     public char[][] getTexture() {
-        MobModel mm = (MobModel) getModel();
+        MobModel model = (MobModel) getModel();
+        if (model == null) return TEXTURE;
 
-        if (mm == null) return TEXTURE;
-
-        MobModel.MovingDirection movingDirection = mm.getMovingDirection();
-        if (movingDirection == MobModel.MovingDirection.DOWN
-                || movingDirection == MobModel.MovingDirection.LEFT) {
+        if (model.getFacingDirection() == MobModel.MovingDirection.LEFT) {
             return FLIPPED_TEXTURE;
         }
         else return TEXTURE;

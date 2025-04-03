@@ -72,15 +72,13 @@ public class PlayerSprite extends ConsoleSprite {
         if (model.actionCounter == 0) return TEXTURE;
 
         if (model.getCurrentInventoryItem() instanceof AxeItem) {
-            if (facingDirection == MobModel.MovingDirection.UP
-                    || facingDirection == MobModel.MovingDirection.RIGHT) {
+            if (facingDirection == MobModel.MovingDirection.RIGHT) {
                 return RIGHT_AXE_ACTION_PERFORMANCE[(model.actionCounter / 2) % RIGHT_AXE_ACTION_PERFORMANCE.length];
             }
             return LEFT_AXE_ACTION_PERFORMANCE[(model.actionCounter / 2) % LEFT_AXE_ACTION_PERFORMANCE.length];
         }
 
-        if (facingDirection == MobModel.MovingDirection.UP
-                || facingDirection == MobModel.MovingDirection.RIGHT) {
+        if (facingDirection == MobModel.MovingDirection.RIGHT) {
             return PUNCH_ACTION_RIGHT_TEXTURE;
         }
         return PUNCH_ACTION_LEFT_TEXTURE;

@@ -10,7 +10,6 @@ public class AppleItemModel extends ItemModel {
 
     @Override
     public void interact(Model model, Item item) {
-        super.interact(model, item);
         if (model instanceof CotMobModel) {
             this.destroy();
         }

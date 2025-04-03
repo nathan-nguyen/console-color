@@ -2,6 +2,7 @@ package com.noiprocs.core.model.mob;
 
 import com.noiprocs.core.GameContext;
 import com.noiprocs.core.model.Model;
+import com.noiprocs.core.util.Helper;
 
 public abstract class MobModel extends Model {
     private static final int DEFAULT_SKIP_MOVEMENT_FRAME = 2;
@@ -81,12 +82,25 @@ public abstract class MobModel extends Model {
 
     protected void setMovingDirection(MovingDirection movingDirection) {
         this.movingDirection = movingDirection;
-        if (movingDirection != MovingDirection.STOP) {
+        if (movingDirection == MovingDirection.RIGHT || movingDirection == MovingDirection.LEFT) {
             this.facingDirection = movingDirection;
         }
     }
 
     public MovingDirection getFacingDirection() {
         return this.facingDirection;
+    }
+
+    public MovingDirection getFollowDirection(int targetX, int targetY) {
+        int up = Math.max(posX - targetX, 0);
+        int right = Math.max(targetY - posY, 0);
+        int down = Math.max(targetX - posX, 0);
+        int left = Math.max(posY - targetY, 0);
+
+        int v = Helper.random.nextInt(up + right + down + left);
+        if (v < up) return MovingDirection.UP;
+        if (v < up + right) return MovingDirection.RIGHT;
+        if (v < up + right + down) return MovingDirection.DOWN;
+        return MovingDirection.LEFT;
     }
 }
