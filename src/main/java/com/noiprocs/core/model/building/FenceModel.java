@@ -12,11 +12,6 @@ public class FenceModel extends Model implements InteractiveInterface {
     }
 
     @Override
-    public void update(int delta) {
-
-    }
-
-    @Override
     public void interact(Model model, Item item) {
         if (model instanceof PlayerModel) {
             if (((PlayerModel) model).addInventoryItem(new FenceItem(1))) {
@@ -26,7 +21,5 @@ public class FenceModel extends Model implements InteractiveInterface {
     }
 
     @Override
-    protected void destroy() {
-        super.destroy();
-    }
+    public void update(int delta) {}
 }

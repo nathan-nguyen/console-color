@@ -3,6 +3,7 @@ package com.noiprocs.ui.console.hitbox;
 import com.noiprocs.core.GameContext;
 import com.noiprocs.core.hitbox.HitboxManagerInterface;
 import com.noiprocs.core.model.Model;
+import com.noiprocs.core.model.item.ItemModel;
 import com.noiprocs.core.model.mob.projectile.ProjectileModel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,7 +24,9 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
     }
 
     private Hitbox getHitbox(Model model) {
-        String className = model.getClass().getName();
+        String className = (model instanceof ItemModel)
+                ? ((ItemModel) model).itemClass.getName()
+                : model.getClass().getName();
         return hitboxMap.computeIfAbsent(className, key -> ConsoleHitboxFactory.generateHitbox(className));
     }
 

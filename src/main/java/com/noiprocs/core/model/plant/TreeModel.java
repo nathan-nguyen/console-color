@@ -46,21 +46,25 @@ public class TreeModel extends Model implements InteractiveInterface {
         if (!(destroyer instanceof PlayerModel)) return;
 
         if (this.isOldAge()) {
-            GameContext.get().modelManager.addSpawnModel(new WoodLogItemModel(posX, posY));
-            GameContext.get().modelManager.addSpawnModel(new WoodLogItemModel(posX + 1, posY + 1));
+            GameContext.get().modelManager.addSpawnModel(new ItemModel(posX, posY, WoodLogItem.class));
+            GameContext.get().modelManager.addSpawnModel(new ItemModel(posX + 1, posY + 1, WoodLogItem.class));
 
             int seedDrop = Helper.random.nextInt(10);
             // 0 drop: 20% - 1 drop: 50% - 2 drop: 30%
             if (seedDrop >= 2) {
-                GameContext.get().modelManager.addSpawnModel(new SaplingItemModel(posX, posY + 2));
+                GameContext.get().modelManager.addSpawnModel(
+                        new ItemModel(posX, posY + 2, SaplingItem.class)
+                );
             }
             if (seedDrop >= 7)
                 GameContext.get().modelManager.addSpawnModel(
-                        new SaplingItemModel(posX + 1, posY + 2)
+                        new ItemModel(posX + 1, posY + 2, SaplingItem.class)
                 );
         }
         else if (this.isMiddleAge()) {
-            GameContext.get().modelManager.addSpawnModel(new WoodLogItemModel(posX, posY));
+            GameContext.get().modelManager.addSpawnModel(
+                    new ItemModel(posX, posY, WoodLogItem.class)
+            );
         }
     }
 

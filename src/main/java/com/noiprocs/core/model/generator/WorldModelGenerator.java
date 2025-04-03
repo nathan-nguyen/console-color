@@ -6,7 +6,8 @@ import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.building.FenceModel;
 import com.noiprocs.core.model.environment.WorldBoundaryHorizontalModel;
 import com.noiprocs.core.model.environment.WorldBoundaryVerticalModel;
-import com.noiprocs.core.model.item.AxeItemModel;
+import com.noiprocs.core.model.item.AxeItem;
+import com.noiprocs.core.model.item.ItemModel;
 import com.noiprocs.core.model.mob.CotLeftModel;
 import com.noiprocs.core.model.mob.CotPsychoModel;
 import com.noiprocs.core.model.mob.CotRightModel;
@@ -49,7 +50,7 @@ public class WorldModelGenerator {
 
         this.generateCotMob(1000, -80, -40, 316, 554);
 
-        this.generateSupportingObject(AxeItemModel.class, 1, 0, 0, 10, 10);
+        this.generateSupportingObject(ItemModel.class, 1, 0, 0, 10, 10, AxeItem.class);
         this.generateSupportingObject(FenceModel.class, 2, 10, 10, 60, 60);
     }
 
@@ -137,14 +138,17 @@ public class WorldModelGenerator {
         }
     }
 
-    private void generateSupportingObject(Class<?> clazz, int amount, int startX, int startY, int endX, int endY) {
+    private void generateSupportingObject(Class<?> clazz, int amount, int startX, int startY, int endX, int endY, Object... args) {
+        Object[] fullArgs = new Object[args.length + 2];
+        System.arraycopy(args, 0, fullArgs, 2, args.length);
+
         int count = 0;
         for (int i = 0; i < MAX_TRIES; ++i) {
-            int modelPosX = random.nextInt(endX - startX) + startX;
-            int modelPosY = random.nextInt(endY - startY) + startY;
+            fullArgs[0] = random.nextInt(endX - startX) + startX;
+            fullArgs[1] = random.nextInt(endY - startY) + startY;
 
-            Model model = (Model) Helper.createObject(clazz, modelPosX, modelPosY);
-            if (gameContext.hitboxManager.isValid(model, modelPosX, modelPosY)) {
+            Model model = (Model) Helper.createObject(clazz, fullArgs);
+            if (gameContext.hitboxManager.isValid(model, (int) fullArgs[0], (int) fullArgs[1])) {
                 gameContext.modelManager.spawnModel(model);
                 ++count;
                 if (count >= amount) break;

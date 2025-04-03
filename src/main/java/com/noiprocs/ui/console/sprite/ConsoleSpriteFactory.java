@@ -5,9 +5,7 @@ import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.building.FenceModel;
 import com.noiprocs.core.model.environment.WorldBoundaryHorizontalModel;
 import com.noiprocs.core.model.environment.WorldBoundaryVerticalModel;
-import com.noiprocs.core.model.item.AxeItemModel;
-import com.noiprocs.core.model.item.SaplingItemModel;
-import com.noiprocs.core.model.item.WoodLogItemModel;
+import com.noiprocs.core.model.item.*;
 import com.noiprocs.core.model.mob.CotMobModel;
 import com.noiprocs.core.model.mob.projectile.FlyingWoodLogModel;
 import com.noiprocs.core.model.plant.*;
@@ -37,14 +35,17 @@ public class ConsoleSpriteFactory {
         if (model instanceof PineTreeModel) return new PineTreeSprite(model.id);
         if (model instanceof TreeModel) return new TreeSprite(model.id);
 
-        if (model instanceof WoodLogItemModel) {
-            return new ConsoleSprite(new char[][]{{'='}}, model.id);
-        }
-        if (model instanceof SaplingItemModel) {
-            return new ConsoleSprite(new char[][]{{'Y'}}, model.id);
-        }
-        if (model instanceof AxeItemModel) {
-            return new AxeItemSprite(model.id);
+        if (model instanceof ItemModel) {
+            Class<?> itemClass = ((ItemModel) model).itemClass;
+            if (itemClass == WoodLogItem.class) {
+                return new ConsoleSprite(new char[][]{{'='}}, model.id);
+            }
+            if (itemClass == SaplingItem.class) {
+                return new ConsoleSprite(new char[][]{{'Y'}}, model.id);
+            }
+            if (itemClass == AxeItem.class) {
+                return new AxeItemSprite(model.id);
+            }
         }
 
         if (model instanceof MazePartModel) return new MazePartSprite(model.id);

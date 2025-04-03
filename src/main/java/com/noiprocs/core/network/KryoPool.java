@@ -61,6 +61,7 @@ public class KryoPool implements Closeable {
     private static void registerKryo(Kryo kryo) {
         kryo.register(int[].class);
         kryo.register(int[][].class);
+        kryo.register(java.lang.Class.class);
         kryo.register(HashMap.class);
         kryo.register(ConcurrentHashMap.class);
         registerPackage(kryo, "com.noiprocs.core.model");
