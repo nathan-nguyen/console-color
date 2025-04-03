@@ -70,10 +70,10 @@ public class PlayerModel extends MobModel implements LowLatencyModelInterface {
     private void interactAction() {
         List<Model> collidingModels = null;
         if (facingDirection == MovingDirection.RIGHT) {
-            collidingModels = GameContext.get().hitboxManager.getCollidingModel(this, 0, 1, 0, 0, 1, 1);
+            collidingModels = GameContext.get().hitboxManager.getCollidingModel(this, 0, 1, -1, 0, 2, 1);
         }
         else if (facingDirection == MovingDirection.LEFT) {
-            collidingModels = GameContext.get().hitboxManager.getCollidingModel(this, 0, -1, 0, 0, 1, 1);
+            collidingModels = GameContext.get().hitboxManager.getCollidingModel(this, 0, -1, -1, 0, 2, 1);
         }
 
         if (collidingModels != null && !collidingModels.isEmpty()) {
@@ -106,6 +106,10 @@ public class PlayerModel extends MobModel implements LowLatencyModelInterface {
     @Override
     public String toString() {
         return "Player: (" + id + ", " + posX + ", " + posY + ")";
+    }
+
+    public Item getCurrentInventoryItem() {
+        return this.inventory[currentInventorySlot];
     }
 
     public boolean addInventoryItem(Item item) {
