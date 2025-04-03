@@ -10,7 +10,7 @@ public class ProjectileModel extends MobModel implements LowLatencyModelInterfac
 
     public ProjectileModel(int x, int y,
                            int horizontalSpeed, int verticalSpeed,
-                           MobModel.MovingDirection movingDirection,
+                           MovingDirection movingDirection,
                            int ttl,
                            Model spawner) {
         super(x, y, true, horizontalSpeed, verticalSpeed);

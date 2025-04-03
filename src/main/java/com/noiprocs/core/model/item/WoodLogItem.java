@@ -20,7 +20,13 @@ public class WoodLogItem extends Item {
     public void use(Model model) {
         logger.info("{} used {}", model, this);
         MobModel.MovingDirection movingDirection = ((MobModel) model).getFacingDirection();
-        GameContext.get().modelManager.addSpawnModel(new FlyingWoodLogModel(model.posX - 2, model.posY + 1, movingDirection, model));
+        int[] spawnerPoint = GameContext.get().hitboxManager.getSpawnPoint(model, 0, 0);
+        GameContext.get().modelManager.addSpawnModel(
+                new FlyingWoodLogModel(
+                        model.posX + spawnerPoint[0], model.posY + spawnerPoint[1],
+                        movingDirection, model
+                )
+        );
         --amount;
     }
 }

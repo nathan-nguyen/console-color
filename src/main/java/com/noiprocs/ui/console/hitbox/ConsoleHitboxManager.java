@@ -86,6 +86,12 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
         return getCollidingModel(model, nextX, nextY, height, width);
     }
 
+    @Override
+    public int[] getSpawnPoint(Model model, int directionX, int directionY) {
+        Hitbox targetHitbox = getHitbox(model);
+        return targetHitbox.getSpawnPoint(directionX, directionY);
+    }
+
     private List<Model> getCollidingModel(Model model, int nextX, int nextY, int height, int width) {
         Model projectileSpawner = model instanceof ProjectileModel ? ((ProjectileModel) model).getSpawner() : null;
 

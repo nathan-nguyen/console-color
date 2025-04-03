@@ -19,8 +19,14 @@ import static com.noiprocs.ui.console.hitbox.HitboxCategory.*;
 public class ConsoleHitboxFactory {
     public static Hitbox generateHitbox(String modelClassName) {
         if (modelClassName.equals(PlayerModel.class.getName())) {
-            return new Hitbox(1, 3, PLAYER, WALL | MOB);
+            return new Hitbox(1, 3, PLAYER, WALL | MOB) {
+                @Override
+                protected int[] getSpawnPointCenter() {
+                    return new int[]{-2, 1};
+                }
+            };
         }
+
         if (modelClassName.equals(CotPsychoModel.class.getName())
                 || modelClassName.equals(CotRightModel.class.getName())
                 || modelClassName.equals(CotLeftModel.class.getName())) {

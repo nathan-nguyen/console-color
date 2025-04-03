@@ -40,4 +40,14 @@ public interface HitboxManagerInterface {
      * @return List of colliding models.
      */
     List<Model> getCollidingModel(Model model, int directionX, int directionY, int dx, int dy, int height, int width);
+
+    /**
+     * Get spawn point for provided model
+     *
+     * @param model      : Model of spawner.
+     * @param directionX : Spawn directionX
+     * @param directionY : Spawn directionY
+     * @return array size of 2: {spawnPointX, spawnPointY}
+     */
+    int[] getSpawnPoint(Model model, int directionX, int directionY);
 }
