@@ -3,6 +3,7 @@ package com.noiprocs.ui.console.hitbox;
 import com.noiprocs.core.model.building.FenceModel;
 import com.noiprocs.core.model.environment.WorldBoundaryHorizontalModel;
 import com.noiprocs.core.model.environment.WorldBoundaryVerticalModel;
+import com.noiprocs.core.model.item.AxeItemModel;
 import com.noiprocs.core.model.item.SaplingItemModel;
 import com.noiprocs.core.model.item.WoodLogItemModel;
 import com.noiprocs.core.model.mob.CotLeftModel;
@@ -52,6 +53,10 @@ public class ConsoleHitboxFactory {
                 || modelClassName.equals(WoodLogItemModel.class.getName())) {
             return new Hitbox(1, 1, ITEM, WALL);
         }
+        if (modelClassName.equals(AxeItemModel.class.getName())) {
+            return new Hitbox(3, 3, ITEM, WALL);
+        }
+
         if (modelClassName.equals(FlyingWoodLogModel.class.getName())) {
             return new Hitbox(1, 1, PROJECTILE, MASK_ALL);
         }

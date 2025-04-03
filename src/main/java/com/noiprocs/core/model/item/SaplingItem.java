@@ -5,10 +5,10 @@ import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.plant.TreeModel;
 
 public class SaplingItem extends Item {
-    private static final String SAPLING_ITEM_NAME = "Sapling";
+    private static final String ITEM_NAME = "Sapling";
 
     public SaplingItem(int amount) {
-        super(SAPLING_ITEM_NAME, amount);
+        super(ITEM_NAME, amount);
     }
 
     @Override

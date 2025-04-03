@@ -6,6 +6,7 @@ import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.building.FenceModel;
 import com.noiprocs.core.model.environment.WorldBoundaryHorizontalModel;
 import com.noiprocs.core.model.environment.WorldBoundaryVerticalModel;
+import com.noiprocs.core.model.item.AxeItemModel;
 import com.noiprocs.core.model.mob.CotLeftModel;
 import com.noiprocs.core.model.mob.CotPsychoModel;
 import com.noiprocs.core.model.mob.CotRightModel;
@@ -22,6 +23,7 @@ import java.util.Random;
 
 public class WorldModelGenerator {
     private static final Logger logger = LogManager.getLogger(WorldModelGenerator.class);
+    private static final int MAX_TRIES = 10;
 
     private final GameContext gameContext;
     private final Random random = new Random();
@@ -134,16 +136,26 @@ public class WorldModelGenerator {
     }
 
     private void generateSupportingObject(int startX, int startY, int endX, int endY) {
-        while (true) {
+        for (int i = 0; i < MAX_TRIES; ++i) {
             int modelPosX = random.nextInt(endX - startX) + startX;
             int modelPosY = random.nextInt(endY - startY) + startY;
 
-            Model fenceModel = new FenceModel(modelPosX, modelPosY);
-            if (gameContext.hitboxManager.isValid(fenceModel, modelPosX, modelPosY)) {
-                gameContext.modelManager.spawnModel(fenceModel);
+            Model model = new FenceModel(modelPosX, modelPosY);
+            if (gameContext.hitboxManager.isValid(model, modelPosX, modelPosY)) {
+                gameContext.modelManager.spawnModel(model);
                 break;
             }
         }
 
+        for (int i = 0; i < MAX_TRIES; ++i) {
+            int modelPosX = random.nextInt(endX - startX) + startX;
+            int modelPosY = random.nextInt(endY - startY) + startY;
+
+            Model model = new AxeItemModel(modelPosX, modelPosY);
+            if (gameContext.hitboxManager.isValid(model, modelPosX, modelPosY)) {
+                gameContext.modelManager.spawnModel(model);
+                break;
+            }
+        }
     }
 }

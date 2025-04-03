@@ -5,6 +5,7 @@ import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.building.FenceModel;
 import com.noiprocs.core.model.environment.WorldBoundaryHorizontalModel;
 import com.noiprocs.core.model.environment.WorldBoundaryVerticalModel;
+import com.noiprocs.core.model.item.AxeItemModel;
 import com.noiprocs.core.model.item.SaplingItemModel;
 import com.noiprocs.core.model.item.WoodLogItemModel;
 import com.noiprocs.core.model.mob.CotMobModel;
@@ -12,10 +13,8 @@ import com.noiprocs.core.model.mob.projectile.FlyingWoodLogModel;
 import com.noiprocs.core.model.plant.*;
 import com.noiprocs.core.model.environment.MazePartModel;
 import com.noiprocs.core.model.mob.character.PlayerModel;
-import com.noiprocs.ui.console.sprite.building.FenceSprite;
 import com.noiprocs.ui.console.sprite.environment.WorldBoundarySprite;
-import com.noiprocs.ui.console.sprite.item.SaplingItemSprite;
-import com.noiprocs.ui.console.sprite.item.WoodLogItemSprite;
+import com.noiprocs.ui.console.sprite.item.AxeItemSprite;
 import com.noiprocs.ui.console.sprite.mob.CotMobSprite;
 import com.noiprocs.ui.console.sprite.mob.projectile.FlyingWoodLogSprite;
 import com.noiprocs.ui.console.sprite.plant.*;
@@ -38,8 +37,15 @@ public class ConsoleSpriteFactory {
         if (model instanceof PineTreeModel) return new PineTreeSprite(model.id);
         if (model instanceof TreeModel) return new TreeSprite(model.id);
 
-        if (model instanceof WoodLogItemModel) return new WoodLogItemSprite(model.id);
-        if (model instanceof SaplingItemModel) return new SaplingItemSprite(model.id);
+        if (model instanceof WoodLogItemModel) {
+            return new ConsoleSprite(new char[][]{{'='}}, model.id);
+        }
+        if (model instanceof SaplingItemModel) {
+            return new ConsoleSprite(new char[][]{{'Y'}}, model.id);
+        }
+        if (model instanceof AxeItemModel) {
+            return new AxeItemSprite(model.id);
+        }
 
         if (model instanceof MazePartModel) return new MazePartSprite(model.id);
         if (model instanceof WorldBoundaryVerticalModel) return new WorldBoundarySprite(model.id, 40, 1);
@@ -47,7 +53,15 @@ public class ConsoleSpriteFactory {
 
         if (model instanceof CotMobModel) return new CotMobSprite(model.id);
 
-        if (model instanceof FenceModel) return new FenceSprite(model.id);
+        if (model instanceof FenceModel) {
+            return new ConsoleSprite(
+                    new char[][]{
+                            {'#','#'},
+                            {'#','#'},
+                    },
+                    model.id
+            );
+        }
 
         if (model instanceof FlyingWoodLogModel) {
             return new FlyingWoodLogSprite(model.id);

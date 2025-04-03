@@ -6,13 +6,12 @@ import com.noiprocs.ui.console.sprite.ConsoleSprite;
 import static com.noiprocs.core.model.environment.MazePartModel.MAZE_PART_DIMENSION;
 
 public class MazePartSprite extends ConsoleSprite {
-    private static final int OFFSET_X = 0, OFFSET_Y = 0;
     private static final int WALL_THICKNESS_HEIGHT = 4;
     private static final int WALL_THICKNESS_WIDTH = 8;
     private static final char WALL_TEXTURE = '░';
 
     public MazePartSprite(String id) {
-        super(EMPTY_TEXTURE, id, OFFSET_X, OFFSET_Y);
+        super(EMPTY_TEXTURE, id);
 
         MazePartModel mpm = (MazePartModel) getModel();
 
@@ -34,9 +33,5 @@ public class MazePartSprite extends ConsoleSprite {
                 mpm.offsetX + mpm.relativePosX * WALL_THICKNESS_HEIGHT,
                 mpm.offsetY + mpm.relativePosY * WALL_THICKNESS_WIDTH
         );
-    }
-
-    @Override
-    public void render() {
     }
 }

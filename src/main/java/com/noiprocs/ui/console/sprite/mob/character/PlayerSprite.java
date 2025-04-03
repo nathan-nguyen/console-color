@@ -53,10 +53,6 @@ public class PlayerSprite extends ConsoleSprite {
     }
 
     @Override
-    public void render() {
-    }
-
-    @Override
     public char[][] getTexture() {
         PlayerModel model = (PlayerModel) getModel();
         MobModel.MovingDirection facingDirection = model.getFacingDirection();

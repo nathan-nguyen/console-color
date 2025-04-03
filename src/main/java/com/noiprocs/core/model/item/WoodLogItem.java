@@ -9,11 +9,10 @@ import org.apache.logging.log4j.Logger;
 
 public class WoodLogItem extends Item {
     private static final Logger logger = LogManager.getLogger(WoodLogItem.class);
-
-    private static final String WOOD_LOG_ITEM_NAME = "Wood Log";
+    private static final String ITEM_NAME = "Wood Log";
 
     public WoodLogItem(int amount) {
-        super(WOOD_LOG_ITEM_NAME, amount);
+        super(ITEM_NAME, amount);
     }
 
     @Override
