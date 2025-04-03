@@ -122,13 +122,17 @@ public class GameContext {
             modelManager.saveGameData();
         }
 
-        // Synchronize data with modelManager
-        statsTime = System.currentTimeMillis();
-        spriteManager.update(dt);
-        MetricCollector.spriteManagerRenderMs.add(System.currentTimeMillis() - statsTime);
+        if (!isServer) {
+            // Synchronize data with modelManager
+            statsTime = System.nanoTime();
+            spriteManager.update(dt);
+            MetricCollector.spriteManagerRenderNs.add(System.nanoTime() - statsTime);
 
-        // Render graphics
-        if (!Config.DISABLE_PLAYER) gameScreen.render(dt);
+            // Render graphics
+            statsTime = System.nanoTime();
+            if (!Config.DISABLE_PLAYER) gameScreen.render(dt);
+            MetricCollector.gameScreenRenderNs.add(System.nanoTime() - statsTime);
+        }
 
         if (Config.DEBUG_MODE && worldCounter % Config.MONITOR_DEBUG_DELAY == 0) {
             MetricCollector.printMetrics();
