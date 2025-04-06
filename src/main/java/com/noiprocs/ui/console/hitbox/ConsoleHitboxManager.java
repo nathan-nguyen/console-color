@@ -59,7 +59,7 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
 
         return gameContext.modelManager.getSurroundedChunk(model)
                 .stream()
-                .flatMap(modelChunkManager -> modelChunkManager.map.values().stream())
+                .flatMap(modelChunk -> modelChunk.map.values().stream())
                 .noneMatch(surroundedModel -> {
                     if (surroundedModel == model || surroundedModel == projectileSpawner) return false;
 
@@ -113,7 +113,7 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
         int endX = nextX + height, endY = nextY + width;
 
         return gameContext.modelManager.getSurroundedChunk(model).stream()
-                .flatMap(modelChunkManager -> modelChunkManager.map.values().stream())
+                .flatMap(modelChunk -> modelChunk.map.values().stream())
                 .filter(surroundedModel -> {
                     if (surroundedModel == model || surroundedModel == projectileSpawner) return false;
 

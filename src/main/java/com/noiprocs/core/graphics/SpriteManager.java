@@ -28,9 +28,7 @@ public abstract class SpriteManager {
 
         Map<String, Model> modelMap = new HashMap<>();
         gameContext.modelManager.getLocalChunk().forEach(
-                modelChunkManager -> modelMap.putAll(
-                        modelChunkManager.map
-                )
+                modelChunk -> modelMap.putAll(modelChunk.map)
         );
 
         List<String> removedKeyList = new ArrayList<>();
