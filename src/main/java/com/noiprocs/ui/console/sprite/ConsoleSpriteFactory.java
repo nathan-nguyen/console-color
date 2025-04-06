@@ -3,6 +3,7 @@ package com.noiprocs.ui.console.sprite;
 import com.noiprocs.core.graphics.RenderableSprite;
 import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.building.FenceModel;
+import com.noiprocs.core.model.environment.WallTrapModel;
 import com.noiprocs.core.model.environment.WorldBoundaryHorizontalModel;
 import com.noiprocs.core.model.environment.WorldBoundaryVerticalModel;
 import com.noiprocs.core.model.item.*;
@@ -11,6 +12,7 @@ import com.noiprocs.core.model.mob.projectile.FlyingWoodLogModel;
 import com.noiprocs.core.model.plant.*;
 import com.noiprocs.core.model.environment.MazePartModel;
 import com.noiprocs.core.model.mob.character.PlayerModel;
+import com.noiprocs.ui.console.sprite.environment.WallTrapSprite;
 import com.noiprocs.ui.console.sprite.environment.WorldBoundarySprite;
 import com.noiprocs.ui.console.sprite.item.AxeItemSprite;
 import com.noiprocs.ui.console.sprite.mob.CotMobSprite;
@@ -52,6 +54,8 @@ public class ConsoleSpriteFactory {
         }
 
         if (model instanceof MazePartModel) return new MazePartSprite(model.id);
+        if (model instanceof WallTrapModel) return new WallTrapSprite(model.id);
+
         if (model instanceof WorldBoundaryVerticalModel) return new WorldBoundarySprite(model.id, 40, 1);
         if (model instanceof WorldBoundaryHorizontalModel) return new WorldBoundarySprite(model.id, 1, 60);
 

@@ -1,8 +1,17 @@
 package com.noiprocs.ui.console.hitbox;
 
+import com.noiprocs.core.model.Model;
+
 public class Hitbox {
-    public final int height, width;
+    protected static final int NO_HITBOX_HEIGHT = 0;
+    protected static final int NO_HITBOX_WIDTH = 0;
+
+    protected final int height, width;
     public final int categoryBit, maskBit;
+
+    public Hitbox(int categoryBit, int maskBit) {
+        this(NO_HITBOX_HEIGHT, NO_HITBOX_WIDTH, categoryBit, maskBit);
+    }
 
     public Hitbox(int height, int width, int categoryBit, int maskBit) {
         this.categoryBit = categoryBit;
@@ -37,5 +46,13 @@ public class Hitbox {
         if (directionX == 1 && directionY == 0) return getSpawnPointBottom();
         if (directionX == 0 && directionY == -1) return getSpawnPointLeft();
         return getSpawnPointCenter();
+    }
+
+    public int getHeight(Model model) {
+        return this.height;
+    }
+
+    public int getWidth(Model model) {
+        return this.width;
     }
 }

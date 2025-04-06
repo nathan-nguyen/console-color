@@ -2,6 +2,7 @@ package com.noiprocs.ui.console.hitbox;
 
 import com.noiprocs.core.model.building.FenceModel;
 import com.noiprocs.core.model.environment.MazePartModel;
+import com.noiprocs.core.model.environment.WallTrapModel;
 import com.noiprocs.core.model.environment.WorldBoundaryHorizontalModel;
 import com.noiprocs.core.model.environment.WorldBoundaryVerticalModel;
 import com.noiprocs.core.model.item.*;
@@ -11,6 +12,7 @@ import com.noiprocs.core.model.mob.projectile.FlyingWoodLogModel;
 import com.noiprocs.core.model.plant.BirchTreeModel;
 import com.noiprocs.core.model.plant.PineTreeModel;
 import com.noiprocs.core.model.plant.TreeModel;
+import com.noiprocs.ui.console.hitbox.environment.WallTrapHitbox;
 import com.noiprocs.ui.console.sprite.environment.MazePartSprite;
 
 import static com.noiprocs.ui.console.hitbox.HitboxCategory.*;
@@ -65,6 +67,10 @@ public class ConsoleHitboxFactory {
                     WALL, WALL | PLAYER | MOB | PROJECTILE
             );
         }
+        if (modelClassName.equals(WallTrapModel.class.getName())) {
+            return new WallTrapHitbox();
+        }
+
         throw new UnsupportedOperationException("Generating hitbox for " + modelClassName + " is not supported!");
     }
 }

@@ -53,6 +53,8 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
     @Override
     public boolean isValid(Model model, int nextX, int nextY) {
         Hitbox modelHitbox = getHitbox(model);
+        int endX = nextX + modelHitbox.getHeight(model);
+        int endY = nextY + modelHitbox.getWidth(model);
         Model projectileSpawner = model instanceof ProjectileModel ? ((ProjectileModel) model).getSpawner() : null;
 
         return gameContext.modelManager.getSurroundedChunk(model)
@@ -65,10 +67,10 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
                     if ((modelHitbox.maskBit & surroundedHitbox.categoryBit) == 0) return false;
 
                     return isOverlapped(
-                            nextX, nextY,
-                            nextX + modelHitbox.height, nextY + modelHitbox.width,
+                            nextX, nextY, endX, endY,
                             surroundedModel.posX, surroundedModel.posY,
-                            surroundedModel.posX + surroundedHitbox.height, surroundedModel.posY + surroundedHitbox.width
+                            surroundedModel.posX + surroundedHitbox.getHeight(surroundedModel),
+                            surroundedModel.posY + surroundedHitbox.getWidth(surroundedModel)
                     );
                 });
     }
@@ -78,15 +80,15 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
         Hitbox hb1 = getHitbox(m1), hb2 = getHitbox(m2);
         return isOverlapped(
                 m1.posX, m1.posY,
-                m1.posX + hb1.height, m1.posY + hb1.width,
+                m1.posX + hb1.getHeight(m1), m1.posY + hb1.getWidth(m1),
                 m2.posX, m2.posY,
-                m2.posX + hb2.height, m2.posY + hb2.width
+                m2.posX + hb2.getHeight(m2), m2.posY + hb2.getWidth(m2)
         );
     }
 
     public List<Model> getCollidingModel(Model model, int nextX, int nextY) {
         Hitbox targetHitbox = getHitbox(model);
-        return getCollidingModel(model, nextX, nextY, targetHitbox.height, targetHitbox.width);
+        return getCollidingModel(model, nextX, nextY, targetHitbox.getHeight(model), targetHitbox.getWidth(model));
     }
 
     @Override
@@ -95,7 +97,7 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
     public List<Model> getCollidingModel(Model model, int directionX, int directionY, int dx, int dy, int height, int width) {
         Hitbox targetHitbox = getHitbox(model);
         int nextX = model.posX + dx;
-        int nextY = model.posY + dy + (directionY >= 0 ? targetHitbox.width: -width);
+        int nextY = model.posY + dy + (directionY >= 0 ? targetHitbox.getWidth(model): -width);
 
         return getCollidingModel(model, nextX, nextY, height, width);
     }
@@ -108,6 +110,7 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
 
     private List<Model> getCollidingModel(Model model, int nextX, int nextY, int height, int width) {
         Model projectileSpawner = model instanceof ProjectileModel ? ((ProjectileModel) model).getSpawner() : null;
+        int endX = nextX + height, endY = nextY + width;
 
         return gameContext.modelManager.getSurroundedChunk(model).stream()
                 .flatMap(modelChunkManager -> modelChunkManager.map.values().stream())
@@ -116,9 +119,10 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
 
                     Hitbox surroundedHitbox = getHitbox(surroundedModel);
                     return isOverlapped(
-                            nextX, nextY, nextX + height, nextY + width,
+                            nextX, nextY, endX, endY,
                             surroundedModel.posX, surroundedModel.posY,
-                            surroundedModel.posX + surroundedHitbox.height, surroundedModel.posY + surroundedHitbox.width
+                            surroundedModel.posX + surroundedHitbox.getHeight(surroundedModel),
+                            surroundedModel.posY + surroundedHitbox.getWidth(surroundedModel)
                     );
                 })
                 .collect(Collectors.toList());
