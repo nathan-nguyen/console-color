@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static com.noiprocs.core.model.environment.MazePartModel.*;
-
 public class MazeModelGenerator {
     // CENTER_MODE = true if destination is in the center
     private static final boolean CENTRE_MODE = false;
@@ -102,7 +100,7 @@ public class MazeModelGenerator {
                 expandableList.remove(Integer.valueOf(next));
 
                 // No space left
-                if (expandableList.size() == 0) break;
+                if (expandableList.isEmpty()) break;
 
                 next = expandableList.get(random.nextInt(expandableList.size()));
                 ++order;
@@ -179,21 +177,11 @@ public class MazeModelGenerator {
     public List<Model> getMazePartModelList() {
         List<Model> result = new ArrayList<>();
 
-        for (int i = 0; i < dimension / MAZE_PART_DIMENSION; ++i) {
-            for (int j = 0; j < dimension / MAZE_PART_DIMENSION; ++j) {
-                int[][] partData = new int[MAZE_PART_DIMENSION][MAZE_PART_DIMENSION];
-                for (int x = 0; x < MAZE_PART_DIMENSION; ++x) {
-                    for (int y = 0; y < MAZE_PART_DIMENSION; ++y) {
-                        partData[x][y] = map[i * MAZE_PART_DIMENSION + x][j * MAZE_PART_DIMENSION + y];
-                    }
-                }
-                MazePartModel mpm = new MazePartModel(
-                        offsetX, offsetY,
-                        MAZE_PART_DIMENSION * i,
-                        MAZE_PART_DIMENSION * j,
-                        partData
-                );
-                result.add(mpm);
+        for (int i = 0; i < dimension; ++i) {
+            for (int j = 0; j < dimension; ++j) {
+                if (map[i][j] > 0) continue;
+                MazePartModel model = new MazePartModel(offsetX, offsetY, i, j);
+                result.add(model);
             }
         }
         return result;

@@ -41,7 +41,7 @@ public class WorldModelGenerator {
         this.generateWorldBoundary(-80, -40, 10, 10);
 
         // Generate maze
-        // this.generateMaze(10, 10, 40);
+        this.generateMaze(10, 10, 40);
 
         // Generate trees
         this.generateTree(1000, -80, -40, 316, 554);
