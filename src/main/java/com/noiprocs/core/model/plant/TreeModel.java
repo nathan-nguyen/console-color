@@ -1,6 +1,7 @@
 package com.noiprocs.core.model.plant;
 
 import com.noiprocs.core.GameContext;
+import com.noiprocs.core.model.DurableModel;
 import com.noiprocs.core.model.InteractiveInterface;
 import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.ModelManager;
@@ -8,13 +9,11 @@ import com.noiprocs.core.model.item.*;
 import com.noiprocs.core.model.mob.character.PlayerModel;
 import com.noiprocs.core.util.Helper;
 
-public class TreeModel extends Model implements InteractiveInterface {
+public class TreeModel extends DurableModel implements InteractiveInterface {
     private static final int MAX_DURABILITY = 20;
 
     private static final int MATURE_AGE = 3600;
     private static final int MIDDLE_AGE = 1800;
-
-    private int durability = MAX_DURABILITY;
 
     public int treeAge;
 
@@ -23,7 +22,7 @@ public class TreeModel extends Model implements InteractiveInterface {
     }
 
     public TreeModel(int x, int y, int treeAge) {
-        super(x, y, true);
+        super(x, y, true, MAX_DURABILITY);
         this.treeAge = treeAge;
     }
 
@@ -35,15 +34,15 @@ public class TreeModel extends Model implements InteractiveInterface {
     @Override
     public void interact(Model model, Item item) {
         if (item instanceof AxeItem) {
-            durability -= 4;
+            this.updateHealth(-4);
         }
-        else --durability;
-        if (durability == 0 || !this.isOldAge()) this.destroy(model);
+        else {
+            this.updateHealth(-1);
+        }
+        if (this.getHealth() <= 0 || !this.isOldAge()) this.dropItem(model);
     }
 
-    private void destroy(Model destroyer) {
-        this.destroy();
-
+    private void dropItem(Model destroyer) {
         if (!(destroyer instanceof PlayerModel)) return;
 
         ModelManager modelManager = GameContext.get().modelManager;

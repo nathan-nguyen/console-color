@@ -113,7 +113,7 @@ public class ConsoleGameScreen implements GameScreenInterface {
         if (item != null) inventorySb.append(item.name).append(": ").append(item.amount);
 
         return playerModel.id + " - [" + playerModel.posX + ", " + playerModel.posY +
-                "] - Inventory: [" + inventorySb + "] - FPS: " + MetricCollector.getAvgFps();
+                "] - Health: " + playerModel.getHealth() + " - Inventory: [" + inventorySb + "] - FPS: " + MetricCollector.getAvgFps();
     }
 
     private String convertMapToString(PlayerModel playerModel) {

@@ -5,6 +5,7 @@ import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.mob.MobModel;
 
 public class ProjectileModel extends MobModel implements LowLatencyModelInterface {
+    private static final int MAX_HEALTH = 1;
     private int ttl;
     private final Model spawner;
 
@@ -13,7 +14,7 @@ public class ProjectileModel extends MobModel implements LowLatencyModelInterfac
                            MovingDirection movingDirection,
                            int ttl,
                            Model spawner) {
-        super(x, y, true, horizontalSpeed, verticalSpeed);
+        super(x, y, true, MAX_HEALTH, horizontalSpeed, verticalSpeed);
         this.ttl = ttl;
         this.spawner = spawner;
         this.setMovingDirection(movingDirection);

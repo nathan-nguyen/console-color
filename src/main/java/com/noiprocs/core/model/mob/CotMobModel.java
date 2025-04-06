@@ -9,11 +9,12 @@ import java.util.List;
 import java.util.Optional;
 
 public class CotMobModel extends MobModel {
+    private static final int MAX_HEALTH = 20;
     private static final int HORIZONTAL_SPEED = 1;
     private static final int VERTICAL_SPEED = 1;
 
     public CotMobModel(int x, int y) {
-        super(x, y, true, HORIZONTAL_SPEED, VERTICAL_SPEED);
+        super(x, y, true, MAX_HEALTH, HORIZONTAL_SPEED, VERTICAL_SPEED);
         this.setMovingDirection(MovingDirection.LEFT);
     }
 

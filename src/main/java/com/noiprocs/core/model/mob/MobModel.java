@@ -1,10 +1,10 @@
 package com.noiprocs.core.model.mob;
 
 import com.noiprocs.core.GameContext;
-import com.noiprocs.core.model.Model;
+import com.noiprocs.core.model.DurableModel;
 import com.noiprocs.core.util.Helper;
 
-public abstract class MobModel extends Model {
+public abstract class MobModel extends DurableModel {
     private static final int DEFAULT_SKIP_MOVEMENT_FRAME = 2;
     public enum MovingDirection {
         STOP, UP, DOWN, LEFT, RIGHT
@@ -20,9 +20,10 @@ public abstract class MobModel extends Model {
     public MobModel(int x,
                     int y,
                     boolean isVisible,
+                    int health,
                     int horizontalSpeed,
                     int verticalSpeed) {
-        super(x, y, isVisible);
+        super(x, y, isVisible, health);
         this.horizontalSpeed = horizontalSpeed;
         this.verticalSpeed = verticalSpeed;
     }
