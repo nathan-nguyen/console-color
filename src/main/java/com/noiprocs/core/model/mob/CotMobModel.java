@@ -2,13 +2,16 @@ package com.noiprocs.core.model.mob;
 
 import com.noiprocs.core.GameContext;
 import com.noiprocs.core.hitbox.HitboxManagerInterface;
+import com.noiprocs.core.model.InteractiveInterface;
 import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.item.AppleItemModel;
+import com.noiprocs.core.model.item.AxeItem;
+import com.noiprocs.core.model.item.Item;
 
 import java.util.List;
 import java.util.Optional;
 
-public class CotMobModel extends MobModel {
+public class CotMobModel extends MobModel implements InteractiveInterface {
     private static final int MAX_HEALTH = 20;
     private static final int HORIZONTAL_SPEED = 1;
     private static final int VERTICAL_SPEED = 1;
@@ -47,6 +50,16 @@ public class CotMobModel extends MobModel {
                         getFollowDirection(appleItemModel.posX, appleItemModel.posY)
                 );
             }
+        }
+    }
+
+    @Override
+    public void interact(Model model, Item item) {
+        if (item instanceof AxeItem) {
+            this.updateHealth(-4);
+        }
+        else {
+            this.updateHealth(-1);
         }
     }
 }
