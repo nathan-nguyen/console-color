@@ -1,5 +1,6 @@
 package com.noiprocs.ui.console.sprite.mob;
 
+import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.mob.MobModel;
 import com.noiprocs.ui.console.sprite.ConsoleSprite;
 
@@ -15,16 +16,15 @@ public class CotMobSprite extends ConsoleSprite {
             {'/', '\\', '/', '\\'}
     };
 
-    public CotMobSprite(String id) {
-        super(TEXTURE, id, OFFSET_X, OFFSET_Y);
+    public CotMobSprite() {
+        super(TEXTURE, OFFSET_X, OFFSET_Y);
     }
 
     @Override
-    public char[][] getTexture() {
-        MobModel model = (MobModel) getModel();
+    public char[][] getTexture(Model model) {
         if (model == null) return TEXTURE;
 
-        if (model.getFacingDirection() == MobModel.MovingDirection.LEFT) {
+        if (((MobModel) model).getFacingDirection() == MobModel.MovingDirection.LEFT) {
             return FLIPPED_TEXTURE;
         }
         else return TEXTURE;

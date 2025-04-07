@@ -123,11 +123,6 @@ public class GameContext {
         }
 
         if (!isServer) {
-            // Synchronize data with modelManager
-            statsTime = System.nanoTime();
-            spriteManager.update(dt);
-            MetricCollector.spriteManagerRenderNs.add(System.nanoTime() - statsTime);
-
             // Render graphics
             statsTime = System.nanoTime();
             if (!Config.DISABLE_PLAYER) gameScreen.render(dt);

@@ -1,5 +1,6 @@
 package com.noiprocs.ui.console.sprite.mob.projectile;
 
+import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.mob.projectile.ProjectileModel;
 import com.noiprocs.ui.console.sprite.ConsoleSprite;
 
@@ -9,13 +10,12 @@ public class FlyingWoodLogSprite extends ConsoleSprite {
             {{'|'}}
     };
 
-    public FlyingWoodLogSprite(String id) {
-        super(ANIMATION_TEXTURES[0], id);
+    public FlyingWoodLogSprite() {
+        super(EMPTY_TEXTURE);
     }
 
     @Override
-    public char[][] getTexture() {
-        ProjectileModel model = (ProjectileModel) getModel();
-        return ANIMATION_TEXTURES[model.getTtl() % ANIMATION_TEXTURES.length];
+    public char[][] getTexture(Model model) {
+        return ANIMATION_TEXTURES[((ProjectileModel) model).getTtl() % ANIMATION_TEXTURES.length];
     }
 }

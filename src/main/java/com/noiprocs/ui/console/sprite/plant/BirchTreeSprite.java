@@ -11,7 +11,7 @@ public class BirchTreeSprite extends TreeSprite {
             {0, 0, 0,'|', '|', 0, 0, 0}
     };
 
-    public BirchTreeSprite(String id) {
-        super(TEXTURE, id, OFFSET_X, OFFSET_Y);
+    public BirchTreeSprite() {
+        super(TEXTURE, OFFSET_X, OFFSET_Y);
     }
 }

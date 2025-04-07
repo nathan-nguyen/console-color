@@ -1,6 +1,5 @@
 package com.noiprocs.ui.console.sprite.environment;
 
-import com.noiprocs.core.model.environment.MazePartModel;
 import com.noiprocs.ui.console.sprite.ConsoleSprite;
 
 public class MazePartSprite extends ConsoleSprite {
@@ -17,13 +16,7 @@ public class MazePartSprite extends ConsoleSprite {
         }
     }
 
-    public MazePartSprite(String id) {
-        super(TEXTURE, id);
-
-        MazePartModel model = (MazePartModel) getModel();
-        model.setPosition(
-                model.offsetX + model.relativePosX * WALL_THICKNESS_HEIGHT,
-                model.offsetY + model.relativePosY * WALL_THICKNESS_WIDTH
-        );
+    public MazePartSprite() {
+        super(TEXTURE);
     }
 }

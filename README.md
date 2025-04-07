@@ -41,7 +41,7 @@ graph LR
 
     ModelManager -.-> |Check collision| HitboxManager
 
-    SpriteManager -.-> ModelManager;
+    GameScreen -.-> ModelManager;
   end
 ```
 

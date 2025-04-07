@@ -3,8 +3,8 @@ package com.noiprocs.ui.console.sprite.environment;
 import com.noiprocs.ui.console.sprite.ConsoleSprite;
 
 public class WorldBoundarySprite extends ConsoleSprite {
-    public WorldBoundarySprite(String id, int height, int width) {
-        super(EMPTY_TEXTURE, id, OFFSET_X, OFFSET_Y);
+    public WorldBoundarySprite(int height, int width) {
+        super(EMPTY_TEXTURE, OFFSET_X, OFFSET_Y);
 
         char[][] worldBoundaryTexture = new char[height][width];
 

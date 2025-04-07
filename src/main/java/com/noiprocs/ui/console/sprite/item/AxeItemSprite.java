@@ -10,7 +10,7 @@ public class AxeItemSprite extends ConsoleSprite {
             {0, '|', 0}
     };
 
-    public AxeItemSprite(String id) {
-        super(TEXTURE, id, OFFSET_X, OFFSET_Y);
+    public AxeItemSprite() {
+        super(TEXTURE, OFFSET_X, OFFSET_Y);
     }
 }

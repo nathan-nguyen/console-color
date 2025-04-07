@@ -3,14 +3,15 @@ package com.noiprocs.ui.console;
 import com.noiprocs.core.GameContext;
 import com.noiprocs.core.config.Config;
 import com.noiprocs.core.graphics.GameScreenInterface;
-import com.noiprocs.core.graphics.RenderableSprite;
 import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.item.Item;
 import com.noiprocs.core.model.mob.character.PlayerModel;
 import com.noiprocs.core.util.MetricCollector;
 import com.noiprocs.ui.console.sprite.ConsoleSprite;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.noiprocs.ui.console.ConsoleUIConfig.HEIGHT;
 import static com.noiprocs.ui.console.ConsoleUIConfig.WIDTH;
@@ -26,50 +27,32 @@ public class ConsoleGameScreen implements GameScreenInterface {
 
     @Override
     public void render(int delta) {
-        RenderableSprite playerSprite = gameContext.spriteManager.renderableSpriteMap.get(gameContext.username);
-        if (playerSprite == null) return;
-
-        PlayerModel playerModel = (PlayerModel) playerSprite.getModel();
-
+        Model playerModel = gameContext.modelManager.getModel(gameContext.username);
         // Only render when playerModel is existing
         if (playerModel == null) return;
 
         // Render map
-        System.out.println(getScreenContentInString(playerModel));
+        System.out.println(getScreenContentInString((PlayerModel) playerModel));
     }
 
     protected String getScreenContentInString(PlayerModel playerModel) {
         // Get list of visible objects not far from player
-        List<RenderableSprite> renderableSpriteList = gameContext.spriteManager
-                .getVisibleRenderableObjectListWithinRange(
-                        playerModel.posX,
-                        playerModel.posY,
-                        Config.RENDER_RANGE
-                );
-
-        /* Render order:
-         * - Models with smaller posX render first.
-         */
-        renderableSpriteList.sort(
-                (u, v) -> {
-                    Model uModel = u.getModel();
-                    Model vModel = v.getModel();
-                    if (uModel == null) return 1;
-                    if (vModel == null) return -1;
-                    return Integer.compare(uModel.posX, vModel.posX);
-                }
-        );
-
+        // Render order: Models with smaller posX render first.
         int offsetX = playerModel.posX - HEIGHT / 2;
         int offsetY = playerModel.posY - WIDTH / 2;
-
         this.clearMap();
 
-        for (RenderableSprite renderableSprite : renderableSpriteList) {
-            ConsoleSprite consoleSprite = (ConsoleSprite) renderableSprite;
-            char[][] texture = consoleSprite.getTexture();
+        List<Model> renderableModelList = gameContext.modelManager.getLocalChunk()
+                .flatMap(modelChunk -> modelChunk.map.values().stream())
+                .filter(model -> model.isVisible
+                        && model.distanceTo(playerModel.posX, playerModel.posY) <= Config.RENDER_RANGE)
+                .sorted(Comparator.comparingInt(u -> u.posX))
+                .collect(Collectors.toList());
 
-            Model model = renderableSprite.getModel();
+        for (Model model : renderableModelList) {
+            ConsoleSprite consoleSprite = (ConsoleSprite) gameContext.spriteManager.createRenderableObject(model);
+            char[][] texture = consoleSprite.getTexture(model);
+
             if (model == null) continue;
             int posX = model.posX - offsetX - consoleSprite.offsetX;
             int posY = model.posY - offsetY - consoleSprite.offsetY;

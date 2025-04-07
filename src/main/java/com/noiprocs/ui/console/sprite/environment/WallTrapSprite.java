@@ -1,5 +1,6 @@
 package com.noiprocs.ui.console.sprite.environment;
 
+import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.environment.WallTrapModel;
 import com.noiprocs.ui.console.sprite.ConsoleSprite;
 
@@ -17,14 +18,13 @@ public class WallTrapSprite extends ConsoleSprite {
             {'░', '░', '░', '░', '░', '░', '░', '░'},
     };
 
-    public WallTrapSprite(String id) {
-        super(EMPTY_TEXTURE, id);
+    public WallTrapSprite() {
+        super(EMPTY_TEXTURE);
     }
 
     @Override
-    public char[][] getTexture() {
-        WallTrapModel model = (WallTrapModel) getModel();
-        if (model.isClosed()) return TEXTURE_CLOSED;
+    public char[][] getTexture(Model model) {
+        if (((WallTrapModel) model).isClosed()) return TEXTURE_CLOSED;
         return TEXTURE_OPENED;
     }
 }

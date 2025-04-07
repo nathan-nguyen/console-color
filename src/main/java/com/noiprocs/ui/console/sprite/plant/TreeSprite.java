@@ -1,5 +1,6 @@
 package com.noiprocs.ui.console.sprite.plant;
 
+import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.plant.TreeModel;
 import com.noiprocs.ui.console.sprite.ConsoleSprite;
 
@@ -29,23 +30,20 @@ public class TreeSprite extends ConsoleSprite {
             {0, 0, 0, 0, '|', '|', 0, 0, 0, 0}
     };
 
-    public TreeSprite(String id) {
-        super(TEXTURE, id, OFFSET_X, OFFSET_Y);
+    public TreeSprite() {
+        super(TEXTURE, OFFSET_X, OFFSET_Y);
     }
 
-    public TreeSprite(char[][] texture, String id, int offsetX, int offsetY) {
-        super(texture, id, offsetX, offsetY);
+    public TreeSprite(char[][] texture, int offsetX, int offsetY) {
+        super(texture, offsetX, offsetY);
     }
 
     @Override
-    public char[][] getTexture() {
-        TreeModel model = (TreeModel) getModel();
-        if (model == null || model.isOldAge()) return super.getTexture();
+    public char[][] getTexture(Model model) {
+        TreeModel treeModel = (TreeModel) model;
+        if (model == null || treeModel.isOldAge()) return super.getTexture(model);
 
-        if (model.isYoungAge()) return YOUNG_TEXTURE;
+        if (treeModel.isYoungAge()) return YOUNG_TEXTURE;
         return MIDDLE_TEXTURE;
     }
-
-    @Override
-    public void render() {}
 }

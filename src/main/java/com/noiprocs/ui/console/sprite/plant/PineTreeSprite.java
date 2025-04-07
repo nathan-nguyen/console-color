@@ -11,7 +11,7 @@ public class PineTreeSprite extends TreeSprite {
             {0, 0, '|', '|', 0, 0}
     };
 
-    public PineTreeSprite(String id) {
-        super(TEXTURE, id, OFFSET_X, OFFSET_Y);
+    public PineTreeSprite() {
+        super(TEXTURE,OFFSET_X, OFFSET_Y);
     }
 }

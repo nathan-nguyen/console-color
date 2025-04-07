@@ -10,7 +10,6 @@ public class MetricCollector {
 
     public static final RollingWindowStatistics modelManagerProcessTimeNs = new RollingWindowStatistics(500);
     public static final RollingWindowStatistics broadcastTimeNs = new RollingWindowStatistics(500);
-    public static final RollingWindowStatistics spriteManagerRenderNs = new RollingWindowStatistics(500);
     public static final RollingWindowStatistics gameScreenRenderNs = new RollingWindowStatistics(500);
 
     public static final RollingWindowStatistics updateModelTimeNs = new RollingWindowStatistics(500);
@@ -26,10 +25,6 @@ public class MetricCollector {
         logger.info("Broadcast process time (ns): Last {} - Average {}",
                 String.format("%,d", broadcastTimeNs.getLast()),
                 String.format("%,d", broadcastTimeNs.getAvg())
-        );
-        logger.info("SpriteManager process time (ns): Last {} - Average {}",
-                String.format("%,d", spriteManagerRenderNs.getLast()),
-                String.format("%,d", spriteManagerRenderNs.getAvg())
         );
         logger.info("GameScreen render time (ns): Last {} - Average {}",
                 String.format("%,d", gameScreenRenderNs.getLast()),

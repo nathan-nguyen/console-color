@@ -55,8 +55,6 @@ public class ModelManager {
         modelChunk.add(model.id, model);
 
         serverModelManager.modelMap.put(model.id, modelChunk);
-
-        gameContext.spriteManager.synchronizeModelData(true);
     }
 
     public void destroyModelById(String id) {

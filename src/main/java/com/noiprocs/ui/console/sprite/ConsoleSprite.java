@@ -1,6 +1,7 @@
 package com.noiprocs.ui.console.sprite;
 
 import com.noiprocs.core.graphics.RenderableSprite;
+import com.noiprocs.core.model.Model;
 
 public class ConsoleSprite extends RenderableSprite {
     protected static final int OFFSET_X = 0, OFFSET_Y = 0;
@@ -9,12 +10,11 @@ public class ConsoleSprite extends RenderableSprite {
     public int offsetX, offsetY;
     private char[][] texture;
 
-    public ConsoleSprite(char[][] texture, String id) {
-        this(texture, id, OFFSET_X, OFFSET_Y);
+    public ConsoleSprite(char[][] texture) {
+        this(texture, OFFSET_X, OFFSET_Y);
     }
 
-    public ConsoleSprite(char[][] texture, String id, int offsetX, int offsetY) {
-        super(id);
+    public ConsoleSprite(char[][] texture, int offsetX, int offsetY) {
         this.texture = texture;
         this.offsetX = offsetX;
         this.offsetY = offsetY;
@@ -24,10 +24,9 @@ public class ConsoleSprite extends RenderableSprite {
         this.texture = texture;
     }
 
-    public char[][] getTexture() {
+    public char[][] getTexture(Model model) {
         return texture;
     }
 
-    public void render() {
-    }
+    public void render() {}
 }
