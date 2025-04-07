@@ -1,7 +1,10 @@
 package com.noiprocs.core.model.generator;
 
+import com.noiprocs.core.config.Config;
 import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.environment.MazePartModel;
+import com.noiprocs.core.model.environment.WallTrapModel;
+import com.noiprocs.core.util.Helper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -179,9 +182,12 @@ public class MazeModelGenerator {
 
         for (int i = 0; i < dimension; ++i) {
             for (int j = 0; j < dimension; ++j) {
-                if (map[i][j] > 0) continue;
-                MazePartModel model = new MazePartModel(offsetX, offsetY, i, j);
-                result.add(model);
+                if (map[i][j] <= 0) {
+                    result.add(new MazePartModel(offsetX, offsetY, i, j));
+                }
+                else if (Helper.random.nextInt(10) == 0) {
+                    result.add(new WallTrapModel(offsetX + i * Config.MAZE_WALL_THICKNESS_HEIGHT, offsetY + j * Config.MAZE_WALL_THICKNESS_WIDTH));
+                }
             }
         }
         return result;

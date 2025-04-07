@@ -47,7 +47,7 @@ public class TreeModel extends DurableModel implements InteractiveInterface {
 
         ModelManager modelManager = GameContext.get().modelManager;
         if (this.isOldAge()) {
-            modelManager.addSpawnModel(
+            modelManager.spawnModelIfValid(
                     new ItemModel(posX, posY, WoodLogItem.class),
                     new ItemModel(posX + 1, posY + 1, WoodLogItem.class),
                     new AppleItemModel(posX + 2, posY + 3)
@@ -56,18 +56,18 @@ public class TreeModel extends DurableModel implements InteractiveInterface {
             int seedDrop = Helper.random.nextInt(10);
             // 0 drop: 20% - 1 drop: 50% - 2 drop: 30%
             if (seedDrop >= 2) {
-                modelManager.addSpawnModel(
+                modelManager.spawnModelIfValid(
                         new ItemModel(posX, posY + 2, SaplingItem.class)
                 );
             }
             if (seedDrop >= 7) {
-                modelManager.addSpawnModel(
+                modelManager.spawnModelIfValid(
                         new ItemModel(posX + 1, posY + 2, SaplingItem.class)
                 );
             }
         }
         else if (this.isMiddleAge()) {
-            modelManager.addSpawnModel(
+            modelManager.spawnModelIfValid(
                     new ItemModel(posX, posY, WoodLogItem.class)
             );
         }

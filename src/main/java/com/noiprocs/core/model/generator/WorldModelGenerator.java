@@ -4,7 +4,6 @@ import com.noiprocs.core.GameContext;
 import com.noiprocs.core.config.Config;
 import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.building.FenceModel;
-import com.noiprocs.core.model.environment.WallTrapModel;
 import com.noiprocs.core.model.environment.WorldBoundaryHorizontalModel;
 import com.noiprocs.core.model.environment.WorldBoundaryVerticalModel;
 import com.noiprocs.core.model.item.AxeItem;
@@ -51,7 +50,6 @@ public class WorldModelGenerator {
 
         this.generateSupportingObject(ItemModel.class, 1, 0, 0, 10, 10, AxeItem.class);
         this.generateSupportingObject(FenceModel.class, 2, 10, 10, 60, 60);
-        this.generateSupportingObject(WallTrapModel.class, 1, -50, -50, 60, 60);
     }
 
     private void generateWorldBoundary(int startX, int startY, int heightPart, int widthPart) {

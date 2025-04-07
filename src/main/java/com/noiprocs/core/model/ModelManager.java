@@ -30,6 +30,8 @@ public class ModelManager {
     }
 
     public Model getModel(String id) {
+        if (this.serverModelManager == null) return null;
+
         if (gameContext.isServer) {
             ModelChunk modelChunk = serverModelManager.modelMap.get(id);
 
@@ -226,11 +228,18 @@ public class ModelManager {
         for (Model model : modelList) addModel(model);
     }
 
-    /**
-     * This method allows model to be spawned asynchronously.
-     */
+    // Spawn model without checking whether the current position is valid
     public void addSpawnModel(Model... models) {
         this.spawnModelQueue.addAll(Arrays.asList(models));
+    }
+
+    // Spawn model only if current position is valid
+    public void spawnModelIfValid(Model... models) {
+        for (Model model: models) {
+            if (gameContext.hitboxManager.isValid(model, model.posX, model.posY)) {
+                this.spawnModelQueue.offer(model);
+            }
+        }
     }
 
     private ModelChunk getChunkFromModelPosition(int posX, int posY) {

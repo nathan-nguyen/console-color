@@ -23,4 +23,7 @@ public class Config {
     public static final boolean USE_KRYO_SERIALIZATION = true;
     // Whether to use a background thread to broadcast data
     public static final boolean USE_BROADCAST_BG_THREAD = false;
+
+    public static final int MAZE_WALL_THICKNESS_HEIGHT = 10;
+    public static final int MAZE_WALL_THICKNESS_WIDTH = 20;
 }
