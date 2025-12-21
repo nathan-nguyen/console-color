@@ -233,13 +233,27 @@ public class ModelManager {
         this.spawnModelQueue.addAll(Arrays.asList(models));
     }
 
-    // Spawn model only if current position is valid
-    public void spawnModelIfValid(Model... models) {
+    // Spawn models only if current position is valid
+    public void spawnModelsIfValid(Model... models) {
         for (Model model: models) {
             if (gameContext.hitboxManager.isValid(model, model.posX, model.posY)) {
                 this.spawnModelQueue.offer(model);
             }
         }
+    }
+
+    /**
+     * Spawn model only if current position is valid
+     *
+     * @param model: Model to be spawned
+     * @return true if spawned successfully
+     */
+    public boolean spawnModelIfValid(Model model) {
+        if (gameContext.hitboxManager.isValid(model, model.posX, model.posY)) {
+            this.spawnModelQueue.offer(model);
+            return true;
+        }
+        return false;
     }
 
     private ModelChunk getChunkFromModelPosition(int posX, int posY) {

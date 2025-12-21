@@ -28,8 +28,11 @@ public class App {
         Thread thread = new Thread(gameContext::run);
         thread.start();
 
-        if (!Config.DISABLE_PLAYER) {
-            Scanner scanner = new Scanner(System.in);
+        if (Config.DISABLE_PLAYER) {
+            return;
+        }
+
+        try (Scanner scanner = new Scanner(System.in)) {
             while (true) {
                 String line = scanner.nextLine();
                 gameContext.controlManager.processInput(line);

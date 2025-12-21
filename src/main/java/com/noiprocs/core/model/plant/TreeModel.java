@@ -35,41 +35,37 @@ public class TreeModel extends DurableModel implements InteractiveInterface {
     public void interact(Model model, Item item) {
         if (item instanceof AxeItem) {
             this.updateHealth(-4);
-        }
-        else {
+        } else {
             this.updateHealth(-1);
         }
-        if (this.getHealth() <= 0 || !this.isOldAge()) this.dropItem(model);
+        if (this.getHealth() <= 0 || !this.isOldAge())
+            this.dropItem(model);
     }
 
     private void dropItem(Model destroyer) {
-        if (!(destroyer instanceof PlayerModel)) return;
+        if (!(destroyer instanceof PlayerModel))
+            return;
 
         ModelManager modelManager = GameContext.get().modelManager;
         if (this.isOldAge()) {
-            modelManager.spawnModelIfValid(
+            modelManager.spawnModelsIfValid(
                     new ItemModel(posX, posY, WoodLogItem.class),
                     new ItemModel(posX + 1, posY + 1, WoodLogItem.class),
-                    new AppleItemModel(posX + 2, posY + 3)
-            );
+                    new AppleItemModel(posX + 2, posY + 3));
 
             int seedDrop = Helper.random.nextInt(10);
             // 0 drop: 20% - 1 drop: 50% - 2 drop: 30%
             if (seedDrop >= 2) {
                 modelManager.spawnModelIfValid(
-                        new ItemModel(posX, posY + 2, SaplingItem.class)
-                );
+                        new ItemModel(posX, posY + 2, SaplingItem.class));
             }
             if (seedDrop >= 7) {
                 modelManager.spawnModelIfValid(
-                        new ItemModel(posX + 1, posY + 2, SaplingItem.class)
-                );
+                        new ItemModel(posX + 1, posY + 2, SaplingItem.class));
             }
-        }
-        else if (this.isMiddleAge()) {
+        } else if (this.isMiddleAge()) {
             modelManager.spawnModelIfValid(
-                    new ItemModel(posX, posY, WoodLogItem.class)
-            );
+                    new ItemModel(posX, posY, WoodLogItem.class));
         }
     }
 

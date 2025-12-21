@@ -44,7 +44,9 @@ public interface HitboxManagerInterface {
     List<Model> getCollidingModel(Model model, int directionX, int directionY, int dx, int dy, int height, int width);
 
     /**
-     * Get spawn point for provided model
+     * Get spawn point for provided model, this is usually used for projectile spawning
+     * to avoid colliding with the spawner itself.
+     * This spawn point is relative to the model's position and depends on the hitbox size.
      *
      * @param model      : Model of spawner.
      * @param directionX : Spawn directionX

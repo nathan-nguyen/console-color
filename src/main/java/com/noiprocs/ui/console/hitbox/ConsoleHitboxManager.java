@@ -86,11 +86,31 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
         );
     }
 
+    /**
+     * Get list of colliding models if providing model is moved to position (nextX, nextY)
+     *
+     * @param model: Checking model
+     * @param nextX: Destination posX
+     * @param nextY: Destination posX
+     * @return List of colliding models.
+     */
+    @Override
     public List<Model> getCollidingModel(Model model, int nextX, int nextY) {
         Hitbox targetHitbox = getHitbox(model);
         return getCollidingModel(model, nextX, nextY, targetHitbox.getHeight(model), targetHitbox.getWidth(model));
     }
 
+    /**
+     * Get list of colliding models, providing direction, distance to original hitbox, and size of checking hitbox
+     * @param model: Checking model
+     * @param directionX: DirectionX to checking hitbox
+     * @param directionY: DirectionY to checking hitbox
+     * @param dx: DistanceX to from original hitbox to checking hitbox
+     * @param dy: DistanceY to from original hitbox to checking hitbox
+     * @param height: Checking hitbox height
+     * @param width: Checking hitbox width
+     * @return List of colliding models.
+     */
     @Override
     // Facing right: directionY >= 0
     // Facing left: directionY < 0
@@ -102,6 +122,16 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
         return getCollidingModel(model, nextX, nextY, height, width);
     }
 
+    /**
+     * Get spawn point for provided model, this is usually used for projectile spawning
+     * to avoid colliding with the spawner itself.
+     * This spawn point is relative to the model's position and depends on the hitbox size.
+     *
+     * @param model      : Model of spawner.
+     * @param directionX : Spawn directionX
+     * @param directionY : Spawn directionY
+     * @return array size of 2: {spawnPointX, spawnPointY}
+     */
     @Override
     public int[] getSpawnPoint(Model model, int directionX, int directionY) {
         Hitbox targetHitbox = getHitbox(model);

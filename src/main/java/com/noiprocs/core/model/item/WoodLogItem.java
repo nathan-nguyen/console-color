@@ -18,7 +18,13 @@ public class WoodLogItem extends Item {
     @Override
     public void use(Model model) {
         logger.info("{} used {}", model, this);
-        MobModel.MovingDirection movingDirection = ((MobModel) model).getFacingDirection();
+
+        // Determine moving direction of the projectile
+        MobModel.MovingDirection movingDirection = ((MobModel) model).getMovingDirection();
+        if (movingDirection == MobModel.MovingDirection.STOP) {
+            movingDirection = ((MobModel) model).getFacingDirection();
+        }
+
         int[] spawnerPoint = GameContext.get().hitboxManager.getSpawnPoint(model, 0, 0);
         GameContext.get().modelManager.addSpawnModel(
                 new FlyingWoodLogModel(

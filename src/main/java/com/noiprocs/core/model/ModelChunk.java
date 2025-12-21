@@ -2,9 +2,7 @@ package com.noiprocs.core.model;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Map;
-import java.util.stream.Stream;
 
 public class ModelChunk implements Serializable {
     public static final int CHUNK_HEIGHT = 120;

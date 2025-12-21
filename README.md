@@ -85,7 +85,7 @@ Disabled background thread, broadcast step takes average of 2ms.
 
 ### HitboxManager
 
-- Hitbox is draw using `model.posX`, `model.posY`, `model.hitboxHeight` and `model.hitboxWidth`.
+- Hitbox is draw using `model.posX`, `model.posY`, `hitbox.height` and `hitbox.weight`. Hitbox dimension is seprated from Model, however they share the same measurement units.
 - Position (`model.posX`, `model.posY`) presents top left corner of hitbox rectangle.
 
 ## How to benchmark performance

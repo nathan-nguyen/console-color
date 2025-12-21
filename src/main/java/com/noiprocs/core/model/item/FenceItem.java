@@ -1,10 +1,14 @@
 package com.noiprocs.core.model.item;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.noiprocs.core.GameContext;
 import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.building.FenceModel;
 
 public class FenceItem extends Item {
+    private static final Logger logger = LogManager.getLogger(FenceItem.class);
     private static final String FENCE_ITEM_NAME = "Fence";
 
     public FenceItem(int amount) {
@@ -13,8 +17,11 @@ public class FenceItem extends Item {
 
     @Override
     public void use(Model model) {
-        System.out.println("Use " + this);
-        GameContext.get().modelManager.spawnModelIfValid(new FenceModel(model.posX, model.posY));
-        --amount;
+        logger.info("Use {}", this);
+        if (GameContext.get().modelManager.spawnModelIfValid(new FenceModel(model.posX, model.posY))) {
+            --amount;
+        } else {
+            logger.info("Cannot place {} at position ({}, {})", this, model.posX, model.posY);
+        }
     }
 }
