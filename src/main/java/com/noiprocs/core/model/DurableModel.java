@@ -3,12 +3,14 @@ package com.noiprocs.core.model;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.noiprocs.core.common.Vector3D;
+
 public abstract class DurableModel extends Model {
     private static final Logger logger = LogManager.getLogger(DurableModel.class);
     private int health;
 
-    public DurableModel(int x, int y, boolean isVisible, int health) {
-        super(x, y, isVisible);
+    public DurableModel(Vector3D position, boolean isVisible, int health) {
+        super(position, isVisible);
         this.health = health;
     }
 

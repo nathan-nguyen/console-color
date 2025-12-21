@@ -13,7 +13,9 @@ import com.noiprocs.core.model.mob.character.PlayerModel;
 import com.noiprocs.core.model.plant.BirchTreeModel;
 import com.noiprocs.core.model.plant.PineTreeModel;
 import com.noiprocs.core.model.plant.TreeModel;
-import com.noiprocs.core.util.Helper;
+import com.noiprocs.core.common.Helper;
+import com.noiprocs.core.common.Vector3D;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -34,7 +36,7 @@ public class WorldModelGenerator {
 
     public void generateWorld() {
         if (!Config.DISABLE_PLAYER) {
-            gameContext.modelManager.spawnModel(new PlayerModel(gameContext.username, 0, 0, true));
+            gameContext.modelManager.spawnModel(new PlayerModel(gameContext.username, Vector3D.ZERO, true));
         }
 
         // Generate world boundary
@@ -57,31 +59,32 @@ public class WorldModelGenerator {
 
         for (int i = 0; i < heightPart; ++i) {
             Model wbm = new WorldBoundaryVerticalModel(
-                    startX + i * WorldBoundaryVerticalModel.WORLD_BOUNDARY_PART_HEIGHT,
-                    startY,
-                    true
-            );
+                    new Vector3D(startX + i * WorldBoundaryVerticalModel.WORLD_BOUNDARY_PART_HEIGHT,
+                            startY, 0),
+                    true);
             result.add(wbm);
             wbm = new WorldBoundaryVerticalModel(
-                    startX + i * WorldBoundaryVerticalModel.WORLD_BOUNDARY_PART_HEIGHT,
-                    startY + widthPart * WorldBoundaryHorizontalModel.WORLD_BOUNDARY_PART_WIDTH,
-                    true
-            );
+                    new Vector3D(
+                            startX + i * WorldBoundaryVerticalModel.WORLD_BOUNDARY_PART_HEIGHT,
+                            startY + widthPart * WorldBoundaryHorizontalModel.WORLD_BOUNDARY_PART_WIDTH,
+                            0),
+                    true);
             result.add(wbm);
         }
 
         for (int i = 0; i < widthPart; ++i) {
             Model wbm = new WorldBoundaryHorizontalModel(
-                    startX,
-                    startY + i * WorldBoundaryHorizontalModel.WORLD_BOUNDARY_PART_WIDTH,
-                    true
-            );
+                    new Vector3D(
+                            startX,
+                            startY + i * WorldBoundaryHorizontalModel.WORLD_BOUNDARY_PART_WIDTH,
+                            0),
+                    true);
             result.add(wbm);
             wbm = new WorldBoundaryHorizontalModel(
-                    startX + heightPart * WorldBoundaryVerticalModel.WORLD_BOUNDARY_PART_HEIGHT,
-                    startY + i * WorldBoundaryHorizontalModel.WORLD_BOUNDARY_PART_WIDTH,
-                    true
-            );
+                    new Vector3D(
+                            startX + heightPart * WorldBoundaryVerticalModel.WORLD_BOUNDARY_PART_HEIGHT,
+                            startY + i * WorldBoundaryHorizontalModel.WORLD_BOUNDARY_PART_WIDTH, 0),
+                    true);
             result.add(wbm);
         }
 
@@ -97,51 +100,54 @@ public class WorldModelGenerator {
     private void generateTree(int number, int startX, int startY, int endX, int endY) {
         while (number-- > 0) {
             int treeType = random.nextInt(3);
+            Vector3D modelPosition = new Vector3D(random.nextInt(endX - startX) + startX,
+                    random.nextInt(endY - startY) + startY, 0);
             Model treeModel;
-            int modelPosX = random.nextInt(endX - startX) + startX;
-            int modelPosY = random.nextInt(endY - startY) + startY;
             if (treeType == 1) {
-                treeModel = new BirchTreeModel(modelPosX, modelPosY);
+                treeModel = new BirchTreeModel(modelPosition);
             } else if (treeType == 2) {
-                treeModel = new PineTreeModel(modelPosX, modelPosY);
+                treeModel = new PineTreeModel(modelPosition);
             } else {
-                treeModel = new TreeModel(modelPosX, modelPosY);
+                treeModel = new TreeModel(modelPosition);
             }
 
-            if (gameContext.hitboxManager.isValid(treeModel, modelPosX, modelPosY)) {
+            if (gameContext.hitboxManager.isValid(treeModel, treeModel.position)) {
                 gameContext.modelManager.spawnModel(treeModel);
+            } else {
+                ++number;
             }
-            else ++number;
         }
     }
 
     private void generateCotMob(int number, int startX, int startY, int endX, int endY) {
         while (number-- > 0) {
-            int modelPosX = random.nextInt(endX - startX) + startX;
-            int modelPosY = random.nextInt(endY - startY) + startY;
-            Model cotMobModel = new CotPsychoModel(modelPosX, modelPosY);
+            Vector3D modelPosition = new Vector3D(random.nextInt(endX - startX) + startX,
+                    random.nextInt(endY - startY) + startY, 0);
+            Model cotMobModel = new CotPsychoModel(modelPosition);
 
-            if (gameContext.hitboxManager.isValid(cotMobModel, modelPosX, modelPosY)) {
+            if (gameContext.hitboxManager.isValid(cotMobModel, cotMobModel.position)) {
                 gameContext.modelManager.spawnModel(cotMobModel);
-            }
-            else ++number;
+            } else
+                ++number;
         }
     }
 
-    private void generateSupportingObject(Class<?> clazz, int amount, int startX, int startY, int endX, int endY, Object... args) {
-        Object[] fullArgs = new Object[args.length + 2];
-        System.arraycopy(args, 0, fullArgs, 2, args.length);
+    private void generateSupportingObject(Class<?> clazz, int amount, int startX, int startY, int endX, int endY,
+            Object... args) {
+        Object[] fullArgs = new Object[args.length + 1];
+        System.arraycopy(args, 0, fullArgs, 1, args.length);
 
         int count = 0;
         for (int i = 0; i < MAX_TRIES; ++i) {
-            fullArgs[0] = random.nextInt(endX - startX) + startX;
-            fullArgs[1] = random.nextInt(endY - startY) + startY;
+            fullArgs[0] = new Vector3D(random.nextInt(endX - startX) + startX, random.nextInt(endY - startY) + startY,
+                    0);
 
             Model model = (Model) Helper.createObject(clazz, fullArgs);
-            if (gameContext.hitboxManager.isValid(model, (int) fullArgs[0], (int) fullArgs[1])) {
+            if (gameContext.hitboxManager.isValid(model, model.position)) {
                 gameContext.modelManager.spawnModel(model);
                 ++count;
-                if (count >= amount) break;
+                if (count >= amount)
+                    break;
             }
         }
     }

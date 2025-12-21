@@ -1,5 +1,6 @@
 package com.noiprocs.ui.console.hitbox;
 
+import com.noiprocs.core.common.Vector3D;
 import com.noiprocs.core.config.Config;
 import com.noiprocs.core.model.building.FenceModel;
 import com.noiprocs.core.model.environment.MazePartModel;
@@ -22,8 +23,8 @@ public class ConsoleHitboxFactory {
         if (modelClassName.equals(PlayerModel.class.getName())) {
             return new Hitbox(1, 3, PLAYER, WALL | MOB) {
                 @Override
-                protected int[] getSpawnPointCenter() {
-                    return new int[]{-2, 1};
+                protected Vector3D getSpawnPointCenter() {
+                    return new Vector3D(-2, 1, 0);
                 }
             };
         }

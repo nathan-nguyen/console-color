@@ -2,13 +2,20 @@ package com.noiprocs.core.model.mob;
 
 import com.noiprocs.core.GameContext;
 import com.noiprocs.core.model.DurableModel;
-import com.noiprocs.core.util.Helper;
+import com.noiprocs.core.common.Helper;
+import com.noiprocs.core.common.Vector3D;
 
 public abstract class MobModel extends DurableModel {
     private static final int DEFAULT_SKIP_MOVEMENT_FRAME = 2;
+
     public enum MovingDirection {
         STOP, UP, DOWN, LEFT, RIGHT
     }
+
+    public static final Vector3D MOVE_NORTH = new Vector3D(-1, 0, 0);
+    public static final Vector3D MOVE_SOUTH = new Vector3D(1, 0, 0);
+    public static final Vector3D MOVE_WEST = new Vector3D(0, -1, 0);
+    public static final Vector3D MOVE_EAST = new Vector3D(0, 1, 0);
 
     private MovingDirection movingDirection = MovingDirection.STOP;
     protected MovingDirection facingDirection = MovingDirection.RIGHT;
@@ -17,13 +24,12 @@ public abstract class MobModel extends DurableModel {
     private final int horizontalSpeed;
     private final int verticalSpeed;
 
-    public MobModel(int x,
-                    int y,
-                    boolean isVisible,
-                    int health,
-                    int horizontalSpeed,
-                    int verticalSpeed) {
-        super(x, y, isVisible, health);
+    public MobModel(Vector3D position,
+            boolean isVisible,
+            int health,
+            int horizontalSpeed,
+            int verticalSpeed) {
+        super(position, isVisible, health);
         this.horizontalSpeed = horizontalSpeed;
         this.verticalSpeed = verticalSpeed;
     }
@@ -37,18 +43,23 @@ public abstract class MobModel extends DurableModel {
 
     protected void move() {
         switch (movingDirection) {
-            case STOP: return;
+            case STOP:
+                return;
             case UP:
-                for (int i = 0; i < verticalSpeed; ++i) move(-1, 0);
+                for (int i = 0; i < verticalSpeed; ++i)
+                    move(MOVE_NORTH);
                 break;
             case DOWN:
-                for (int i = 0; i < verticalSpeed; ++i) move(1, 0);
+                for (int i = 0; i < verticalSpeed; ++i)
+                    move(MOVE_SOUTH);
                 break;
             case LEFT:
-                for (int i = 0; i < horizontalSpeed; ++i) move(0, -1);
+                for (int i = 0; i < horizontalSpeed; ++i)
+                    move(MOVE_WEST);
                 break;
             case RIGHT:
-                for (int i = 0; i < horizontalSpeed; ++i) move(0, 1);
+                for (int i = 0; i < horizontalSpeed; ++i)
+                    move(MOVE_EAST);
                 break;
         }
     }
@@ -61,20 +72,19 @@ public abstract class MobModel extends DurableModel {
      * @param x: Distance to move in horizontal direction.
      * @param y: Distance to move in vertical direction.
      */
-    protected void move(int x, int y) {
-        if (movingDirection == MovingDirection.STOP) return;
+    protected void move(Vector3D deltaPosition) {
+        if (movingDirection == MovingDirection.STOP)
+            return;
 
-        if (this.isNextMoveValid(posX + x, posY + y)) {
-            posX += x;
-            posY += y;
-        }
-        else {
+        if (this.isNextMoveValid(this.position.add(deltaPosition))) {
+            this.position.addInPlace(deltaPosition);
+        } else {
             movingDirection = MovingDirection.STOP;
         }
     }
 
-    protected boolean isNextMoveValid(int x, int y) {
-        return GameContext.get().hitboxManager.isValid(this, x, y);
+    protected boolean isNextMoveValid(Vector3D nextPosition) {
+        return GameContext.get().hitboxManager.isValid(this, nextPosition);
     }
 
     public MovingDirection getMovingDirection() {
@@ -92,16 +102,19 @@ public abstract class MobModel extends DurableModel {
         return this.facingDirection;
     }
 
-    public MovingDirection getFollowDirection(int targetX, int targetY) {
-        int up = Math.max(posX - targetX, 0);
-        int right = Math.max(targetY - posY, 0);
-        int down = Math.max(targetX - posX, 0);
-        int left = Math.max(posY - targetY, 0);
+    public MovingDirection getFollowDirection(Vector3D targetPosition) {
+        int up = Math.max(position.x - targetPosition.x, 0);
+        int right = Math.max(targetPosition.y - position.y, 0);
+        int down = Math.max(targetPosition.x - position.x, 0);
+        int left = Math.max(position.y - targetPosition.y, 0);
 
         int v = Helper.random.nextInt(up + right + down + left);
-        if (v < up) return MovingDirection.UP;
-        if (v < up + right) return MovingDirection.RIGHT;
-        if (v < up + right + down) return MovingDirection.DOWN;
+        if (v < up)
+            return MovingDirection.UP;
+        if (v < up + right)
+            return MovingDirection.RIGHT;
+        if (v < up + right + down)
+            return MovingDirection.DOWN;
         return MovingDirection.LEFT;
     }
 }

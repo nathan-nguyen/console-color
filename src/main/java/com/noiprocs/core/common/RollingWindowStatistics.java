@@ -1,4 +1,4 @@
-package com.noiprocs.core.util;
+package com.noiprocs.core.common;
 
 import java.util.LinkedList;
 

@@ -1,5 +1,6 @@
 package com.noiprocs.core.model.building;
 
+import com.noiprocs.core.common.Vector3D;
 import com.noiprocs.core.model.InteractiveInterface;
 import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.item.FenceItem;
@@ -7,8 +8,8 @@ import com.noiprocs.core.model.item.Item;
 import com.noiprocs.core.model.mob.character.PlayerModel;
 
 public class FenceModel extends Model implements InteractiveInterface {
-    public FenceModel(int x, int y) {
-        super(x, y, true);
+    public FenceModel(Vector3D position) {
+        super(position, true);
     }
 
     @Override

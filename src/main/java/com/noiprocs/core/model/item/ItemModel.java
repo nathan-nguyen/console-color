@@ -3,13 +3,14 @@ package com.noiprocs.core.model.item;
 import com.noiprocs.core.model.ItemModelInterface;
 import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.mob.character.PlayerModel;
-import com.noiprocs.core.util.Helper;
+import com.noiprocs.core.common.Helper;
+import com.noiprocs.core.common.Vector3D;
 
 public class ItemModel extends Model implements ItemModelInterface {
     public final Class<?> itemClass;
 
-    public ItemModel(int x, int y, Class<?> itemClass) {
-        super(x, y, true);
+    public ItemModel(Vector3D position, Class<?> itemClass) {
+        super(position, true);
         this.itemClass = itemClass;
     }
 
@@ -28,6 +29,6 @@ public class ItemModel extends Model implements ItemModelInterface {
 
     @Override
     public String toString() {
-        return this.getClass().getSimpleName() + "(" + itemClass.getSimpleName() + ", " + posX + ", " + posY + ")";
+        return this.getClass().getSimpleName() + "(" + itemClass.getSimpleName() + " at " + position + ")";
     }
 }

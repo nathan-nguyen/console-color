@@ -18,10 +18,10 @@ public class FenceItem extends Item {
     @Override
     public void use(Model model) {
         logger.info("Use {}", this);
-        if (GameContext.get().modelManager.spawnModelIfValid(new FenceModel(model.posX, model.posY))) {
+        if (GameContext.get().modelManager.spawnModelIfValid(new FenceModel(model.position))) {
             --amount;
         } else {
-            logger.info("Cannot place {} at position ({}, {})", this, model.posX, model.posY);
+            logger.info("Cannot place {} at position {}", this, model.position);
         }
     }
 }

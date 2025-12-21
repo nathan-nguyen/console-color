@@ -1,5 +1,6 @@
 package com.noiprocs.core.model.mob.projectile;
 
+import com.noiprocs.core.common.Vector3D;
 import com.noiprocs.core.model.LowLatencyModelInterface;
 import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.mob.MobModel;
@@ -9,12 +10,12 @@ public class ProjectileModel extends MobModel implements LowLatencyModelInterfac
     private int ttl;
     private final Model spawner;
 
-    public ProjectileModel(int x, int y,
-                           int horizontalSpeed, int verticalSpeed,
-                           MovingDirection movingDirection,
-                           int ttl,
-                           Model spawner) {
-        super(x, y, true, MAX_HEALTH, horizontalSpeed, verticalSpeed);
+    public ProjectileModel(Vector3D position,
+            int horizontalSpeed, int verticalSpeed,
+            MovingDirection movingDirection,
+            int ttl,
+            Model spawner) {
+        super(position, true, MAX_HEALTH, horizontalSpeed, verticalSpeed);
         this.ttl = ttl;
         this.spawner = spawner;
         this.setMovingDirection(movingDirection);
@@ -29,7 +30,8 @@ public class ProjectileModel extends MobModel implements LowLatencyModelInterfac
         super.move();
 
         --ttl;
-        if (ttl <= 0) this.destroy();
+        if (ttl <= 0)
+            this.destroy();
     }
 
     public Model getSpawner() {

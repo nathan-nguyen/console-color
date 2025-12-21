@@ -7,7 +7,8 @@ import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.ModelManager;
 import com.noiprocs.core.model.item.*;
 import com.noiprocs.core.model.mob.character.PlayerModel;
-import com.noiprocs.core.util.Helper;
+import com.noiprocs.core.common.Helper;
+import com.noiprocs.core.common.Vector3D;
 
 public class TreeModel extends DurableModel implements InteractiveInterface {
     private static final int MAX_DURABILITY = 20;
@@ -17,12 +18,12 @@ public class TreeModel extends DurableModel implements InteractiveInterface {
 
     public int treeAge;
 
-    public TreeModel(int x, int y) {
-        this(x, y, MATURE_AGE);
+    public TreeModel(Vector3D position) {
+        this(position, MATURE_AGE);
     }
 
-    public TreeModel(int x, int y, int treeAge) {
-        super(x, y, true, MAX_DURABILITY);
+    public TreeModel(Vector3D position, int treeAge) {
+        super(position, true, MAX_DURABILITY);
         this.treeAge = treeAge;
     }
 
@@ -49,23 +50,24 @@ public class TreeModel extends DurableModel implements InteractiveInterface {
         ModelManager modelManager = GameContext.get().modelManager;
         if (this.isOldAge()) {
             modelManager.spawnModelsIfValid(
-                    new ItemModel(posX, posY, WoodLogItem.class),
-                    new ItemModel(posX + 1, posY + 1, WoodLogItem.class),
-                    new AppleItemModel(posX + 2, posY + 3));
+                    new ItemModel(position, WoodLogItem.class),
+                    new ItemModel(new Vector3D(position.x + 1, position.y + 1, position.z), WoodLogItem.class),
+                    // AppleItemModel is different with ItemModel with AppleItem class
+                    new AppleItemModel(new Vector3D(position.x + 2, position.y + 3, position.z)));
 
             int seedDrop = Helper.random.nextInt(10);
             // 0 drop: 20% - 1 drop: 50% - 2 drop: 30%
             if (seedDrop >= 2) {
                 modelManager.spawnModelIfValid(
-                        new ItemModel(posX, posY + 2, SaplingItem.class));
+                        new ItemModel(new Vector3D(position.x, position.y + 2, position.z), SaplingItem.class));
             }
             if (seedDrop >= 7) {
                 modelManager.spawnModelIfValid(
-                        new ItemModel(posX + 1, posY + 2, SaplingItem.class));
+                        new ItemModel(new Vector3D(position.x + 1, position.y + 2, position.z), SaplingItem.class));
             }
         } else if (this.isMiddleAge()) {
             modelManager.spawnModelIfValid(
-                    new ItemModel(posX, posY, WoodLogItem.class));
+                    new ItemModel(position, WoodLogItem.class));
         }
     }
 

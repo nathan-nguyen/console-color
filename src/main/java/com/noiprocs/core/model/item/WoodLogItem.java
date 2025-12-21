@@ -1,6 +1,7 @@
 package com.noiprocs.core.model.item;
 
 import com.noiprocs.core.GameContext;
+import com.noiprocs.core.common.Vector3D;
 import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.mob.MobModel;
 import com.noiprocs.core.model.mob.projectile.FlyingWoodLogModel;
@@ -25,13 +26,11 @@ public class WoodLogItem extends Item {
             movingDirection = ((MobModel) model).getFacingDirection();
         }
 
-        int[] spawnerPoint = GameContext.get().hitboxManager.getSpawnPoint(model, 0, 0);
+        Vector3D spawnerPoint = GameContext.get().hitboxManager.getSpawnPoint(model, Vector3D.ZERO);
         GameContext.get().modelManager.addSpawnModel(
                 new FlyingWoodLogModel(
-                        model.posX + spawnerPoint[0], model.posY + spawnerPoint[1],
-                        movingDirection, model
-                )
-        );
+                        model.position.add(spawnerPoint),
+                        movingDirection, model));
         --amount;
     }
 }

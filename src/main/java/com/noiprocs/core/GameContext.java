@@ -6,7 +6,7 @@ import com.noiprocs.core.graphics.SpriteManager;
 import com.noiprocs.core.hitbox.HitboxManagerInterface;
 import com.noiprocs.core.model.ModelManager;
 import com.noiprocs.core.network.NetworkManager;
-import com.noiprocs.core.util.MetricCollector;
+import com.noiprocs.core.common.MetricCollector;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

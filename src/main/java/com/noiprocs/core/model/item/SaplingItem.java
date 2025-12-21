@@ -18,7 +18,7 @@ public class SaplingItem extends Item {
     @Override
     public void use(Model model) {
         logger.info("Use {}", this);
-        if (GameContext.get().modelManager.spawnModelIfValid(new TreeModel(model.posX, model.posY, 0))) {
+        if (GameContext.get().modelManager.spawnModelIfValid(new TreeModel(model.position, 0))) {
             --amount;
         }
     }

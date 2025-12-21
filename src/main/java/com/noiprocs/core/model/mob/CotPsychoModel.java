@@ -1,11 +1,12 @@
 package com.noiprocs.core.model.mob;
 
 import com.noiprocs.core.GameContext;
-import com.noiprocs.core.util.Helper;
+import com.noiprocs.core.common.Helper;
+import com.noiprocs.core.common.Vector3D;
 
 public class CotPsychoModel extends CotMobModel {
-    public CotPsychoModel(int x, int y) {
-        super(x, y);
+    public CotPsychoModel(Vector3D position) {
+        super(position);
     }
 
     @Override
@@ -14,23 +15,18 @@ public class CotPsychoModel extends CotMobModel {
     }
 
     @Override
-    protected void move(int x, int y) {
-        if (GameContext.get().hitboxManager.isValid(this, posX + x, posY + y)) {
-            posX += x;
-            posY += y;
-        }
-        else {
+    protected void move(Vector3D deltaPosition) {
+        if (GameContext.get().hitboxManager.isValid(this, this.position.add(deltaPosition))) {
+            this.position.addInPlace(deltaPosition);
+        } else {
             int nextDirection = Helper.random.nextInt(4);
             if (nextDirection == 0) {
                 this.setMovingDirection(MovingDirection.UP);
-            }
-            else if (nextDirection == 1) {
+            } else if (nextDirection == 1) {
                 this.setMovingDirection(MovingDirection.DOWN);
-            }
-            else if (nextDirection == 2) {
+            } else if (nextDirection == 2) {
                 this.setMovingDirection(MovingDirection.LEFT);
-            }
-            else {
+            } else {
                 this.setMovingDirection(MovingDirection.RIGHT);
             }
         }

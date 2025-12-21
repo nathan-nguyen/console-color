@@ -1,6 +1,7 @@
 package com.noiprocs.core.hitbox;
 
 import com.noiprocs.core.GameContext;
+import com.noiprocs.core.common.Vector3D;
 import com.noiprocs.core.model.Model;
 
 import java.util.List;
@@ -11,47 +12,48 @@ public interface HitboxManagerInterface {
     /**
      * Check whether the model could be relocated to provided position.
      *
-     * @param model: Checking model
-     * @param nextX: Next position in X coordinate.
-     * @param nextY: Next position in Y coordinate.
+     * @param model:        Checking model
+     * @param nextPosition: Next position
      * @return True if model could be relocated.
      */
-    boolean isValid(Model model, int nextX, int nextY);
+    boolean isValid(Model model, Vector3D nextPosition);
 
     boolean isColliding(Model m1, Model m2);
 
     /**
-     * Get list of colliding models if providing model is moved to position (nextX, nextY)
+     * Get list of colliding models if providing model is moved to position (nextX,
+     * nextY)
      *
-     * @param model: Checking model
-     * @param nextX: Destination posX
-     * @param nextY: Destination posX
+     * @param model:        Checking model
+     * @param nextPosition: Destination position
      * @return List of colliding models.
      */
-    List<Model> getCollidingModel(Model model, int nextX, int nextY);
+    List<Model> getCollidingModel(Model model, Vector3D nextPosition);
 
     /**
-     * Get list of colliding models, providing direction, distance to original hitbox, and size of checking hitbox
-     * @param model: Checking model
+     * Get list of colliding models, providing direction, distance to original
+     * hitbox, and size of checking hitbox
+     *
+     * @param model:      Checking model
      * @param directionX: DirectionX to checking hitbox
      * @param directionY: DirectionY to checking hitbox
-     * @param dx: DistanceX to from original hitbox to checking hitbox
-     * @param dy: DistanceY to from original hitbox to checking hitbox
-     * @param height: Checking hitbox height
-     * @param width: Checking hitbox width
+     * @param dx:         DistanceX to from original hitbox to checking hitbox
+     * @param dy:         DistanceY to from original hitbox to checking hitbox
+     * @param height:     Checking hitbox height
+     * @param width:      Checking hitbox width
      * @return List of colliding models.
      */
     List<Model> getCollidingModel(Model model, int directionX, int directionY, int dx, int dy, int height, int width);
 
     /**
-     * Get spawn point for provided model, this is usually used for projectile spawning
-     * to avoid colliding with the spawner itself.
-     * This spawn point is relative to the model's position and depends on the hitbox size.
+     * Get spawn point for provided model, this is usually used for projectile
+     * spawning to avoid colliding with the spawner itself.
+     * This spawn point is relative to the model's position and depends on the
+     * hitbox size.
      *
-     * @param model      : Model of spawner.
-     * @param directionX : Spawn directionX
-     * @param directionY : Spawn directionY
-     * @return array size of 2: {spawnPointX, spawnPointY}
+     * @param model     : Model of spawner.
+     * @param direction : Direction vector where the projectile is moving to.
+     * @return Spawn point vector relative to the model's position.
      */
-    int[] getSpawnPoint(Model model, int directionX, int directionY);
+    Vector3D getSpawnPoint(Model model, Vector3D direction);
 }

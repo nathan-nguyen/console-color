@@ -1,11 +1,12 @@
 package com.noiprocs.core.model.item;
 
+import com.noiprocs.core.common.Vector3D;
 import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.mob.CotMobModel;
 
 public class AppleItemModel extends ItemModel {
-    public AppleItemModel(int x, int y) {
-        super(x, y, AppleItem.class);
+    public AppleItemModel(Vector3D position) {
+        super(position, AppleItem.class);
     }
 
     @Override

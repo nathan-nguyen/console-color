@@ -1,7 +1,7 @@
 package com.noiprocs.core;
 
 import com.noiprocs.core.config.Config;
-import com.noiprocs.core.util.MetricCollector;
+import com.noiprocs.core.common.MetricCollector;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

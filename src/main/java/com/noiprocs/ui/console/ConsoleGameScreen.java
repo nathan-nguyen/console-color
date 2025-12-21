@@ -6,7 +6,7 @@ import com.noiprocs.core.graphics.GameScreenInterface;
 import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.item.Item;
 import com.noiprocs.core.model.mob.character.PlayerModel;
-import com.noiprocs.core.util.MetricCollector;
+import com.noiprocs.core.common.MetricCollector;
 import com.noiprocs.ui.console.sprite.ConsoleSprite;
 
 import java.util.Comparator;
@@ -38,15 +38,15 @@ public class ConsoleGameScreen implements GameScreenInterface {
     protected String getScreenContentInString(PlayerModel playerModel) {
         // Get list of visible objects not far from player
         // Render order: Models with smaller posX render first.
-        int offsetX = playerModel.posX - HEIGHT / 2;
-        int offsetY = playerModel.posY - WIDTH / 2;
+        int offsetX = playerModel.position.x - HEIGHT / 2;
+        int offsetY = playerModel.position.y - WIDTH / 2;
         this.clearMap();
 
         List<Model> renderableModelList = gameContext.modelManager.getLocalChunk()
                 .flatMap(modelChunk -> modelChunk.map.values().stream())
                 .filter(model -> model.isVisible
-                        && model.distanceTo(playerModel.posX, playerModel.posY) <= Config.RENDER_RANGE)
-                .sorted(Comparator.comparingInt(u -> u.posX))
+                        && model.position.distanceTo(playerModel.position) <= Config.RENDER_RANGE)
+                .sorted(Comparator.comparingInt(u -> u.position.x))
                 .collect(Collectors.toList());
 
         for (Model model : renderableModelList) {
@@ -54,8 +54,8 @@ public class ConsoleGameScreen implements GameScreenInterface {
             char[][] texture = consoleSprite.getTexture(model);
 
             if (model == null) continue;
-            int posX = model.posX - offsetX - consoleSprite.offsetX;
-            int posY = model.posY - offsetY - consoleSprite.offsetY;
+            int posX = model.position.x - offsetX - consoleSprite.offsetX;
+            int posY = model.position.y - offsetY - consoleSprite.offsetY;
 
             // Main player sprite position is always fixed and does not depend on current model position
             // Main player model position could be updated after offsetX and offsetY were calculated. If we use normal
@@ -95,8 +95,7 @@ public class ConsoleGameScreen implements GameScreenInterface {
         Item item = playerModel.inventory[playerModel.currentInventorySlot];
         if (item != null) inventorySb.append(item.name).append(": ").append(item.amount);
 
-        return playerModel.id + " - [" + playerModel.posX + ", " + playerModel.posY +
-                "] - Health: " + playerModel.getHealth() + " - Inventory: [" + inventorySb + "] - FPS: " + MetricCollector.getAvgFps();
+        return playerModel.id + " - [" + playerModel.position + "] - Health: " + playerModel.getHealth() + " - Inventory: [" + inventorySb + "] - FPS: " + MetricCollector.getAvgFps();
     }
 
     private String convertMapToString(PlayerModel playerModel) {

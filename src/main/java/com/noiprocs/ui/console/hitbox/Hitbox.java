@@ -1,5 +1,6 @@
 package com.noiprocs.ui.console.hitbox;
 
+import com.noiprocs.core.common.Vector3D;
 import com.noiprocs.core.model.Model;
 
 public class Hitbox {
@@ -20,31 +21,31 @@ public class Hitbox {
         this.width = width;
     }
 
-    protected int[] getSpawnPointTop() {
-        return new int[]{-1, 0};
+    protected Vector3D getSpawnPointTop() {
+        return new Vector3D(-1, 0, 0);
     }
 
-    protected int[] getSpawnPointRight() {
-        return new int[]{0, width};
+    protected Vector3D getSpawnPointRight() {
+        return new Vector3D(0, width, 0);
     }
 
-    protected int[] getSpawnPointBottom() {
-        return new int[]{height, 0};
+    protected Vector3D getSpawnPointBottom() {
+        return new Vector3D(height, 0, 0);
     }
 
-    protected int[] getSpawnPointLeft() {
-        return new int[]{0, -1};
+    protected Vector3D getSpawnPointLeft() {
+        return new Vector3D(0, -1, 0);
     }
 
-    protected int[] getSpawnPointCenter() {
-        return new int[]{height / 2, width / 2};
+    protected Vector3D getSpawnPointCenter() {
+        return new Vector3D(height / 2, width / 2, 0);
     }
 
-    public int[] getSpawnPoint(int directionX, int directionY) {
-        if (directionX == -1 && directionY == 0) return getSpawnPointTop();
-        if (directionX == 0 && directionY == 1) return getSpawnPointRight();
-        if (directionX == 1 && directionY == 0) return getSpawnPointBottom();
-        if (directionX == 0 && directionY == -1) return getSpawnPointLeft();
+    public Vector3D getSpawnPoint(Vector3D direction) {
+        if (direction.x == -1 && direction.y == 0) return getSpawnPointTop();
+        if (direction.x == 0 && direction.y == 1) return getSpawnPointRight();
+        if (direction.x == 1 && direction.y == 0) return getSpawnPointBottom();
+        if (direction.x == 0 && direction.y == -1) return getSpawnPointLeft();
         return getSpawnPointCenter();
     }
 

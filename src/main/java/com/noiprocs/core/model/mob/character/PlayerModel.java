@@ -1,6 +1,7 @@
 package com.noiprocs.core.model.mob.character;
 
 import com.noiprocs.core.GameContext;
+import com.noiprocs.core.common.Vector3D;
 import com.noiprocs.core.model.InteractiveInterface;
 import com.noiprocs.core.model.ItemModelInterface;
 import com.noiprocs.core.model.LowLatencyModelInterface;
@@ -23,8 +24,8 @@ public class PlayerModel extends MobModel implements LowLatencyModelInterface {
     public Item[] inventory = new Item[MAX_INVENTORY_SIZE];
     public int currentInventorySlot = 0;
 
-    public PlayerModel(String id, int x, int y, boolean isVisible) {
-        super(x, y, isVisible, MAX_HEALTH, HORIZONTAL_SPEED, VERTICAL_SPEED);
+    public PlayerModel(String id, Vector3D position, boolean isVisible) {
+        super(position, isVisible, MAX_HEALTH, HORIZONTAL_SPEED, VERTICAL_SPEED);
         this.id = id;
         this.skipMovementFrame = DEFAULT_SKIP_MOVEMENT_FRAME;
     }
@@ -52,7 +53,7 @@ public class PlayerModel extends MobModel implements LowLatencyModelInterface {
 
     // Absorb nearby items
     private void absorbItems() {
-        List<Model> collidingModels = GameContext.get().hitboxManager.getCollidingModel(this, this.posX, this.posY);
+        List<Model> collidingModels = GameContext.get().hitboxManager.getCollidingModel(this, this.position);
         for (Model item: collidingModels) {
             if (item instanceof ItemModelInterface) {
                 logger.info("Absorbed item {}", item);
@@ -106,7 +107,7 @@ public class PlayerModel extends MobModel implements LowLatencyModelInterface {
 
     @Override
     public String toString() {
-        return "Player: (" + id + ", " + posX + ", " + posY + ")";
+        return "Player: (" + id + ", " + position + ")";
     }
 
     public Item getCurrentInventoryItem() {

@@ -1,4 +1,4 @@
-package com.noiprocs.core.util;
+package com.noiprocs.core.common;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
