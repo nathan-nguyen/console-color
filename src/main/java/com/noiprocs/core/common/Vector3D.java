@@ -32,4 +32,8 @@ public class Vector3D implements Serializable {
         return (int) Math.sqrt((x - position.x) * (x - position.x) + (y - position.y) * (y - position.y)
                 + (z - position.z) * (z - position.z));
     }
+
+    public Vector3D copy() {
+        return new Vector3D(this.x, this.y, this.z);
+    }
 }
