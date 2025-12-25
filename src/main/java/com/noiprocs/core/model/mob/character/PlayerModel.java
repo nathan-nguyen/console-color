@@ -47,14 +47,16 @@ public class PlayerModel extends MobModel implements LowLatencyModelInterface {
     }
 
     public void triggerAction() {
-        if (actionCounter > 0) return;
+        if (actionCounter > 0) {
+            return;
+        }
         actionCounter = 6;
     }
 
     // Absorb nearby items
     private void absorbItems() {
         List<Model> collidingModels = GameContext.get().hitboxManager.getCollidingModel(this, this.position);
-        for (Model item: collidingModels) {
+        for (Model item : collidingModels) {
             if (item instanceof ItemModelInterface) {
                 logger.info("Absorbed item {}", item);
                 ((ItemModelInterface) item).interact(this, inventory[currentInventorySlot]);
@@ -63,19 +65,22 @@ public class PlayerModel extends MobModel implements LowLatencyModelInterface {
     }
 
     private void updateAction() {
-        if (actionCounter == 0) return;
+        if (actionCounter == 0)
+            return;
 
         --actionCounter;
-        if (actionCounter == 2) interactAction();
+        if (actionCounter == 2)
+            interactAction();
     }
 
     private void interactAction() {
         List<Model> collidingModels = null;
+        Vector3D hitboxDimension = new Vector3D(2, 1, 0);
+        Vector3D distance = new Vector3D(-1, 0, 0);
         if (facingDirection == MovingDirection.RIGHT) {
-            collidingModels = GameContext.get().hitboxManager.getCollidingModel(this, 0, 1, -1, 0, 2, 1);
-        }
-        else if (facingDirection == MovingDirection.LEFT) {
-            collidingModels = GameContext.get().hitboxManager.getCollidingModel(this, 0, -1, -1, 0, 2, 1);
+            collidingModels = GameContext.get().hitboxManager.getCollidingModel(this, EAST, distance, hitboxDimension);
+        } else if (facingDirection == MovingDirection.LEFT) {
+            collidingModels = GameContext.get().hitboxManager.getCollidingModel(this, WEST, distance, hitboxDimension);
         }
 
         if (collidingModels != null && !collidingModels.isEmpty()) {
@@ -118,13 +123,15 @@ public class PlayerModel extends MobModel implements LowLatencyModelInterface {
         int emptySlot = Integer.MAX_VALUE;
         for (int i = 0; i < MAX_INVENTORY_SIZE; ++i) {
             Item existingItem = inventory[i];
-            if (existingItem == null) emptySlot = Math.min(emptySlot, i);
+            if (existingItem == null)
+                emptySlot = Math.min(emptySlot, i);
             if (existingItem != null && existingItem.name.equals(item.name)) {
                 existingItem.amount += item.amount;
                 return true;
             }
         }
-        if (emptySlot > MAX_INVENTORY_SIZE) return false;
+        if (emptySlot > MAX_INVENTORY_SIZE)
+            return false;
         inventory[emptySlot] = item;
         return true;
     }
@@ -135,9 +142,11 @@ public class PlayerModel extends MobModel implements LowLatencyModelInterface {
 
     public void useItem() {
         Item item = inventory[currentInventorySlot];
-        if (item == null) return;
+        if (item == null)
+            return;
 
         item.use(this);
-        if (item.amount == 0) inventory[currentInventorySlot] = null;
+        if (item.amount == 0)
+            inventory[currentInventorySlot] = null;
     }
 }

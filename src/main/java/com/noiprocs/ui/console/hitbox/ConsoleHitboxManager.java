@@ -34,10 +34,10 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
     // Check whether 2 rectangles overlapped, providing top-left and bottom-right
     // positions
     // Note: X is increasing from top to bottom, Y is increasing from left to right.
-    public static boolean isOverlapped(
-            int tlX1, int tlY1, int brX1, int brY1,
-            int tlX2, int tlY2, int brX2, int brY2) {
-        return tlX1 < brX2 && brX1 > tlX2 && tlY1 < brY2 && brY1 > tlY2;
+    public static boolean isOverlapped(Vector3D topLeft1, Vector3D bottomRight1, Vector3D topLeft2,
+            Vector3D bottomRight2) {
+        return topLeft1.x < bottomRight2.x && bottomRight1.x > topLeft2.x && topLeft1.y < bottomRight2.y
+                && bottomRight1.y > topLeft2.y;
     }
 
     /**
@@ -50,8 +50,7 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
     @Override
     public boolean isValid(Model model, Vector3D nextPosition) {
         Hitbox modelHitbox = getHitbox(model);
-        int endX = nextPosition.x + modelHitbox.getHeight(model);
-        int endY = nextPosition.y + modelHitbox.getWidth(model);
+        Vector3D end = nextPosition.add(new Vector3D(modelHitbox.getHeight(model), modelHitbox.getWidth(model), 0));
         Model projectileSpawner = model instanceof ProjectileModel ? ((ProjectileModel) model).getSpawner() : null;
 
         return gameContext.modelManager.getSurroundedChunk(model)
@@ -65,22 +64,25 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
                     if ((modelHitbox.maskBit & surroundedHitbox.categoryBit) == 0)
                         return false;
 
-                    return isOverlapped(
-                            nextPosition.x, nextPosition.y, endX, endY,
-                            surroundedModel.position.x, surroundedModel.position.y,
-                            surroundedModel.position.x + surroundedHitbox.getHeight(surroundedModel),
-                            surroundedModel.position.y + surroundedHitbox.getWidth(surroundedModel));
+                    return isOverlapped(nextPosition, end, surroundedModel.position,
+                            surroundedModel.position.add(new Vector3D(surroundedHitbox.getHeight(surroundedModel),
+                                    surroundedHitbox.getWidth(surroundedModel), 0)));
                 });
     }
 
+    /**
+     * Check whether 2 models are colliding.
+     *
+     * @param m1: First model
+     * @param m2: Second model
+     * @return True if 2 models are colliding.
+     */
     @Override
     public boolean isColliding(Model m1, Model m2) {
         Hitbox hb1 = getHitbox(m1), hb2 = getHitbox(m2);
-        return isOverlapped(
-                m1.position.x, m1.position.y,
-                m1.position.x + hb1.getHeight(m1), m1.position.y + hb1.getWidth(m1),
-                m2.position.x, m2.position.y,
-                m2.position.x + hb2.getHeight(m2), m2.position.y + hb2.getWidth(m2));
+        Vector3D dimension1 = new Vector3D(hb1.getHeight(m1), hb1.getWidth(m1), 0);
+        Vector3D dimension2 = new Vector3D(hb2.getHeight(m2), hb2.getWidth(m2), 0);
+        return isOverlapped(m1.position, m1.position.add(dimension1), m2.position, m2.position.add(dimension2));
     }
 
     /**
@@ -94,33 +96,29 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
     @Override
     public List<Model> getCollidingModel(Model model, Vector3D nextPosition) {
         Hitbox targetHitbox = getHitbox(model);
-        return getCollidingModel(model, nextPosition.x, nextPosition.y, targetHitbox.getHeight(model),
-                targetHitbox.getWidth(model));
+        Vector3D dimension = new Vector3D(targetHitbox.getHeight(model), targetHitbox.getWidth(model), 0);
+        return getCollidingModel(model, nextPosition, dimension);
     }
 
     /**
      * Get list of colliding models, providing direction, distance to original
      * hitbox, and size of checking hitbox
      *
-     * @param model:      Checking model
-     * @param directionX: DirectionX to checking hitbox
-     * @param directionY: DirectionY to checking hitbox
-     * @param dx:         DistanceX to from original hitbox to checking hitbox
-     * @param dy:         DistanceY to from original hitbox to checking hitbox
-     * @param height:     Checking hitbox height
-     * @param width:      Checking hitbox width
+     * @param model:     Checking model
+     * @param direction: Direction vector of checking hitbox
+     * @param distance:  Distance vector to from original hitbox to checking hitbox
+     * @param dimension: Checking hitbox dimension
      * @return List of colliding models.
      */
     @Override
     // Facing right: directionY >= 0
     // Facing left: directionY < 0
-    public List<Model> getCollidingModel(Model model, int directionX, int directionY, int dx, int dy, int height,
-            int width) {
+    public List<Model> getCollidingModel(Model model, Vector3D direction, Vector3D distance, Vector3D dimension) {
         Hitbox targetHitbox = getHitbox(model);
-        int nextX = model.position.x + dx;
-        int nextY = model.position.y + dy + (directionY >= 0 ? targetHitbox.getWidth(model) : -width);
-
-        return getCollidingModel(model, nextX, nextY, height, width);
+        Vector3D nextPosition = model.position
+                .add(new Vector3D(distance.x,
+                        distance.y + (direction.y >= 0 ? targetHitbox.getWidth(model) : -dimension.y), 0));
+        return getCollidingModel(model, nextPosition, dimension);
     }
 
     /**
@@ -139,9 +137,9 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
         return targetHitbox.getSpawnPoint(direction);
     }
 
-    private List<Model> getCollidingModel(Model model, int nextX, int nextY, int height, int width) {
+    private List<Model> getCollidingModel(Model model, Vector3D nextPosition, Vector3D dimension) {
         Model projectileSpawner = model instanceof ProjectileModel ? ((ProjectileModel) model).getSpawner() : null;
-        int endX = nextX + height, endY = nextY + width;
+        Vector3D end = nextPosition.add(dimension);
 
         return gameContext.modelManager.getSurroundedChunk(model).stream()
                 .flatMap(modelChunk -> modelChunk.map.values().stream())
@@ -150,12 +148,10 @@ public class ConsoleHitboxManager implements HitboxManagerInterface {
                         return false;
 
                     Hitbox surroundedHitbox = getHitbox(surroundedModel);
-                    return isOverlapped(
-                            nextX, nextY, endX, endY,
-                            surroundedModel.position.x, surroundedModel.position.y,
-                            surroundedModel.position.x + surroundedHitbox.getHeight(surroundedModel),
-                            surroundedModel.position.y + surroundedHitbox.getWidth(surroundedModel));
-                })
-                .collect(Collectors.toList());
+                    Vector3D surroundedDimension = new Vector3D(surroundedHitbox.getHeight(surroundedModel),
+                            surroundedHitbox.getWidth(surroundedModel), 0);
+                    return isOverlapped(nextPosition, end, surroundedModel.position,
+                            surroundedModel.position.add(surroundedDimension));
+                }).collect(Collectors.toList());
     }
 }

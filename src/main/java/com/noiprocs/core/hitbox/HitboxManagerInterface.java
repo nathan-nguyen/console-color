@@ -34,16 +34,13 @@ public interface HitboxManagerInterface {
      * Get list of colliding models, providing direction, distance to original
      * hitbox, and size of checking hitbox
      *
-     * @param model:      Checking model
-     * @param directionX: DirectionX to checking hitbox
-     * @param directionY: DirectionY to checking hitbox
-     * @param dx:         DistanceX to from original hitbox to checking hitbox
-     * @param dy:         DistanceY to from original hitbox to checking hitbox
-     * @param height:     Checking hitbox height
-     * @param width:      Checking hitbox width
+     * @param model:     Checking model
+     * @param direction: Direction vector of checking hitbox
+     * @param distance:  Distance vector to from original hitbox to checking hitbox
+     * @param dimension: Checking hitbox dimension
      * @return List of colliding models.
      */
-    List<Model> getCollidingModel(Model model, int directionX, int directionY, int dx, int dy, int height, int width);
+    List<Model> getCollidingModel(Model model, Vector3D direction, Vector3D distance, Vector3D dimension);
 
     /**
      * Get spawn point for provided model, this is usually used for projectile

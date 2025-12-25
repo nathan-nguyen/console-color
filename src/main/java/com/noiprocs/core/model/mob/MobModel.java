@@ -12,10 +12,10 @@ public abstract class MobModel extends DurableModel {
         STOP, UP, DOWN, LEFT, RIGHT
     }
 
-    public static final Vector3D MOVE_NORTH = new Vector3D(-1, 0, 0);
-    public static final Vector3D MOVE_SOUTH = new Vector3D(1, 0, 0);
-    public static final Vector3D MOVE_WEST = new Vector3D(0, -1, 0);
-    public static final Vector3D MOVE_EAST = new Vector3D(0, 1, 0);
+    public static final Vector3D NORTH = new Vector3D(-1, 0, 0);
+    public static final Vector3D SOUTH = new Vector3D(1, 0, 0);
+    public static final Vector3D WEST = new Vector3D(0, -1, 0);
+    public static final Vector3D EAST = new Vector3D(0, 1, 0);
 
     private MovingDirection movingDirection = MovingDirection.STOP;
     protected MovingDirection facingDirection = MovingDirection.RIGHT;
@@ -47,19 +47,19 @@ public abstract class MobModel extends DurableModel {
                 return;
             case UP:
                 for (int i = 0; i < verticalSpeed; ++i)
-                    move(MOVE_NORTH);
+                    move(NORTH);
                 break;
             case DOWN:
                 for (int i = 0; i < verticalSpeed; ++i)
-                    move(MOVE_SOUTH);
+                    move(SOUTH);
                 break;
             case LEFT:
                 for (int i = 0; i < horizontalSpeed; ++i)
-                    move(MOVE_WEST);
+                    move(WEST);
                 break;
             case RIGHT:
                 for (int i = 0; i < horizontalSpeed; ++i)
-                    move(MOVE_EAST);
+                    move(EAST);
                 break;
         }
     }
