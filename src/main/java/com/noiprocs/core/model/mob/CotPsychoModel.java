@@ -16,8 +16,9 @@ public class CotPsychoModel extends CotMobModel {
 
     @Override
     protected void move(Vector3D deltaPosition) {
-        if (GameContext.get().hitboxManager.isValid(this, this.position.add(deltaPosition))) {
-            this.position.addInPlace(deltaPosition);
+        Vector3D nextPosition = this.position.add(deltaPosition);
+        if (GameContext.get().hitboxManager.isValid(this, nextPosition)) {
+            this.setPosition(nextPosition);
         } else {
             int nextDirection = Helper.random.nextInt(4);
             if (nextDirection == 0) {

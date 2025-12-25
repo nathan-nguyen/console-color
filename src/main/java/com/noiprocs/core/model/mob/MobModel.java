@@ -73,11 +73,13 @@ public abstract class MobModel extends DurableModel {
      * @param y: Distance to move in vertical direction.
      */
     protected void move(Vector3D deltaPosition) {
-        if (movingDirection == MovingDirection.STOP)
+        if (movingDirection == MovingDirection.STOP) {
             return;
+        }
 
-        if (this.isNextMoveValid(this.position.add(deltaPosition))) {
-            this.position.addInPlace(deltaPosition);
+        Vector3D nextPosition = this.position.add(deltaPosition);
+        if (this.isNextMoveValid(nextPosition)) {
+            this.setPosition(nextPosition);
         } else {
             movingDirection = MovingDirection.STOP;
         }

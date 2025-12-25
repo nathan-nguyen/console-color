@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class Vector3D implements Serializable {
     public static final Vector3D ZERO = new Vector3D(0, 0, 0);
 
-    public int x, y, z;
+    public final int x, y, z;
 
     public Vector3D(int x, int y, int z) {
         this.x = x;
@@ -15,12 +15,6 @@ public class Vector3D implements Serializable {
 
     public Vector3D add(Vector3D other) {
         return new Vector3D(this.x + other.x, this.y + other.y, this.z + other.z);
-    }
-
-    public void addInPlace(Vector3D other) {
-        this.x += other.x;
-        this.y += other.y;
-        this.z += other.z;
     }
 
     @Override
