@@ -7,7 +7,7 @@ public class Hitbox {
     protected static final int NO_HITBOX_HEIGHT = 0;
     protected static final int NO_HITBOX_WIDTH = 0;
 
-    protected final int height, width;
+    protected final Vector3D dimension;
     public final int categoryBit, maskBit;
 
     public Hitbox(int categoryBit, int maskBit) {
@@ -17,8 +17,7 @@ public class Hitbox {
     public Hitbox(int height, int width, int categoryBit, int maskBit) {
         this.categoryBit = categoryBit;
         this.maskBit = maskBit;
-        this.height = height;
-        this.width = width;
+        this.dimension = new Vector3D(height, width, 0);
     }
 
     protected Vector3D getSpawnPointTop() {
@@ -26,11 +25,11 @@ public class Hitbox {
     }
 
     protected Vector3D getSpawnPointRight() {
-        return new Vector3D(0, width, 0);
+        return new Vector3D(0, dimension.y, 0);
     }
 
     protected Vector3D getSpawnPointBottom() {
-        return new Vector3D(height, 0, 0);
+        return new Vector3D(dimension.x, 0, 0);
     }
 
     protected Vector3D getSpawnPointLeft() {
@@ -38,7 +37,7 @@ public class Hitbox {
     }
 
     protected Vector3D getSpawnPointCenter() {
-        return new Vector3D(height / 2, width / 2, 0);
+        return new Vector3D(dimension.x / 2, dimension.y / 2, 0);
     }
 
     public Vector3D getSpawnPoint(Vector3D direction) {
@@ -49,11 +48,7 @@ public class Hitbox {
         return getSpawnPointCenter();
     }
 
-    public int getHeight(Model model) {
-        return this.height;
-    }
-
-    public int getWidth(Model model) {
-        return this.width;
+    public Vector3D getDimension(Model model) {
+        return dimension;
     }
 }
