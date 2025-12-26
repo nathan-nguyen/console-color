@@ -1,8 +1,9 @@
 package com.noiprocs.ui.console.sprite.mob.character;
 
+import com.noiprocs.core.common.Direction;
+import com.noiprocs.core.common.Vector3D;
 import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.item.AxeItem;
-import com.noiprocs.core.model.mob.MobModel;
 import com.noiprocs.core.model.mob.character.PlayerModel;
 import com.noiprocs.ui.console.sprite.ConsoleSprite;
 
@@ -69,17 +70,17 @@ public class PlayerSprite extends ConsoleSprite {
     @Override
     public char[][] getTexture(Model model) {
         PlayerModel playerModel = (PlayerModel) model;
-        MobModel.MovingDirection facingDirection = playerModel.getFacingDirection();
+        Vector3D facingDirection = playerModel.getFacingDirection();
         if (playerModel.actionCounter == 0) return TEXTURE;
 
         if (playerModel.getCurrentInventoryItem() instanceof AxeItem) {
-            if (facingDirection == MobModel.MovingDirection.RIGHT) {
+            if (facingDirection.equals(Direction.EAST)) {
                 return RIGHT_AXE_ACTION_PERFORMANCE[(playerModel.actionCounter / 2) % RIGHT_AXE_ACTION_PERFORMANCE.length];
             }
             return LEFT_AXE_ACTION_PERFORMANCE[(playerModel.actionCounter / 2) % LEFT_AXE_ACTION_PERFORMANCE.length];
         }
 
-        if (facingDirection == MobModel.MovingDirection.RIGHT) {
+        if (facingDirection.equals(Direction.EAST)) {
             return PUNCH_ACTION_RIGHT_TEXTURE;
         }
         return PUNCH_ACTION_LEFT_TEXTURE;

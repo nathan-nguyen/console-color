@@ -1,6 +1,7 @@
 package com.noiprocs.core.model.mob;
 
 import com.noiprocs.core.GameContext;
+import com.noiprocs.core.common.Direction;
 import com.noiprocs.core.common.Vector3D;
 import com.noiprocs.core.hitbox.HitboxManagerInterface;
 import com.noiprocs.core.model.InteractiveInterface;
@@ -18,12 +19,11 @@ import org.apache.logging.log4j.Logger;
 public class CotMobModel extends MobModel implements InteractiveInterface {
     private static final Logger logger = LogManager.getLogger(CotMobModel.class);
     private static final int MAX_HEALTH = 20;
-    private static final int HORIZONTAL_SPEED = 1;
-    private static final int VERTICAL_SPEED = 1;
+    private static final Vector3D DEFAULT_SPEED = new Vector3D(1, 1, 0);
 
     public CotMobModel(Vector3D position) {
-        super(position, true, MAX_HEALTH, HORIZONTAL_SPEED, VERTICAL_SPEED);
-        this.setMovingDirection(MovingDirection.LEFT);
+        super(position, true, MAX_HEALTH, DEFAULT_SPEED);
+        this.setMovingDirection(Direction.WEST);
     }
 
     @Override

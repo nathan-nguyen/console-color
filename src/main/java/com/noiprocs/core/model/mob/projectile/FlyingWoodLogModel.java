@@ -14,10 +14,10 @@ public class FlyingWoodLogModel extends ProjectileModel {
 
     private static final int DEFAULT_SKIP_MOVEMENT_FRAME = 3;
     private static final int DEFAULT_TTL = 15;
-    private static final int HORIZONTAL_SPEED = 2, VERTICAL_SPEED = 1;
+    private static final Vector3D DEFAULT_SPEED = new Vector3D(2, 1, 0);
 
-    public FlyingWoodLogModel(Vector3D position, MovingDirection movingDirection, Model spawner) {
-        super(position, HORIZONTAL_SPEED, VERTICAL_SPEED, movingDirection, DEFAULT_TTL, spawner);
+    public FlyingWoodLogModel(Vector3D position, Vector3D movingDirection, Model spawner) {
+        super(position, DEFAULT_SPEED, movingDirection, DEFAULT_TTL, spawner);
         this.skipMovementFrame = DEFAULT_SKIP_MOVEMENT_FRAME;
     }
 

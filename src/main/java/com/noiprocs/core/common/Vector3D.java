@@ -30,4 +30,8 @@ public class Vector3D implements Serializable {
     public Vector3D copy() {
         return new Vector3D(this.x, this.y, this.z);
     }
+
+    public boolean equals(Vector3D obj) {
+        return this.x == obj.x && this.y == obj.y && this.z == obj.z;
+    }
 }

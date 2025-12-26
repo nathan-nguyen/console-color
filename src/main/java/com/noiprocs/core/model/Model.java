@@ -13,8 +13,8 @@ public abstract class Model implements Serializable {
     public boolean isDestroyed = false;
 
     public Model(Vector3D position, boolean isVisible) {
-        this.position = position.copy();
-        this.rotation = Vector3D.ZERO.copy();
+        this.position = position;
+        this.rotation = Vector3D.ZERO;
         this.isVisible = isVisible;
     }
 

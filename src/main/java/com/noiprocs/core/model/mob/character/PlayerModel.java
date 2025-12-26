@@ -1,6 +1,7 @@
 package com.noiprocs.core.model.mob.character;
 
 import com.noiprocs.core.GameContext;
+import com.noiprocs.core.common.Direction;
 import com.noiprocs.core.common.Vector3D;
 import com.noiprocs.core.model.InteractiveInterface;
 import com.noiprocs.core.model.ItemModelInterface;
@@ -17,7 +18,7 @@ public class PlayerModel extends MobModel implements LowLatencyModelInterface {
     private static final Logger logger = LogManager.getLogger(PlayerModel.class);
     private static final int MAX_HEALTH = 100;
     private static final int DEFAULT_SKIP_MOVEMENT_FRAME = 6;
-    private static final int HORIZONTAL_SPEED = 2, VERTICAL_SPEED = 1;
+    private static final Vector3D DEFAULT_SPEED = new Vector3D(1, 2, 0);
     private static final int MAX_INVENTORY_SIZE = 4;
 
     public int actionCounter = 0;
@@ -25,25 +26,25 @@ public class PlayerModel extends MobModel implements LowLatencyModelInterface {
     public int currentInventorySlot = 0;
 
     public PlayerModel(String id, Vector3D position, boolean isVisible) {
-        super(position, isVisible, MAX_HEALTH, HORIZONTAL_SPEED, VERTICAL_SPEED);
+        super(position, isVisible, MAX_HEALTH, DEFAULT_SPEED);
         this.id = id;
         this.skipMovementFrame = DEFAULT_SKIP_MOVEMENT_FRAME;
     }
 
     public void moveUp() {
-        this.setMovingDirection(MovingDirection.UP);
+        this.setMovingDirection(Direction.NORTH);
     }
 
     public void moveDown() {
-        this.setMovingDirection(MovingDirection.DOWN);
+        this.setMovingDirection(Direction.SOUTH);
     }
 
     public void moveLeft() {
-        this.setMovingDirection(MovingDirection.LEFT);
+        this.setMovingDirection(Direction.WEST);
     }
 
     public void moveRight() {
-        this.setMovingDirection(MovingDirection.RIGHT);
+        this.setMovingDirection(Direction.EAST);
     }
 
     public void triggerAction() {
@@ -77,11 +78,7 @@ public class PlayerModel extends MobModel implements LowLatencyModelInterface {
         List<Model> collidingModels = null;
         Vector3D hitboxDimension = new Vector3D(2, 1, 0);
         Vector3D distance = new Vector3D(-1, 0, 0);
-        if (facingDirection == MovingDirection.RIGHT) {
-            collidingModels = GameContext.get().hitboxManager.getCollidingModel(this, EAST, distance, hitboxDimension);
-        } else if (facingDirection == MovingDirection.LEFT) {
-            collidingModels = GameContext.get().hitboxManager.getCollidingModel(this, WEST, distance, hitboxDimension);
-        }
+        collidingModels = GameContext.get().hitboxManager.getCollidingModel(this, facingDirection, distance, hitboxDimension);
 
         if (collidingModels != null && !collidingModels.isEmpty()) {
             Model interactModel = collidingModels.get(0);
@@ -93,7 +90,7 @@ public class PlayerModel extends MobModel implements LowLatencyModelInterface {
     }
 
     public void stop() {
-        this.setMovingDirection(MovingDirection.STOP);
+        this.setMovingDirection(Vector3D.ZERO);
     }
 
     @Override

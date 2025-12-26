@@ -21,8 +21,8 @@ public class WoodLogItem extends Item {
         logger.info("{} used {}", model, this);
 
         // Determine moving direction of the projectile
-        MobModel.MovingDirection movingDirection = ((MobModel) model).getMovingDirection();
-        if (movingDirection == MobModel.MovingDirection.STOP) {
+        Vector3D movingDirection = ((MobModel) model).getMovingDirection();
+        if (movingDirection == Vector3D.ZERO) {
             movingDirection = ((MobModel) model).getFacingDirection();
         }
 

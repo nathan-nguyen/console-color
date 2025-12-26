@@ -1,6 +1,7 @@
 package com.noiprocs.core.model.mob;
 
 import com.noiprocs.core.GameContext;
+import com.noiprocs.core.common.Direction;
 import com.noiprocs.core.common.Helper;
 import com.noiprocs.core.common.Vector3D;
 
@@ -22,13 +23,13 @@ public class CotPsychoModel extends CotMobModel {
         } else {
             int nextDirection = Helper.random.nextInt(4);
             if (nextDirection == 0) {
-                this.setMovingDirection(MovingDirection.UP);
+                this.setMovingDirection(Direction.NORTH);
             } else if (nextDirection == 1) {
-                this.setMovingDirection(MovingDirection.DOWN);
+                this.setMovingDirection(Direction.SOUTH);
             } else if (nextDirection == 2) {
-                this.setMovingDirection(MovingDirection.LEFT);
+                this.setMovingDirection(Direction.WEST);
             } else {
-                this.setMovingDirection(MovingDirection.RIGHT);
+                this.setMovingDirection(Direction.EAST);
             }
         }
     }

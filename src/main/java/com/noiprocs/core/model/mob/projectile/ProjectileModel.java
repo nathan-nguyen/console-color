@@ -10,12 +10,8 @@ public class ProjectileModel extends MobModel implements LowLatencyModelInterfac
     private int ttl;
     private final Model spawner;
 
-    public ProjectileModel(Vector3D position,
-            int horizontalSpeed, int verticalSpeed,
-            MovingDirection movingDirection,
-            int ttl,
-            Model spawner) {
-        super(position, true, MAX_HEALTH, horizontalSpeed, verticalSpeed);
+    public ProjectileModel(Vector3D position, Vector3D speed, Vector3D movingDirection, int ttl, Model spawner) {
+        super(position, true, MAX_HEALTH, speed);
         this.ttl = ttl;
         this.spawner = spawner;
         this.setMovingDirection(movingDirection);
