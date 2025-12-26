@@ -17,10 +17,14 @@ public class ItemModel extends Model implements ItemModelInterface {
   @Override
   public void interact(Model model, Item item) {
     if (model instanceof PlayerModel) {
-      Item createItem = (Item) Helper.createObject(itemClass, 1);
-      if (((PlayerModel) model).addInventoryItem(createItem)) {
-        this.destroy();
-      }
+      this.addToModelInventory((PlayerModel) model);
+    }
+  }
+
+  protected void addToModelInventory(PlayerModel model) {
+    Item createItem = (Item) Helper.createObject(itemClass, 1);
+    if (model.addInventoryItem(createItem)) {
+      this.destroy();
     }
   }
 
