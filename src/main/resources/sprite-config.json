@@ -1,0 +1,26 @@
+{
+  "sprites": [
+    {
+      "modelClass": "com.noiprocs.core.model.item.WoodLogItem",
+      "texture": ["="]
+    },
+    {
+      "modelClass": "com.noiprocs.core.model.item.SaplingItem",
+      "texture": ["Y"]
+    },
+    {
+      "modelClass": "com.noiprocs.core.model.item.AppleItem",
+      "texture": ["o"]
+    },
+    {
+      "modelClass": "com.noiprocs.core.model.building.FenceModel",
+      "texture": ["##", "##"]
+    },
+    {
+      "modelClass": "com.noiprocs.core.model.item.AxeItem",
+      "texture": ["(=)", "~|~", "~|~"],
+      "offsetX": 2,
+      "offsetY": 1
+    }
+  ]
+}

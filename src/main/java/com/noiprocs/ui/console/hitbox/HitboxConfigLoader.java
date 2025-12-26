@@ -15,6 +15,7 @@ import java.util.Map;
 
 public class HitboxConfigLoader {
   private static final Map<String, Integer> CATEGORY_MAP = new HashMap<>();
+  private static final String HITBOX_CONFIG_FILE_NAME = "hitbox-config.json";
 
   static {
     CATEGORY_MAP.put("NONE", NONE);
@@ -27,9 +28,10 @@ public class HitboxConfigLoader {
   }
 
   public static Map<String, HitboxConfig> loadHitboxConfigs() {
-    try (InputStream is = HitboxConfigLoader.class.getResourceAsStream("/hitbox-config.json")) {
+    try (InputStream is =
+        HitboxConfigLoader.class.getResourceAsStream("/" + HITBOX_CONFIG_FILE_NAME)) {
       if (is == null) {
-        throw new IllegalStateException("hitbox-config.json not found in resources");
+        throw new IllegalStateException(HITBOX_CONFIG_FILE_NAME + " not found in resources");
       }
 
       try (Reader reader = new InputStreamReader(is, StandardCharsets.UTF_8)) {
