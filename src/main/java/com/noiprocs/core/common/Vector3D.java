@@ -3,35 +3,38 @@ package com.noiprocs.core.common;
 import java.io.Serializable;
 
 public class Vector3D implements Serializable {
-    public static final Vector3D ZERO = new Vector3D(0, 0, 0);
+  public static final Vector3D ZERO = new Vector3D(0, 0, 0);
 
-    public final int x, y, z;
+  public final int x, y, z;
 
-    public Vector3D(int x, int y, int z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
+  public Vector3D(int x, int y, int z) {
+    this.x = x;
+    this.y = y;
+    this.z = z;
+  }
 
-    public Vector3D add(Vector3D other) {
-        return new Vector3D(this.x + other.x, this.y + other.y, this.z + other.z);
-    }
+  public Vector3D add(Vector3D other) {
+    return new Vector3D(this.x + other.x, this.y + other.y, this.z + other.z);
+  }
 
-    @Override
-    public String toString() {
-        return "(" + x + ", " + y + ", " + z + ")";
-    }
+  @Override
+  public String toString() {
+    return "(" + x + ", " + y + ", " + z + ")";
+  }
 
-    public int distanceTo(Vector3D position) {
-        return (int) Math.sqrt((x - position.x) * (x - position.x) + (y - position.y) * (y - position.y)
+  public int distanceTo(Vector3D position) {
+    return (int)
+        Math.sqrt(
+            (x - position.x) * (x - position.x)
+                + (y - position.y) * (y - position.y)
                 + (z - position.z) * (z - position.z));
-    }
+  }
 
-    public Vector3D copy() {
-        return new Vector3D(this.x, this.y, this.z);
-    }
+  public Vector3D copy() {
+    return new Vector3D(this.x, this.y, this.z);
+  }
 
-    public boolean equals(Vector3D obj) {
-        return this.x == obj.x && this.y == obj.y && this.z == obj.z;
-    }
+  public boolean equals(Vector3D obj) {
+    return this.x == obj.x && this.y == obj.y && this.z == obj.z;
+  }
 }

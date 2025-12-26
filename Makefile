@@ -10,7 +10,7 @@ SERVER_PORT ?= 8080
 SERVER_ARGS = pc gnik server $(SERVER_HOST) $(SERVER_PORT)
 
 # Phony targets
-.PHONY: help test compile clean install run-server install-run-server
+.PHONY: help test compile clean install run-server install-run-server lint format
 
 # Default target
 help:
@@ -20,6 +20,8 @@ help:
 	@echo "  compile            - Compile the project"
 	@echo "  clean              - Clean build artifacts"
 	@echo "  install            - Clean and install the project"
+	@echo "  lint               - Run linting checks on Java code"
+	@echo "  format             - Format Java code"
 	@echo "  run-server         - Run the server (default: $(SERVER_HOST):$(SERVER_PORT))"
 	@echo "  install-run-server - Install and run the server"
 	@echo ""
@@ -37,6 +39,12 @@ clean:
 
 install:
 	mvn clean install
+
+lint:
+	mvn checkstyle:check
+
+format:
+	mvn spotless:apply
 
 run-server:
 	mvn compile exec:java -Dexec.mainClass="com.noiprocs.App" -Dexec.args="$(SERVER_ARGS)"

@@ -1,4 +1,3 @@
 package com.noiprocs.core.model;
 
-public interface ItemModelInterface extends InteractiveInterface {
-}
+public interface ItemModelInterface extends InteractiveInterface {}

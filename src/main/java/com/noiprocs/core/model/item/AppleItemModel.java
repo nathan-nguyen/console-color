@@ -5,14 +5,14 @@ import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.mob.CotMobModel;
 
 public class AppleItemModel extends ItemModel {
-    public AppleItemModel(Vector3D position) {
-        super(position, AppleItem.class);
-    }
+  public AppleItemModel(Vector3D position) {
+    super(position, AppleItem.class);
+  }
 
-    @Override
-    public void interact(Model model, Item item) {
-        if (model instanceof CotMobModel) {
-            this.destroy();
-        }
+  @Override
+  public void interact(Model model, Item item) {
+    if (model instanceof CotMobModel) {
+      this.destroy();
     }
+  }
 }

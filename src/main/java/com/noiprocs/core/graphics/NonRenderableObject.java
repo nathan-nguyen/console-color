@@ -1,4 +1,3 @@
 package com.noiprocs.core.graphics;
 
-public class NonRenderableObject {
-}
+public class NonRenderableObject {}

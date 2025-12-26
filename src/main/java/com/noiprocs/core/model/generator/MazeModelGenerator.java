@@ -1,219 +1,215 @@
 package com.noiprocs.core.model.generator;
 
+import com.noiprocs.core.common.Helper;
+import com.noiprocs.core.common.Vector3D;
 import com.noiprocs.core.config.Config;
 import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.environment.MazePartModel;
 import com.noiprocs.core.model.environment.WallTrapModel;
-import com.noiprocs.core.common.Helper;
-import com.noiprocs.core.common.Vector3D;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class MazeModelGenerator {
-    // CENTER_MODE = true if destination is in the center
-    private static final boolean CENTRE_MODE = false;
+  // CENTER_MODE = true if destination is in the center
+  private static final boolean CENTRE_MODE = false;
 
-    private static final char WALL_TEXTURE = '░';
+  private static final char WALL_TEXTURE = '░';
 
-    private static final boolean PRINT_MAZE_PATH = false;
+  private static final boolean PRINT_MAZE_PATH = false;
 
-    private static final boolean PRINT_BORDER = true;
-    private static final boolean PRINT_ORDER = true;
+  private static final boolean PRINT_BORDER = true;
+  private static final boolean PRINT_ORDER = true;
 
-    private static final int EMPTY = 0;
-    private static final int INVALID = -1;
+  private static final int EMPTY = 0;
+  private static final int INVALID = -1;
 
-    private final Random random = new Random();
+  private final Random random = new Random();
 
-    // Using two dimensions array for easy maintenance
-    private int[][] map;
-    private final int dimension;
-    private int offsetX, offsetY;
+  // Using two dimensions array for easy maintenance
+  private int[][] map;
+  private final int dimension;
+  private int offsetX, offsetY;
 
-    public MazeModelGenerator(int dimension) {
-        this.dimension = dimension;
+  public MazeModelGenerator(int dimension) {
+    this.dimension = dimension;
+  }
+
+  public void constructMaze(int offsetX, int offsetY) {
+    this.offsetX = offsetX;
+    this.offsetY = offsetY;
+
+    while (true) {
+      long seed = random.nextLong();
+      random.setSeed(seed);
+
+      boolean result = this.construct();
+      System.out.println("Seed: " + seed + " - Result: " + result);
+      if (result) break;
     }
 
-    public void constructMaze(int offsetX, int offsetY) {
-        this.offsetX = offsetX;
-        this.offsetY = offsetY;
+    // Open the entrance
+    map[0][1] = 1;
 
-        while (true) {
-            long seed = random.nextLong();
-            random.setSeed(seed);
+    // Open the exit
+    if (!CENTRE_MODE && map[dimension - 2][dimension - 2] > 0)
+      map[dimension - 2][dimension - 1] = 1;
 
-            boolean result = this.construct();
-            System.out.println("Seed: " + seed + " - Result: " + result);
-            if (result)
-                break;
-        }
+    // printMaze();
+    System.out.print("Maze wall: ");
+    printWall();
 
-        // Open the entrance
-        map[0][1] = 1;
+    if (PRINT_MAZE_PATH) {
+      System.out.println("\nMaze path: ");
+      printMazePath();
+    }
+  }
 
-        // Open the exit
-        if (!CENTRE_MODE && map[dimension - 2][dimension - 2] > 0)
-            map[dimension - 2][dimension - 1] = 1;
+  // Return true if maze is constructed successfully
+  private boolean construct() {
+    List<Integer> expandableList = new ArrayList<>();
+    // Using two dimension array for easy maintenance
+    map = new int[dimension][dimension];
 
-        // printMaze();
-        System.out.print("Maze wall: ");
-        printWall();
-
-        if (PRINT_MAZE_PATH) {
-            System.out.println("\nMaze path: ");
-            printMazePath();
-        }
+    for (int i = 0; i < dimension; ++i) {
+      map[0][i] = INVALID;
+      map[i][0] = INVALID;
+      map[dimension - 1][i] = INVALID;
+      map[i][dimension - 1] = INVALID;
     }
 
-    // Return true if maze is constructed successfully
-    private boolean construct() {
-        List<Integer> expandableList = new ArrayList<>();
-        // Using two dimension array for easy maintenance
-        map = new int[dimension][dimension];
+    // Add (1, 1) to expandableList
+    expandableList.add(dimension + 1);
 
-        for (int i = 0; i < dimension; ++i) {
-            map[0][i] = INVALID;
-            map[i][0] = INVALID;
-            map[dimension - 1][i] = INVALID;
-            map[i][dimension - 1] = INVALID;
-        }
+    // 0 < next / n < n-1 && 0 < next % n < n-1
+    int next = dimension + 1;
+    int order = 0;
+    map[1][1] = order % 8 + 1;
 
-        // Add (1, 1) to expandableList
-        expandableList.add(dimension + 1);
+    // Keep expanding the maze until there is not any space left
+    while (true) {
+      // If neighbor square is empty but invalid position, set neighbor to INVALID
+      if (map[next / dimension - 1][next % dimension] == EMPTY
+          && !isValidPosition(next - dimension, dimension))
+        map[next / dimension - 1][next % dimension] = INVALID;
+      if (map[next / dimension][next % dimension + 1] == EMPTY
+          && !isValidPosition(next + 1, dimension))
+        map[next / dimension][next % dimension + 1] = INVALID;
+      if (map[next / dimension + 1][next % dimension] == EMPTY
+          && !isValidPosition(next + dimension, dimension))
+        map[next / dimension + 1][next % dimension] = INVALID;
+      if (map[next / dimension][next % dimension - 1] == EMPTY
+          && !isValidPosition(next - 1, dimension))
+        map[next / dimension][next % dimension - 1] = INVALID;
 
-        // 0 < next / n < n-1 && 0 < next % n < n-1
-        int next = dimension + 1;
-        int order = 0;
-        map[1][1] = order % 8 + 1;
+      // If all four neighbors are not EMPTY, remove next from expendableList
+      if (map[next / dimension - 1][next % dimension] != EMPTY
+          && map[next / dimension][next % dimension + 1] != EMPTY
+          && map[next / dimension + 1][next % dimension] != EMPTY
+          && map[next / dimension][next % dimension - 1] != EMPTY) {
+        expandableList.remove(Integer.valueOf(next));
 
-        // Keep expanding the maze until there is not any space left
-        while (true) {
-            // If neighbor square is empty but invalid position, set neighbor to INVALID
-            if (map[next / dimension - 1][next % dimension] == EMPTY && !isValidPosition(next - dimension, dimension))
-                map[next / dimension - 1][next % dimension] = INVALID;
-            if (map[next / dimension][next % dimension + 1] == EMPTY && !isValidPosition(next + 1, dimension))
-                map[next / dimension][next % dimension + 1] = INVALID;
-            if (map[next / dimension + 1][next % dimension] == EMPTY && !isValidPosition(next + dimension, dimension))
-                map[next / dimension + 1][next % dimension] = INVALID;
-            if (map[next / dimension][next % dimension - 1] == EMPTY && !isValidPosition(next - 1, dimension))
-                map[next / dimension][next % dimension - 1] = INVALID;
+        // No space left
+        if (expandableList.isEmpty()) break;
 
-            // If all four neighbors are not EMPTY, remove next from expendableList
-            if (map[next / dimension - 1][next % dimension] != EMPTY
-                    && map[next / dimension][next % dimension + 1] != EMPTY
-                    && map[next / dimension + 1][next % dimension] != EMPTY
-                    && map[next / dimension][next % dimension - 1] != EMPTY) {
-                expandableList.remove(Integer.valueOf(next));
+        next = expandableList.get(random.nextInt(expandableList.size()));
+        ++order;
+        continue;
+      }
+      int nextSquare = nextSquare(next, dimension);
+      expandableList.add(nextSquare);
+      map[nextSquare / dimension][nextSquare % dimension] = order % 8 + 1;
 
-                // No space left
-                if (expandableList.isEmpty())
-                    break;
+      if (CENTRE_MODE
+          && nextSquare / dimension == dimension / 2
+          && nextSquare % dimension == dimension / 2)
+        map[nextSquare / dimension][nextSquare % dimension] = 9;
 
-                next = expandableList.get(random.nextInt(expandableList.size()));
-                ++order;
-                continue;
-            }
-            int nextSquare = nextSquare(next, dimension);
-            expandableList.add(nextSquare);
-            map[nextSquare / dimension][nextSquare % dimension] = order % 8 + 1;
-
-            if (CENTRE_MODE && nextSquare / dimension == dimension / 2 && nextSquare % dimension == dimension / 2)
-                map[nextSquare / dimension][nextSquare % dimension] = 9;
-
-            next = nextSquare;
-        }
-
-        return CENTRE_MODE ? map[dimension / 2][dimension / 2] == 9 : map[dimension - 2][dimension - 2] > 0;
+      next = nextSquare;
     }
 
-    // Find next random adjacent empty square, always guarantee to terminate
-    private int nextSquare(int next, int n) {
-        while (true) {
-            int order = random.nextInt(4);
-            switch (order) {
-                case 0:
-                    if (map[next / n - 1][next % n] == EMPTY && isValidPosition(next - n, n))
-                        return next - n;
-                case 1:
-                    if (map[next / n][next % n + 1] == EMPTY && isValidPosition(next + 1, n))
-                        return next + 1;
-                case 2:
-                    if (map[next / n + 1][next % n] == EMPTY && isValidPosition(next + n, n))
-                        return next + n;
-                case 3:
-                    if (map[next / n][next % n - 1] == EMPTY && isValidPosition(next - 1, n))
-                        return next - 1;
-            }
-        }
+    return CENTRE_MODE
+        ? map[dimension / 2][dimension / 2] == 9
+        : map[dimension - 2][dimension - 2] > 0;
+  }
+
+  // Find next random adjacent empty square, always guarantee to terminate
+  private int nextSquare(int next, int n) {
+    while (true) {
+      int order = random.nextInt(4);
+      switch (order) {
+        case 0:
+          if (map[next / n - 1][next % n] == EMPTY && isValidPosition(next - n, n)) return next - n;
+        case 1:
+          if (map[next / n][next % n + 1] == EMPTY && isValidPosition(next + 1, n)) return next + 1;
+        case 2:
+          if (map[next / n + 1][next % n] == EMPTY && isValidPosition(next + n, n)) return next + n;
+        case 3:
+          if (map[next / n][next % n - 1] == EMPTY && isValidPosition(next - 1, n)) return next - 1;
+      }
+    }
+  }
+
+  // Valid position is position with only 1 non-EMPTY and non-INVALID neighbor
+  private boolean isValidPosition(int x, int n) {
+    int count = 0;
+    if (map[x / n - 1][x % n] > 0) ++count;
+    if (map[x / n][x % n + 1] > 0) ++count;
+    if (map[x / n + 1][x % n] > 0) ++count;
+    if (map[x / n][x % n - 1] > 0) ++count;
+    return count == 1;
+  }
+
+  private void printMazePath() {
+    for (int i = 0; i < dimension; ++i) {
+      for (int j = 0; j < dimension; ++j) {
+        if (i == 0 || i == dimension - 1 || j == 0 || j == dimension - 1)
+          System.out.print(PRINT_BORDER ? "x " : "  ");
+        else if (map[i][j] > 0) System.out.print(PRINT_ORDER ? map[i][j] + " " : "o ");
+        else System.out.print("  ");
+      }
+      System.out.println();
+    }
+  }
+
+  private void printWall() {
+    System.out.println();
+
+    char[][] display = new char[dimension][dimension];
+    for (int i = 0; i < dimension; ++i) {
+      for (int j = 0; j < dimension; ++j) {
+        if (map[i][j] > 0) continue;
+        display[i][j] = WALL_TEXTURE;
+      }
     }
 
-    // Valid position is position with only 1 non-EMPTY and non-INVALID neighbor
-    private boolean isValidPosition(int x, int n) {
-        int count = 0;
-        if (map[x / n - 1][x % n] > 0)
-            ++count;
-        if (map[x / n][x % n + 1] > 0)
-            ++count;
-        if (map[x / n + 1][x % n] > 0)
-            ++count;
-        if (map[x / n][x % n - 1] > 0)
-            ++count;
-        return count == 1;
+    // Print the maze
+    for (int i = 0; i < dimension; ++i) {
+      for (int j = 0; j < dimension; ++j) {
+        if (display[i][j] == 0) System.out.print(" ");
+        else System.out.print(display[i][j]);
+      }
+      System.out.println();
     }
+  }
 
-    private void printMazePath() {
-        for (int i = 0; i < dimension; ++i) {
-            for (int j = 0; j < dimension; ++j) {
-                if (i == 0 || i == dimension - 1 || j == 0 || j == dimension - 1)
-                    System.out.print(PRINT_BORDER ? "x " : "  ");
-                else if (map[i][j] > 0)
-                    System.out.print(PRINT_ORDER ? map[i][j] + " " : "o ");
-                else
-                    System.out.print("  ");
-            }
-            System.out.println();
+  public List<Model> getMazePartModelList() {
+    List<Model> result = new ArrayList<>();
+
+    for (int i = 0; i < dimension; ++i) {
+      for (int j = 0; j < dimension; ++j) {
+        if (map[i][j] <= 0) {
+          result.add(new MazePartModel(offsetX, offsetY, i, j));
+        } else if (Helper.random.nextInt(10) == 0) {
+          result.add(
+              new WallTrapModel(
+                  new Vector3D(
+                      offsetX + i * Config.MAZE_WALL_THICKNESS_HEIGHT,
+                      offsetY + j * Config.MAZE_WALL_THICKNESS_WIDTH,
+                      0)));
         }
+      }
     }
-
-    private void printWall() {
-        System.out.println();
-
-        char[][] display = new char[dimension][dimension];
-        for (int i = 0; i < dimension; ++i) {
-            for (int j = 0; j < dimension; ++j) {
-                if (map[i][j] > 0)
-                    continue;
-                display[i][j] = WALL_TEXTURE;
-            }
-        }
-
-        // Print the maze
-        for (int i = 0; i < dimension; ++i) {
-            for (int j = 0; j < dimension; ++j) {
-                if (display[i][j] == 0)
-                    System.out.print(" ");
-                else
-                    System.out.print(display[i][j]);
-            }
-            System.out.println();
-        }
-    }
-
-    public List<Model> getMazePartModelList() {
-        List<Model> result = new ArrayList<>();
-
-        for (int i = 0; i < dimension; ++i) {
-            for (int j = 0; j < dimension; ++j) {
-                if (map[i][j] <= 0) {
-                    result.add(new MazePartModel(offsetX, offsetY, i, j));
-                } else if (Helper.random.nextInt(10) == 0) {
-                    result.add(new WallTrapModel(new Vector3D(offsetX + i * Config.MAZE_WALL_THICKNESS_HEIGHT,
-                            offsetY + j * Config.MAZE_WALL_THICKNESS_WIDTH, 0)));
-                }
-            }
-        }
-        return result;
-    }
+    return result;
+  }
 }

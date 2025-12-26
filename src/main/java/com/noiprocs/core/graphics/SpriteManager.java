@@ -6,13 +6,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public abstract class SpriteManager {
-    private static final Logger logger = LogManager.getLogger(SpriteManager.class);
+  private static final Logger logger = LogManager.getLogger(SpriteManager.class);
 
-    private GameContext gameContext;
+  private GameContext gameContext;
 
-    public void setGameContext(GameContext gameContext) {
-        this.gameContext = gameContext;
-    }
+  public void setGameContext(GameContext gameContext) {
+    this.gameContext = gameContext;
+  }
 
-    public abstract RenderableSprite createRenderableObject(Model model);
+  public abstract RenderableSprite createRenderableObject(Model model);
 }
