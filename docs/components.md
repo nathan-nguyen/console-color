@@ -15,5 +15,7 @@ Disabled background thread, broadcast step takes average of 2ms.
 
 ## HitboxManager
 
-- Hitbox is draw using `model.posX`, `model.posY`, `hitbox.height` and `hitbox.weight`. Hitbox dimension is seprated from Model, however they share the same measurement units.
-- Position (`model.posX`, `model.posY`) presents top left corner of hitbox rectangle.
+- Hitbox is drawn using `model.position` and `hitbox.getDimension(model)`. Hitbox dimension is separated from Model, however they share the same measurement units.
+- Position (`model.position`) is a Vector3D representing the top-left corner of hitbox rectangle. Access coordinates via `model.position.x` (row) and `model.position.y` (column).
+- Coordinate system: X increases from top to bottom, Y increases from left to right.
+- Hitbox dimensions are accessed via `hitbox.getDimension(model)` which returns a Vector3D where `dimension.x` = height and `dimension.y` = width.

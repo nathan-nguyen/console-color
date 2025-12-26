@@ -84,9 +84,11 @@ Hitboxes are configured in `src/main/resources/hitbox-config.json`. Each hitbox 
 
 ### Position Reference
 
-- Position (`model.posX`, `model.posY`) represents the **top-left corner** of the hitbox rectangle
+- Position (`model.position`) is a Vector3D representing the **top-left corner** of the hitbox rectangle
+- Access coordinates via `model.position.x` (row, increases top to bottom) and `model.position.y` (column, increases left to right)
+- The bottom-right corner is calculated as `model.position.add(hitbox.getDimension(model))`
+- Hitbox dimensions are stored as a Vector3D via `hitbox.getDimension(model)` where `dimension.x` = height and `dimension.y` = width
 - Hitbox dimensions use the same measurement units as model positions
-- The hitbox is drawn using `model.posX`, `model.posY`, `hitbox.height`, and `hitbox.width`
 
 ## Sprite Configuration
 
