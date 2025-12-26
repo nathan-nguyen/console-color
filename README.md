@@ -98,7 +98,7 @@ Disabled background thread, broadcast step takes average of 2ms.
 ## Improvements
 ### Future improvements
 
-- Use text files for ConsoleSpriteFactory and ConsoleHitboxFactory instead of hardcoding.
+- Use text files for ConsoleSpriteFactory instead of hardcoding.
 - Fix bugs and remove try / catch or move try / catch in proper positions.
 - Improve HitboxManager - isValid method with moving vector.
     - At the moment, we loop and check whether each step is valid.
@@ -110,5 +110,6 @@ Disabled background thread, broadcast step takes average of 2ms.
 
 - Divided ModelManager into chunks.
 - Broadcast data to client asynchronously.
-- Use better serializer (i.e Kryo, ...). Issue with Java serializer: When object's attributes are updated while object is serialized, this caused serialized data to be corrupted.
-- Use netty for communication via network.
+- Used better serializer (i.e Kryo, ...). Issue with Java serializer: When object's attributes are updated while object is serialized, this caused serialized data to be corrupted.
+- Used `netty` for communication via network.
+- Used text files for `ConsoleHitboxFactory` instead of hardcoding.

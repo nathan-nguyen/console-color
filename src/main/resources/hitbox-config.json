@@ -1,0 +1,81 @@
+{
+  "hitboxes": [
+    {
+      "modelClass": "com.noiprocs.core.model.mob.CotPsychoModel",
+      "height": 1,
+      "width": 4,
+      "category": "MOB",
+      "mask": ["WALL", "PLAYER", "MOB"]
+    },
+    {
+      "modelClass": "com.noiprocs.core.model.plant.TreeModel",
+      "height": 1,
+      "width": 4,
+      "category": "WALL",
+      "mask": ["WALL"]
+    },
+    {
+      "modelClasses": [
+        "com.noiprocs.core.model.plant.PineTreeModel",
+        "com.noiprocs.core.model.plant.BirchTreeModel"
+      ],
+      "height": 1,
+      "width": 2,
+      "category": "WALL",
+      "mask": ["WALL"]
+    },
+    {
+      "modelClass": "com.noiprocs.core.model.environment.WorldBoundaryVerticalModel",
+      "height": 40,
+      "width": 1,
+      "category": "WALL",
+      "mask": ["WALL"]
+    },
+    {
+      "modelClass": "com.noiprocs.core.model.environment.WorldBoundaryHorizontalModel",
+      "height": 1,
+      "width": 60,
+      "category": "WALL",
+      "mask": ["WALL"]
+    },
+    {
+      "modelClass": "com.noiprocs.core.model.building.FenceModel",
+      "height": 2,
+      "width": 2,
+      "category": "WALL",
+      "mask": ["WALL"]
+    },
+    {
+      "modelClasses": [
+        "com.noiprocs.core.model.item.WoodLogItem",
+        "com.noiprocs.core.model.item.SaplingItem",
+        "com.noiprocs.core.model.item.AppleItem"
+      ],
+      "height": 1,
+      "width": 1,
+      "category": "ITEM",
+      "mask": ["WALL"]
+    },
+    {
+      "modelClass": "com.noiprocs.core.model.item.AxeItem",
+      "height": 3,
+      "width": 3,
+      "category": "ITEM",
+      "mask": ["WALL"]
+    },
+    {
+      "modelClass": "com.noiprocs.core.model.mob.projectile.FlyingWoodLogModel",
+      "height": 1,
+      "width": 1,
+      "category": "PROJECTILE",
+      "mask": ["MASK_ALL"]
+    },
+    {
+      "modelClass": "com.noiprocs.core.model.environment.MazePartModel",
+      "height": "Config.MAZE_WALL_THICKNESS_HEIGHT",
+      "width": "Config.MAZE_WALL_THICKNESS_WIDTH",
+      "category": "WALL",
+      "mask": ["WALL", "PLAYER", "MOB", "PROJECTILE"]
+    }
+  ]
+}
