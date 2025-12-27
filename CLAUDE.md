@@ -6,33 +6,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 A multiplayer console-based game with client-server architecture built in Java using Maven. The game features a real-time multiplayer environment with collision detection, sprites, and network synchronization.
 
-## Build and Development Commands
-
-```bash
-# Build
-make compile              # Compile the project
-make install              # Clean and install
-mvn assembly:single       # Create executable JAR with dependencies
-
-# Testing
-make test                 # Run all tests
-mvn test                  # Run all tests (Maven)
-
-# Code Quality
-make lint                 # Run checkstyle checks (Google style)
-make format               # Format code with Spotless
-
-# Running the Game
-make run-server                                # Start server (localhost:8080)
-make run-server SERVER_HOST=0.0.0.0 SERVER_PORT=9090  # Custom host/port
-
-# Run server manually
-mvn compile exec:java -Dexec.mainClass="com.noiprocs.App" -Dexec.args="pc gnik server localhost 8080"
-
-# Run client manually
-mvn compile exec:java -Dexec.mainClass="com.noiprocs.App" -Dexec.args="pc <username> client localhost 8080"
-```
-
 ## Architecture
 
 The game uses a component-based architecture centered around `GameContext`, which coordinates all major systems:

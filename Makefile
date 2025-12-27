@@ -38,7 +38,7 @@ clean:
 	mvn clean
 
 install:
-	mvn clean install
+	mvn clean install -DskipTests
 
 lint:
 	mvn checkstyle:check
