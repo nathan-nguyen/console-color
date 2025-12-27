@@ -8,7 +8,7 @@ import com.noiprocs.core.model.InteractiveInterface;
 import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.ModelManager;
 import com.noiprocs.core.model.item.*;
-import com.noiprocs.core.model.mob.character.PlayerModel;
+import com.noiprocs.core.model.mob.character.Humanoid;
 
 public class TreeModel extends DurableModel implements InteractiveInterface {
   private static final int MAX_DURABILITY = 20;
@@ -43,7 +43,7 @@ public class TreeModel extends DurableModel implements InteractiveInterface {
   }
 
   private void dropItem(Model destroyer) {
-    if (!(destroyer instanceof PlayerModel)) return;
+    if (!(destroyer instanceof Humanoid)) return;
 
     ModelManager modelManager = GameContext.get().modelManager;
     if (this.isOldAge()) {

@@ -37,6 +37,8 @@ public class MovingBehavior implements BehaviorInterface {
     }
 
     Vector3D nextPosition = mobModel.getPosition().add(deltaPosition);
+    // We could consider using Swept AABB here, however if the speed is low, using AABB requires
+    // more steps which could lead to lower performance.
     if (this.isNextMoveValid(mobModel, nextPosition)) {
       mobModel.setPosition(nextPosition);
     } else {
