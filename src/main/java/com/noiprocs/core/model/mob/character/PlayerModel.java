@@ -3,6 +3,7 @@ package com.noiprocs.core.model.mob.character;
 import com.noiprocs.core.common.Direction;
 import com.noiprocs.core.common.Vector3D;
 import com.noiprocs.core.model.LowLatencyModelInterface;
+import com.noiprocs.core.model.action.AttackAction;
 import com.noiprocs.core.model.item.Item;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -55,5 +56,12 @@ public class PlayerModel extends Humanoid implements LowLatencyModelInterface {
 
     item.use(this);
     if (item.amount == 0) inventory.items[this.currentInventorySlot] = null;
+  }
+
+  public void triggerAction() {
+    if (this.action != null && !this.action.isCompleted()) {
+      return;
+    }
+    this.action = new AttackAction(new Vector3D(2, 1, 0), new Vector3D(-1, 0, 0));
   }
 }

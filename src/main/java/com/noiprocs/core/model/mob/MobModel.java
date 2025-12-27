@@ -4,6 +4,7 @@ import com.noiprocs.core.GameContext;
 import com.noiprocs.core.common.Direction;
 import com.noiprocs.core.common.Vector3D;
 import com.noiprocs.core.model.DurableModel;
+import com.noiprocs.core.model.action.Action;
 import com.noiprocs.core.model.behavior.BehaviorInterface;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ public abstract class MobModel extends DurableModel {
   protected int skipMovementFrame = DEFAULT_SKIP_MOVEMENT_FRAME;
   private Vector3D speed;
   private List<BehaviorInterface> behaviors = new ArrayList<>();
+  public Action action = null;
 
   public MobModel(Vector3D position, boolean isVisible, int health, Vector3D speed) {
     super(position, isVisible, health);
@@ -24,11 +26,16 @@ public abstract class MobModel extends DurableModel {
 
   @Override
   public void update(int delta) {
-    if (GameContext.get().worldCounter % skipMovementFrame != 0) {
-      return;
+    if (GameContext.get().worldCounter % skipMovementFrame == 0) {
+      for (BehaviorInterface behavior : behaviors) {
+        behavior.update(this);
+      }
     }
-    for (BehaviorInterface behavior : behaviors) {
-      behavior.update(this);
+    if (action != null) {
+      action.update(this);
+      if (action.isCompleted()) {
+        action = null;
+      }
     }
   }
 

@@ -71,15 +71,15 @@ public class PlayerSprite extends ConsoleSprite {
   public char[][] getTexture(Model model) {
     PlayerModel playerModel = (PlayerModel) model;
     Vector3D facingDirection = playerModel.getFacingDirection();
-    if (playerModel.actionCounter == 0) return TEXTURE;
+    if (playerModel.action == null) return TEXTURE;
 
     if (playerModel.getHoldingItem() instanceof AxeItem) {
       if (facingDirection.equals(Direction.EAST)) {
         return RIGHT_AXE_ACTION_PERFORMANCE[
-            (playerModel.actionCounter / 2) % RIGHT_AXE_ACTION_PERFORMANCE.length];
+            (playerModel.action.actionFrameCountDown / 2) % RIGHT_AXE_ACTION_PERFORMANCE.length];
       }
       return LEFT_AXE_ACTION_PERFORMANCE[
-          (playerModel.actionCounter / 2) % LEFT_AXE_ACTION_PERFORMANCE.length];
+          (playerModel.action.actionFrameCountDown / 2) % LEFT_AXE_ACTION_PERFORMANCE.length];
     }
 
     if (facingDirection.equals(Direction.EAST)) {
