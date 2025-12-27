@@ -4,9 +4,10 @@ import com.noiprocs.core.GameContext;
 import com.noiprocs.core.common.Direction;
 import com.noiprocs.core.common.Vector3D;
 import com.noiprocs.core.model.InteractiveInterface;
-import com.noiprocs.core.model.ItemModelInterface;
 import com.noiprocs.core.model.LowLatencyModelInterface;
 import com.noiprocs.core.model.Model;
+import com.noiprocs.core.model.behavior.AbsorbNearbyItemBehavior;
+import com.noiprocs.core.model.behavior.MovingBehavior;
 import com.noiprocs.core.model.item.Item;
 import com.noiprocs.core.model.mob.MobModel;
 import java.util.List;
@@ -28,6 +29,7 @@ public class PlayerModel extends MobModel implements LowLatencyModelInterface {
     super(position, isVisible, MAX_HEALTH, DEFAULT_SPEED);
     this.id = id;
     this.skipMovementFrame = DEFAULT_SKIP_MOVEMENT_FRAME;
+    this.addBehavior(new MovingBehavior(), new AbsorbNearbyItemBehavior());
   }
 
   public void moveUp() {
@@ -46,23 +48,15 @@ public class PlayerModel extends MobModel implements LowLatencyModelInterface {
     this.setMovingDirection(Direction.EAST);
   }
 
+  public void stop() {
+    this.setMovingDirection(Vector3D.ZERO);
+  }
+
   public void triggerAction() {
     if (actionCounter > 0) {
       return;
     }
     actionCounter = 6;
-  }
-
-  // Absorb nearby items
-  private void absorbItems() {
-    List<Model> collidingModels =
-        GameContext.get().hitboxManager.getCollidingModel(this, this.position);
-    for (Model item : collidingModels) {
-      if (item instanceof ItemModelInterface) {
-        logger.info("Absorbed item {}", item);
-        ((ItemModelInterface) item).interact(this, inventory[currentInventorySlot]);
-      }
-    }
   }
 
   private void updateAction() {
@@ -90,22 +84,10 @@ public class PlayerModel extends MobModel implements LowLatencyModelInterface {
     }
   }
 
-  public void stop() {
-    this.setMovingDirection(Vector3D.ZERO);
-  }
-
   @Override
   public void update(int dt) {
     super.update(dt);
     this.updateAction();
-  }
-
-  @Override
-  protected void move() {
-    super.move();
-    if (GameContext.get().worldCounter % this.skipMovementFrame == 0) {
-      this.absorbItems();
-    }
   }
 
   @Override

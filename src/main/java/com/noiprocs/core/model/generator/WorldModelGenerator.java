@@ -10,7 +10,7 @@ import com.noiprocs.core.model.environment.WorldBoundaryHorizontalModel;
 import com.noiprocs.core.model.environment.WorldBoundaryVerticalModel;
 import com.noiprocs.core.model.item.AxeItem;
 import com.noiprocs.core.model.item.ItemModel;
-import com.noiprocs.core.model.mob.CotPsychoModel;
+import com.noiprocs.core.model.mob.CotMobModel;
 import com.noiprocs.core.model.mob.character.PlayerModel;
 import com.noiprocs.core.model.plant.BirchTreeModel;
 import com.noiprocs.core.model.plant.PineTreeModel;
@@ -127,7 +127,7 @@ public class WorldModelGenerator {
       Vector3D modelPosition =
           new Vector3D(
               random.nextInt(endX - startX) + startX, random.nextInt(endY - startY) + startY, 0);
-      Model cotMobModel = new CotPsychoModel(modelPosition);
+      Model cotMobModel = new CotMobModel(modelPosition);
 
       if (gameContext.hitboxManager.isValid(cotMobModel, cotMobModel.position)) {
         gameContext.modelManager.spawnModel(cotMobModel);

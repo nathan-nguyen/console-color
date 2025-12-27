@@ -7,6 +7,7 @@ import com.noiprocs.core.model.item.Item;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -67,9 +68,10 @@ public class KryoPool implements Closeable {
     kryo.register(java.lang.Class.class);
     kryo.register(HashMap.class);
     kryo.register(ConcurrentHashMap.class);
-    registerPackage(kryo, "com.noiprocs.core.model");
+    kryo.register(ArrayList.class);
     kryo.register(Item[].class);
     kryo.register(Vector3D.class);
+    registerPackage(kryo, "com.noiprocs.core.model");
     kryo.setInstantiatorStrategy(
         new DefaultInstantiatorStrategy(new org.objenesis.strategy.StdInstantiatorStrategy()));
   }

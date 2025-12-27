@@ -19,11 +19,15 @@ public abstract class Model implements Serializable {
 
   public abstract void update(int delta);
 
+  public Vector3D getPosition() {
+    return this.position;
+  }
+
   public void setPosition(Vector3D nextPosition) {
     this.position = nextPosition;
   }
 
-  protected void destroy() {
+  public void destroy() {
     this.isDestroyed = true;
   }
 

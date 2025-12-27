@@ -64,7 +64,6 @@ The game uses a component-based architecture centered around `GameContext`, whic
 Model (abstract base)
 ├── MobModel (entities with movement/AI)
 │   ├── CotMobModel (game-specific mobs)
-│   │   └── CotPsychoModel
 │   ├── PlayerModel (player characters)
 │   └── ProjectileModel (flying objects)
 ├── TreeModel (plants/obstacles)

@@ -6,7 +6,6 @@ import com.noiprocs.core.model.environment.WallTrapModel;
 import com.noiprocs.core.model.environment.WorldBoundaryHorizontalModel;
 import com.noiprocs.core.model.environment.WorldBoundaryVerticalModel;
 import com.noiprocs.core.model.mob.CotMobModel;
-import com.noiprocs.core.model.mob.CotPsychoModel;
 import com.noiprocs.core.model.mob.character.PlayerModel;
 import com.noiprocs.core.model.mob.projectile.FlyingWoodLogModel;
 import com.noiprocs.core.model.plant.BirchTreeModel;
@@ -52,8 +51,7 @@ public class ConsoleSpriteFactory {
       return new WorldBoundarySprite(1, 60);
     }
 
-    if (modelClassName.equals(CotMobModel.class.getName())
-        || modelClassName.equals(CotPsychoModel.class.getName())) {
+    if (modelClassName.equals(CotMobModel.class.getName())) {
       return new CotMobSprite();
     }
 

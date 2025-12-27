@@ -8,7 +8,7 @@ import com.noiprocs.core.model.environment.MazePartModel;
 import com.noiprocs.core.model.environment.WallTrapModel;
 import com.noiprocs.core.model.item.AxeItem;
 import com.noiprocs.core.model.item.WoodLogItem;
-import com.noiprocs.core.model.mob.CotPsychoModel;
+import com.noiprocs.core.model.mob.CotMobModel;
 import com.noiprocs.core.model.mob.character.PlayerModel;
 import com.noiprocs.core.model.mob.projectile.FlyingWoodLogModel;
 import com.noiprocs.core.model.plant.BirchTreeModel;
@@ -33,8 +33,8 @@ public class HitboxConfigVerificationTest extends TestCase {
     assertTrue(hitbox instanceof com.noiprocs.ui.console.hitbox.environment.WallTrapHitbox);
   }
 
-  public void testCotPsychoModelFromConfig() {
-    Hitbox hitbox = ConsoleHitboxFactory.generateHitbox(CotPsychoModel.class.getName());
+  public void testCotMobModelFromConfig() {
+    Hitbox hitbox = ConsoleHitboxFactory.generateHitbox(CotMobModel.class.getName());
     assertNotNull(hitbox);
     assertEquals(1, hitbox.dimension.x, 0.001);
     assertEquals(4, hitbox.dimension.y, 0.001);

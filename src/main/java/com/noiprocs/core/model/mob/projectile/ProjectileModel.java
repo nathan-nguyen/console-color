@@ -3,6 +3,7 @@ package com.noiprocs.core.model.mob.projectile;
 import com.noiprocs.core.common.Vector3D;
 import com.noiprocs.core.model.LowLatencyModelInterface;
 import com.noiprocs.core.model.Model;
+import com.noiprocs.core.model.behavior.ProjectileMovingBehavior;
 import com.noiprocs.core.model.mob.MobModel;
 
 public class ProjectileModel extends MobModel implements LowLatencyModelInterface {
@@ -16,18 +17,18 @@ public class ProjectileModel extends MobModel implements LowLatencyModelInterfac
     this.ttl = ttl;
     this.spawner = spawner;
     this.setMovingDirection(movingDirection);
+    this.addBehavior(new ProjectileMovingBehavior());
   }
 
   public int getTtl() {
     return this.ttl;
   }
 
-  @Override
-  protected void move() {
-    super.move();
-
-    --ttl;
-    if (ttl <= 0) this.destroy();
+  public void updateTtl(int amount) {
+    this.ttl += amount;
+    if (this.ttl <= 0) {
+      this.destroy();
+    }
   }
 
   public Model getSpawner() {

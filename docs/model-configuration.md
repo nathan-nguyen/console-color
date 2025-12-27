@@ -49,7 +49,7 @@ Hitboxes are configured in `src/main/resources/hitbox-config.json`. Each hitbox 
 #### Single Model Class
 ```json
 {
-  "modelClass": "com.noiprocs.core.model.mob.CotPsychoModel",
+  "modelClass": "com.noiprocs.core.model.mob.CotMobModel",
   "height": 1,
   "width": 4,
   "category": "MOB",

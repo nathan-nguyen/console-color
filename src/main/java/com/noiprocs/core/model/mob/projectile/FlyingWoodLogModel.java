@@ -1,10 +1,7 @@
 package com.noiprocs.core.model.mob.projectile;
 
-import com.noiprocs.core.GameContext;
 import com.noiprocs.core.common.Vector3D;
-import com.noiprocs.core.model.InteractiveInterface;
 import com.noiprocs.core.model.Model;
-import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,20 +15,5 @@ public class FlyingWoodLogModel extends ProjectileModel {
   public FlyingWoodLogModel(Vector3D position, Vector3D movingDirection, Model spawner) {
     super(position, DEFAULT_SPEED, movingDirection, DEFAULT_TTL, spawner);
     this.skipMovementFrame = DEFAULT_SKIP_MOVEMENT_FRAME;
-  }
-
-  @Override
-  protected boolean isNextMoveValid(Vector3D nextPosition) {
-    List<Model> collidingModels =
-        GameContext.get().hitboxManager.getCollidingModel(this, nextPosition);
-    if (collidingModels.isEmpty()) return true;
-
-    Model model = collidingModels.get(0);
-    logger.info("Hit {}", model);
-    if (model instanceof InteractiveInterface) {
-      ((InteractiveInterface) model).interact(this, null);
-    }
-    this.destroy();
-    return false;
   }
 }
