@@ -73,7 +73,7 @@ public class PlayerSprite extends ConsoleSprite {
     Vector3D facingDirection = playerModel.getFacingDirection();
     if (playerModel.actionCounter == 0) return TEXTURE;
 
-    if (playerModel.getCurrentInventoryItem() instanceof AxeItem) {
+    if (playerModel.getHoldingItem() instanceof AxeItem) {
       if (facingDirection.equals(Direction.EAST)) {
         return RIGHT_AXE_ACTION_PERFORMANCE[
             (playerModel.actionCounter / 2) % RIGHT_AXE_ACTION_PERFORMANCE.length];

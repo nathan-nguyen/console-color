@@ -99,7 +99,7 @@ public class ConsoleGameScreen implements GameScreenInterface {
   private String getHudString(PlayerModel playerModel) {
     StringBuilder inventorySb = new StringBuilder();
 
-    Item item = playerModel.inventory[playerModel.currentInventorySlot];
+    Item item = playerModel.getHoldingItem();
     if (item != null) inventorySb.append(item.name).append(": ").append(item.amount);
 
     return playerModel.id

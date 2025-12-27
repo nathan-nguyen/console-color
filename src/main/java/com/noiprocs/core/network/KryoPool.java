@@ -3,7 +3,6 @@ package com.noiprocs.core.network;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.util.DefaultInstantiatorStrategy;
 import com.noiprocs.core.common.Vector3D;
-import com.noiprocs.core.model.item.Item;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.Serializable;
@@ -69,7 +68,6 @@ public class KryoPool implements Closeable {
     kryo.register(HashMap.class);
     kryo.register(ConcurrentHashMap.class);
     kryo.register(ArrayList.class);
-    kryo.register(Item[].class);
     kryo.register(Vector3D.class);
     registerPackage(kryo, "com.noiprocs.core.model");
     kryo.setInstantiatorStrategy(

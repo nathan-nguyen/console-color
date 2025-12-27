@@ -15,7 +15,7 @@ public class FenceModel extends Model implements InteractiveInterface {
   @Override
   public void interact(Model model, Item item) {
     if (model instanceof Humanoid) {
-      if (((Humanoid) model).addInventoryItem(new FenceItem(1))) {
+      if (((Humanoid) model).inventory.addItem(new FenceItem(1))) {
         this.destroy();
       }
     }

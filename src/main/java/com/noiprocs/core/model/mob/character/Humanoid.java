@@ -20,9 +20,9 @@ public class Humanoid extends MobModel {
   private static final Vector3D DEFAULT_SPEED = new Vector3D(1, 2, 0);
   private static final int MAX_INVENTORY_SIZE = 4;
 
+  public final Inventory inventory = new Inventory(MAX_INVENTORY_SIZE);
+
   public int actionCounter = 0;
-  public Item[] inventory = new Item[MAX_INVENTORY_SIZE];
-  public int currentInventorySlot = 0;
 
   public Humanoid(Vector3D position, boolean isVisible) {
     super(position, isVisible, MAX_HEALTH, DEFAULT_SPEED);
@@ -57,45 +57,18 @@ public class Humanoid extends MobModel {
       Model interactModel = collidingModels.get(0);
       if (interactModel instanceof InteractiveInterface) {
         logger.info("Interact with model {}", interactModel);
-        ((InteractiveInterface) interactModel).interact(this, inventory[currentInventorySlot]);
+        ((InteractiveInterface) interactModel).interact(this, this.getHoldingItem());
       }
     }
+  }
+
+  public Item getHoldingItem() {
+    return null;
   }
 
   @Override
   public void update(int dt) {
     super.update(dt);
     this.updateAction();
-  }
-
-  public Item getCurrentInventoryItem() {
-    return this.inventory[currentInventorySlot];
-  }
-
-  public boolean addInventoryItem(Item item) {
-    int emptySlot = Integer.MAX_VALUE;
-    for (int i = 0; i < MAX_INVENTORY_SIZE; ++i) {
-      Item existingItem = inventory[i];
-      if (existingItem == null) emptySlot = Math.min(emptySlot, i);
-      if (existingItem != null && existingItem.name.equals(item.name)) {
-        existingItem.amount += item.amount;
-        return true;
-      }
-    }
-    if (emptySlot > MAX_INVENTORY_SIZE) return false;
-    inventory[emptySlot] = item;
-    return true;
-  }
-
-  public void setCurrentInventorySlot(int currentInventorySlot) {
-    this.currentInventorySlot = currentInventorySlot;
-  }
-
-  public void useItem() {
-    Item item = inventory[currentInventorySlot];
-    if (item == null) return;
-
-    item.use(this);
-    if (item.amount == 0) inventory[currentInventorySlot] = null;
   }
 }

@@ -23,7 +23,7 @@ public class ItemModel extends Model implements ItemModelInterface {
 
   protected void addToModelInventory(Humanoid model) {
     Item createItem = (Item) Helper.createObject(itemClass, 1);
-    if (model.addInventoryItem(createItem)) {
+    if (model.inventory.addItem(createItem)) {
       this.destroy();
     }
   }

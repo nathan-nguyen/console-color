@@ -19,8 +19,7 @@ public class AbsorbNearbyItemBehavior implements BehaviorInterface {
     for (Model item : collidingModels) {
       if (item instanceof ItemModelInterface) {
         logger.info("Absorbed item {}", item);
-        ((ItemModelInterface) item)
-            .interact(model, humanoidModel.inventory[humanoidModel.currentInventorySlot]);
+        ((ItemModelInterface) item).interact(model, humanoidModel.getHoldingItem());
       }
     }
   }
